@@ -1,0 +1,30 @@
+{
+  "name": "obsidian-agent-skills",
+  "version": "0.1.0",
+  "description": "Obsidian-backed workflow skills for coding agents",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GeekXtop/obsidian-agent-skills.git"
+  },
+  "keywords": [
+    "agent-skills",
+    "obsidian",
+    "codex",
+    "claude-code",
+    "marketplace",
+    "skills"
+  ],
+  "scripts": {
+    "test": "node scripts/validate-skills.mjs"
+  },
+  "skills": [
+    "./skills"
+  ],
+  "pi": {
+    "skills": [
+      "./skills"
+    ]
+  }
+}

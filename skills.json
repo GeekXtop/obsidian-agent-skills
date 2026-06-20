@@ -1,0 +1,18 @@
+{
+  "name": "obsidian-agent-skills",
+  "version": "0.1.0",
+  "description": "Obsidian-backed workflow skills for coding agents",
+  "repository": "https://github.com/GeekXtop/obsidian-agent-skills",
+  "skills": [
+    {
+      "name": "obinit",
+      "path": "skills/obinit",
+      "description": "初始化或更新软件项目的 Obsidian-backed 通用 agent 工作约定。"
+    },
+    {
+      "name": "oblearn",
+      "path": "skills/oblearn",
+      "description": "从项目内 agent 记忆库提取可跨项目复用的经验，并沉淀到 Obsidian 公共知识笔记。"
+    }
+  ]
+}

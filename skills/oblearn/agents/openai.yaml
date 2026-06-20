@@ -1,0 +1,4 @@
+interface:
+  display_name: "Oblearn"
+  short_description: "提取项目经验写入 Obsidian 公共知识库"
+  default_prompt: "使用 $oblearn 从当前项目提取可复用公共知识。"
