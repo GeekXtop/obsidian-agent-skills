@@ -4,7 +4,9 @@ import { fileURLToPath } from "node:url";
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
 const skillsDir = join(root, "skills");
+const commandsDir = join(root, "commands");
 const packageJsonPath = join(root, "package.json");
+let skillNames = [];
 
 function fail(message) {
   console.error(message);
@@ -31,7 +33,7 @@ function parseFrontmatter(markdown) {
 if (!existsSync(skillsDir)) {
   fail("Missing skills directory.");
 } else {
-  const skillNames = readdirSync(skillsDir).filter((name) => {
+  skillNames = readdirSync(skillsDir).filter((name) => {
     const path = join(skillsDir, name);
     return statSync(path).isDirectory();
   });
@@ -60,6 +62,45 @@ if (!existsSync(skillsDir)) {
 
     if (!frontmatter.description) {
       fail(`${skillName}: missing description`);
+    }
+
+    const openAiAgentPath = join(skillsDir, skillName, "agents", "openai.yaml");
+    if (!existsSync(openAiAgentPath)) {
+      fail(`${skillName}: missing agents/openai.yaml`);
+    }
+
+    const templatesDir = join(skillsDir, skillName, "templates");
+    if (!existsSync(templatesDir)) {
+      fail(`${skillName}: missing templates directory`);
+    } else {
+      const templates = readdirSync(templatesDir).filter((name) => {
+        const path = join(templatesDir, name);
+        return statSync(path).isFile();
+      });
+
+      if (templates.length === 0) {
+        fail(`${skillName}: templates directory is empty`);
+      }
+    }
+  }
+}
+
+if (!existsSync(commandsDir)) {
+  fail("Missing commands directory.");
+} else {
+  for (const skillName of skillNames) {
+    const commandPath = join(commandsDir, `${skillName}.md`);
+
+    if (!existsSync(commandPath)) {
+      fail(`${skillName}: missing Claude slash command`);
+      continue;
+    }
+
+    const command = readFileSync(commandPath, "utf8");
+    const frontmatter = parseFrontmatter(command);
+
+    if (!frontmatter?.description) {
+      fail(`${skillName}: command missing description`);
     }
   }
 }

@@ -110,15 +110,7 @@ obsidian read path="Agent/Knowledge/Frontend Design Pitfalls.md"
 
 追加到公共知识笔记时，使用短条目：
 
-```md
-## 2026-06-21 - <short title>
-
-- Source project: [[<project>]]
-- Context: 什么时候遇到
-- Lesson: 可复用结论
-- Apply when: 哪类项目/任务适用
-- Check: 下次 agent 应该检查什么
-```
+使用 `templates/public-knowledge-entry.md`。
 
 条目要能被下一个 agent 直接执行，不写散文。
 
@@ -126,27 +118,7 @@ obsidian read path="Agent/Knowledge/Frontend Design Pitfalls.md"
 
 仅在用户确认后创建：
 
-```md
----
-title: <Knowledge Title>
-tags:
-  - agent/knowledge
-  - <domain>
-status: active
-created: 2026-06-21
-updated: 2026-06-21
----
-
-# <Knowledge Title>
-
-## Use When
-
-## Always Check
-
-## Lessons
-
-## Related
-```
+使用 `templates/public-knowledge-note.md`。
 
 内部链接使用 Obsidian wikilink，例如 `[[Frontend Design Pitfalls]]`。外部链接用标准 Markdown 链接。
 
@@ -154,12 +126,7 @@ updated: 2026-06-21
 
 如果提取了公共知识，在 `.agents/active.md` 追加或更新：
 
-```md
-## Knowledge Extracted
-
-- [[Frontend Design Pitfalls]]: added mobile overflow checklist.
-- [[React Project Conventions]]: added component boundary note.
-```
+使用 `templates/active-knowledge-extracted.md` 的结构。
 
 如果只是发现项目内经验但不适合公共化，保留在 `.agents/lessons.md`。
 

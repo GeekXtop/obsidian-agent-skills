@@ -129,12 +129,7 @@ obsidian read path="Agent/Knowledge/Frontend Design Pitfalls.md"
 
 如果使用了公共知识笔记，在 `.agents/active.md` 记录：
 
-```md
-## Knowledge Used
-
-- [[Frontend Design Pitfalls]]
-- [[React Project Conventions]]
-```
+使用 `templates/active.md` 中的 `Knowledge Used` 结构，或在已有 `.agents/active.md` 中追加同名段落。
 
 如果任务中发现新的可复用坑：
 
@@ -144,82 +139,47 @@ obsidian read path="Agent/Knowledge/Frontend Design Pitfalls.md"
 
 阶段结束、功能完成或踩坑复盘时，使用 `$oblearn` 从项目记忆库中提取公共知识。
 
-工具专用文件保持很短：
-
-```md
-# AGENTS.md
-
-先读 `.agents/instructions.md`。它是本项目的中立规则源头。
-```
-
-```md
-# CLAUDE.md
-
-先读 `.agents/instructions.md`。它是本项目的中立规则源头。
-```
+工具专用文件保持很短。使用 `templates/agent-entry.md` 生成 `AGENTS.md` 和 `CLAUDE.md`，只把入口转发到 `.agents/instructions.md`。
 
 ## Obsidian 项目笔记
 
 创建 Obsidian 项目笔记时，只写项目级索引和跨项目知识入口：
 
-```md
----
-title: <project>
-tags:
-  - project
-  - agent/project
-status: active
-repo: <absolute repo path>
-created: <date>
-updated: <date>
----
+使用 `templates/obsidian-project-note.md`。填充 `<project>`、`<repo>` 和日期，不要把私人笔记复制进仓库。
 
-# <project>
+不要让 Obsidian 成为构建、测试、部署或运行时依赖。
 
-## Links
+## 模板文件
 
-- Rules: <repo>/.agents/instructions.md
-- Active: <repo>/.agents/active.md
-- Progress: <repo>/.agents/progress.md
-- Lessons: <repo>/.agents/lessons.md
-- Specs: <repo>/docs/superpowers/specs/
-- Plans: <repo>/docs/superpowers/plans/
-- ADR: <repo>/docs/adr/
+初始化时优先使用本 skill 的模板文件：
 
-## Goal
+- `templates/instructions.md` -> `.agents/instructions.md`
+- `templates/agent-entry.md` -> `AGENTS.md`、`CLAUDE.md`
+- `templates/agents-readme.md` -> `.agents/README.md`
+- `templates/active.md` -> `.agents/active.md`
+- `templates/progress.md` -> `.agents/progress.md`
+- `templates/lessons.md` -> `.agents/lessons.md`
+- `templates/adr-readme.md` -> `docs/adr/README.md`
+- `templates/superpowers-specs-readme.md` -> `docs/superpowers/specs/README.md`
+- `templates/superpowers-plans-readme.md` -> `docs/superpowers/plans/README.md`
+- `templates/obsidian-project-note.md` -> Obsidian project note
 
-## Current State
-
-## Commands
-
-## Knowledge To Check
-
-- [[Frontend Design Pitfalls]]
-- [[React Project Conventions]]
-
-## Decisions
-
-## Open Questions
-
-## Agent Log
-```
-
-不要把私人笔记复制进仓库。不要让 Obsidian 成为构建、测试、部署或运行时依赖。
+如果目标文件已有非空内容，先读取并合并，不要直接覆盖。
 
 ## 初始化清单
 
 用当前可用的文件工具创建或更新：
 
-1. `.agents/instructions.md`：中立规则源头。
-2. `AGENTS.md`：通用 agent 入口，指向 `.agents/instructions.md`。
-3. `CLAUDE.md`：如果用户使用 Claude Code，写一个指向 `.agents/instructions.md` 的适配文件。
-4. `.agents/README.md`：说明这是 agent 记忆库空间。
-5. `.agents/active.md`：初始化当前状态和项目笔记路径。
-6. `.agents/progress.md`：初始化进度记录。
-7. `.agents/lessons.md`：初始化复用经验记录。
-8. `docs/superpowers/specs/README.md`：说明这里放设计规格书。
-9. `docs/superpowers/plans/README.md`：说明这里放实现计划。
-10. `docs/adr/README.md`：说明这里放架构决策。
+1. `.agents/instructions.md`：中立规则源头，使用 `templates/instructions.md`。
+2. `AGENTS.md`：通用 agent 入口，使用 `templates/agent-entry.md`。
+3. `CLAUDE.md`：如果用户使用 Claude Code，使用 `templates/agent-entry.md`。
+4. `.agents/README.md`：使用 `templates/agents-readme.md`。
+5. `.agents/active.md`：使用 `templates/active.md`。
+6. `.agents/progress.md`：使用 `templates/progress.md`。
+7. `.agents/lessons.md`：使用 `templates/lessons.md`。
+8. `docs/superpowers/specs/README.md`：使用 `templates/superpowers-specs-readme.md`。
+9. `docs/superpowers/plans/README.md`：使用 `templates/superpowers-plans-readme.md`。
+10. `docs/adr/README.md`：使用 `templates/adr-readme.md`。
 11. Obsidian 项目笔记：只创建或更新配置好的项目笔记路径。
 
 覆盖已有非空指令文件前，先读取并保留用户已有规则；只有用户明确要求替换时才整体覆盖。

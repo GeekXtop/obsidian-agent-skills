@@ -56,49 +56,7 @@ description: 在任务、阶段或会话收尾时更新项目内 agent memory。
 
 `.agents/active.md` 表示“下一次打开项目时最该知道什么”。它应该短而具体。
 
-推荐结构：
-
-```md
-# Active
-
-## Current Task
-
-- Goal:
-- Status:
-- Last updated: YYYY-MM-DD
-
-## Current State
-
-- Completed:
-- In progress:
-- Blocked:
-
-## Verification
-
-- Command:
-- Result:
-
-## Important Files
-
-- `path/to/file`: why it matters.
-
-## Next Steps
-
-1. Next concrete step.
-2. Next concrete step.
-
-## Current ADRs
-
-- [0001 - <title>](../docs/adr/0001-title.md): accepted.
-
-## Knowledge Used
-
-- [[Knowledge Note]]
-
-## Knowledge Extracted
-
-- [[Knowledge Note]]: short note.
-```
+推荐结构见 `templates/active.md`。
 
 如果现有 `active.md` 已有不同结构，保留原结构并就地更新相关段落。不要整体重写用户已有内容，除非用户明确要求重写。
 
@@ -106,17 +64,7 @@ description: 在任务、阶段或会话收尾时更新项目内 agent memory。
 
 `.agents/progress.md` 记录阶段性进展，不保存聊天流水。
 
-追加条目：
-
-```md
-## YYYY-MM-DD - <short task title>
-
-- Completed: concise list of durable changes.
-- Verified: commands run and results.
-- Changed: important files or modules.
-- Next: next concrete action.
-- Notes: blockers, decisions, or follow-up.
-```
+追加条目使用 `templates/progress-entry.md`。
 
 只记录对后续工作有价值的信息。不要把每个命令输出全文复制进去。
 
@@ -124,16 +72,7 @@ description: 在任务、阶段或会话收尾时更新项目内 agent memory。
 
 `.agents/lessons.md` 只保存可复用经验，不能变成任务日志。
 
-追加条目：
-
-```md
-## YYYY-MM-DD - <short lesson title>
-
-- Context:
-- Lesson:
-- Apply when:
-- Check next time:
-```
+追加条目使用 `templates/lesson-entry.md`。
 
 只有满足至少一条才写入：
 
@@ -162,4 +101,3 @@ description: 在任务、阶段或会话收尾时更新项目内 agent memory。
 - 是否建议运行 `$oblearn`。
 
 不要把完整 memory 内容复制到最终回复，除非用户要求。
-

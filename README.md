@@ -15,6 +15,15 @@ This repository follows the [Agent Skills specification](https://agentskills.io/
 
 The plugin exposes four skills: `obinit`, `obadr`, `obclose`, and `oblearn`.
 
+Claude Code also exposes matching slash commands:
+
+```text
+/obinit
+/obadr
+/obclose
+/oblearn
+```
+
 ### npx skills
 
 ```sh
@@ -88,6 +97,8 @@ The skills are written in Chinese because the workflow is intended for a Chinese
 
 Project memory files such as `.agents/active.md`, `.agents/progress.md`, and `.agents/lessons.md` are agent-driven updates. This repository does not install a background watcher or automatic sync hook. Use `$obclose` at task or session boundaries to write the current state back to project memory.
 
+Templates for files written by the skills live under each skill's `templates/` directory. The `SKILL.md` files define behavior and safety boundaries; templates define the output format.
+
 ## Development
 
 Validate the repository:
@@ -96,4 +107,4 @@ Validate the repository:
 npm test
 ```
 
-The validation script checks that every skill has a `SKILL.md` file with frontmatter `name` and `description`, and that the frontmatter name matches the skill directory.
+The validation script checks skill frontmatter, OpenAI agent metadata, Claude slash commands, templates, and plugin manifest versions.

@@ -77,38 +77,7 @@ docs/adr/
 
 ## ADR 模板
 
-新建 ADR 时使用这个模板：
-
-```md
-# <Decision Title>
-
-- Status: proposed | accepted | superseded | deprecated
-- Date: YYYY-MM-DD
-- Deciders: <people or agent/user session>
-
-## Context
-
-What problem, constraint, or pressure led to this decision.
-
-## Decision
-
-The decision that was made.
-
-## Options Considered
-
-- Option A: tradeoffs.
-- Option B: tradeoffs.
-
-## Consequences
-
-- Positive consequence.
-- Negative consequence or cost.
-- Follow-up work.
-
-## References
-
-- Related issue, PR, spec, plan, or project note.
-```
+新建 ADR 时使用 `templates/adr.md`。填充标题、状态、日期、决策人、背景、决定、备选方案、后果和参考链接。
 
 默认状态：
 
@@ -135,19 +104,10 @@ The decision that was made.
 
 如果 `.agents/active.md` 存在，追加或更新：
 
-```md
-## Current ADRs
-
-- [0001 - <title>](docs/adr/0001-title.md): accepted.
-```
+使用 `templates/active-adrs-section.md` 中的 `Current ADRs` 结构。
 
 如果 `.agents/progress.md` 存在，追加短记录：
 
-```md
-## YYYY-MM-DD
-
-- ADR: recorded [0001 - <title>](../docs/adr/0001-title.md).
-```
+使用 `templates/progress-entry.md`。
 
 不要创建聊天流水式日志。只记录能帮助下一次 agent 恢复项目上下文的信息。
-
