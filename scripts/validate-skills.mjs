@@ -130,6 +130,30 @@ if (existsSync(packageJsonPath)) {
       fail(`${pluginDir}: missing description`);
     }
   }
+
+  const marketplacePath = join(root, ".claude-plugin", "marketplace.json");
+  if (!existsSync(marketplacePath)) {
+    fail(".claude-plugin: missing marketplace.json");
+  } else {
+    const marketplace = JSON.parse(readFileSync(marketplacePath, "utf8"));
+    const marketplacePlugin = marketplace.plugins?.find((plugin) => plugin.name === packageJson.name);
+
+    if (marketplace.name !== packageJson.name) {
+      fail(".claude-plugin/marketplace.json: marketplace name must match package name");
+    }
+
+    if (!marketplacePlugin) {
+      fail(".claude-plugin/marketplace.json: missing plugin entry for package name");
+    } else {
+      if (marketplacePlugin.version !== packageJson.version) {
+        fail(".claude-plugin/marketplace.json: plugin version must match package version");
+      }
+
+      if (marketplacePlugin.source !== "./") {
+        fail('.claude-plugin/marketplace.json: plugin source must be "./"');
+      }
+    }
+  }
 }
 
 if (process.exitCode) {
