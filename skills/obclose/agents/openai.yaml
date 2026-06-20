@@ -1,0 +1,4 @@
+interface:
+  display_name: "Obclose"
+  short_description: "收尾任务并更新项目 memory"
+  default_prompt: "使用 $obclose 更新当前项目的任务状态和 memory。"

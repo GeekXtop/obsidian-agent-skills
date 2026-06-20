@@ -13,7 +13,7 @@ This repository follows the [Agent Skills specification](https://agentskills.io/
 /plugin install obsidian-agent-skills@obsidian-agent-skills
 ```
 
-The plugin exposes three skills: `obinit`, `obadr`, and `oblearn`.
+The plugin exposes four skills: `obinit`, `obadr`, `obclose`, and `oblearn`.
 
 ### npx skills
 
@@ -61,6 +61,7 @@ OpenCode discovers `SKILL.md` files under nested `skills/` directories after res
 | --- | --- |
 | [obinit](skills/obinit) | Initialize or update an Obsidian-backed agent workspace for a software project. |
 | [obadr](skills/obadr) | Record project-local architecture decisions in `docs/adr/`. |
+| [obclose](skills/obclose) | Close out a task or session by updating `.agents/active.md`, `.agents/progress.md`, and `.agents/lessons.md`. |
 | [oblearn](skills/oblearn) | Extract reusable project lessons and write them into Obsidian public knowledge notes. |
 
 ## Usage
@@ -76,12 +77,16 @@ $obadr
 ```
 
 ```text
+$obclose
+```
+
+```text
 $oblearn
 ```
 
 The skills are written in Chinese because the workflow is intended for a Chinese-language Obsidian agent knowledge base. They keep Obsidian as a context and knowledge layer, not a build, test, deploy, or runtime dependency.
 
-Project memory files such as `.agents/active.md`, `.agents/progress.md`, and `.agents/lessons.md` are agent-driven updates. This repository does not install a background watcher or automatic sync hook.
+Project memory files such as `.agents/active.md`, `.agents/progress.md`, and `.agents/lessons.md` are agent-driven updates. This repository does not install a background watcher or automatic sync hook. Use `$obclose` at task or session boundaries to write the current state back to project memory.
 
 ## Development
 

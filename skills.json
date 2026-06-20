@@ -1,7 +1,7 @@
 {
   "name": "obsidian-agent-skills",
-  "version": "0.1.2",
-  "description": "Obsidian-backed workflow skills for project memory, ADRs, and reusable lessons",
+  "version": "0.1.3",
+  "description": "Obsidian-backed workflow skills for project memory, task closeout, ADRs, and reusable lessons",
   "repository": "https://github.com/GeekXtop/obsidian-agent-skills",
   "skills": [
     {
@@ -13,6 +13,11 @@
       "name": "obadr",
       "path": "skills/obadr",
       "description": "为当前项目记录 Architecture Decision Record，并回写项目 memory 链接。"
+    },
+    {
+      "name": "obclose",
+      "path": "skills/obclose",
+      "description": "在任务、阶段或会话收尾时更新项目内 active/progress/lessons。"
     },
     {
       "name": "oblearn",
