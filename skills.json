@@ -1,6 +1,6 @@
 {
   "name": "obsidian-agent-skills",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Obsidian-backed workflow skills for project memory, task closeout, ADRs, and reusable lessons",
   "repository": "https://github.com/GeekXtop/obsidian-agent-skills",
   "skills": [

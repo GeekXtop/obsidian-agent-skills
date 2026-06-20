@@ -149,8 +149,8 @@ if (existsSync(packageJsonPath)) {
         fail(".claude-plugin/marketplace.json: plugin version must match package version");
       }
 
-      if (marketplacePlugin.source !== "./") {
-        fail('.claude-plugin/marketplace.json: plugin source must be "./"');
+      if (marketplacePlugin.source?.source !== "url" || marketplacePlugin.source?.url !== "https://github.com/GeekXtop/obsidian-agent-skills.git") {
+        fail(".claude-plugin/marketplace.json: plugin source must point at the GitHub repository URL");
       }
     }
   }
