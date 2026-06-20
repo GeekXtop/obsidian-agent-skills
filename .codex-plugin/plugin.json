@@ -1,7 +1,7 @@
 {
   "name": "obsidian-agent-skills",
-  "version": "0.1.1",
-  "description": "Obsidian-backed workflow skills for initializing agent project memory and extracting reusable lessons.",
+  "version": "0.1.2",
+  "description": "Obsidian-backed workflow skills for project memory, ADRs, and reusable lessons.",
   "author": {
     "name": "GeekX.top",
     "url": "https://github.com/GeekXtop"
@@ -21,7 +21,7 @@
   "interface": {
     "displayName": "Obsidian Agent Skills",
     "shortDescription": "Initialize project memory and extract reusable Obsidian lessons",
-    "longDescription": "Use Obsidian Agent Skills to initialize Obsidian-backed agent project conventions with obinit and extract reusable project lessons into Obsidian knowledge notes with oblearn.",
+    "longDescription": "Use Obsidian Agent Skills to initialize Obsidian-backed agent project conventions with obinit, record project architecture decisions with obadr, and extract reusable project lessons into Obsidian knowledge notes with oblearn.",
     "developerName": "GeekX.top",
     "category": "Developer Tools",
     "capabilities": [
@@ -31,6 +31,7 @@
     ],
     "defaultPrompt": [
       "使用 $obinit 初始化当前项目。",
+      "使用 $obadr 为当前项目记录一个架构决策。",
       "使用 $oblearn 从当前项目提取可复用公共知识。"
     ],
     "websiteURL": "https://github.com/GeekXtop/obsidian-agent-skills",

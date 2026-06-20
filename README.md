@@ -13,7 +13,7 @@ This repository follows the [Agent Skills specification](https://agentskills.io/
 /plugin install obsidian-agent-skills@obsidian-agent-skills
 ```
 
-The plugin exposes two skills: `obinit` and `oblearn`.
+The plugin exposes three skills: `obinit`, `obadr`, and `oblearn`.
 
 ### npx skills
 
@@ -60,6 +60,7 @@ OpenCode discovers `SKILL.md` files under nested `skills/` directories after res
 | Skill | Description |
 | --- | --- |
 | [obinit](skills/obinit) | Initialize or update an Obsidian-backed agent workspace for a software project. |
+| [obadr](skills/obadr) | Record project-local architecture decisions in `docs/adr/`. |
 | [oblearn](skills/oblearn) | Extract reusable project lessons and write them into Obsidian public knowledge notes. |
 
 ## Usage
@@ -71,10 +72,16 @@ $obinit
 ```
 
 ```text
+$obadr
+```
+
+```text
 $oblearn
 ```
 
 The skills are written in Chinese because the workflow is intended for a Chinese-language Obsidian agent knowledge base. They keep Obsidian as a context and knowledge layer, not a build, test, deploy, or runtime dependency.
+
+Project memory files such as `.agents/active.md`, `.agents/progress.md`, and `.agents/lessons.md` are agent-driven updates. This repository does not install a background watcher or automatic sync hook.
 
 ## Development
 

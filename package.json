@@ -1,7 +1,7 @@
 {
   "name": "obsidian-agent-skills",
-  "version": "0.1.1",
-  "description": "Obsidian-backed workflow skills for coding agents",
+  "version": "0.1.2",
+  "description": "Obsidian-backed workflow skills for project memory, ADRs, and reusable lessons",
   "type": "module",
   "license": "MIT",
   "repository": {

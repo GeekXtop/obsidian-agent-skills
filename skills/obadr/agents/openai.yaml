@@ -1,0 +1,4 @@
+interface:
+  display_name: "Obadr"
+  short_description: "记录项目内架构决策 ADR"
+  default_prompt: "使用 $obadr 为当前项目记录一个架构决策。"

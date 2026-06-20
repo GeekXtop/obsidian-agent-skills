@@ -1,0 +1,153 @@
+---
+name: obadr
+description: 为当前项目记录 Architecture Decision Record。适用于用户要求记录技术决策、沉淀架构取舍、解释为什么选择或放弃某个方案、把重要决定写入 docs/adr/，或希望后续 agent 能理解项目级决策背景。
+---
+
+# Obadr
+
+把当前项目的重要技术取舍写成项目内 ADR。ADR 属于当前仓库，不属于 Obsidian 公共知识库；跨项目可复用经验由 `$oblearn` 另行提取。
+
+## 默认行为
+
+用户只说 `$obadr`、`记录 ADR`、`把这个决定写下来` 或类似请求时，按安全默认值执行：
+
+- 只写当前项目仓库内的 `docs/adr/`。
+- 不把 ADR 原文复制到 Obsidian 公共知识笔记。
+- 不修改源码、依赖、构建配置或 git 配置。
+- 先读取已有 `AGENTS.md`、`.agents/instructions.md`、`.agents/active.md`、相关 `docs/adr/`，避免重复记录。
+- 如果决策内容不明确，先问用户补齐背景、备选方案、最终决定和后果。
+- 如果已有 ADR 覆盖同一决策，优先更新状态或追加后续说明，不创建重复 ADR。
+- 完成后更新 `.agents/active.md` 或 `.agents/progress.md` 的 ADR 链接。
+
+## 适用场景
+
+使用 ADR 记录长期会影响维护的项目级决定，例如：
+
+- 技术栈、框架、数据库、运行时、部署平台选择。
+- 目录结构、模块边界、数据流、权限模型。
+- 引入或拒绝一个依赖、服务、模式或约定。
+- 一次重要重构的边界和原因。
+- 已经验证过的长期技术取舍。
+
+不要为这些内容创建 ADR：
+
+- 临时任务状态。
+- 普通 bug 修复过程。
+- 聊天摘要。
+- 未验证猜测。
+- 跨项目通用经验本身。
+- secret、账号、密钥、客户信息、隐私内容。
+
+跨项目通用经验应该进入 `$oblearn` 的候选知识；项目内决策才进入 `$obadr`。
+
+## 工作流
+
+1. 确定项目根目录：优先使用当前 git root，否则使用当前目录。
+2. 读取项目规则和记忆文件：
+   - `AGENTS.md`
+   - `.agents/instructions.md`
+   - `.agents/active.md`
+   - `.agents/progress.md`
+3. 读取 `docs/adr/` 下现有 ADR 标题和最近相关条目。
+4. 判断是否需要新 ADR：
+   - 新的长期项目决策：创建新 ADR。
+   - 已有 ADR 的后续变化：更新已有 ADR 状态或追加后续说明。
+   - 只是可复用经验：建议使用 `$oblearn`，不要写 ADR。
+5. 如果缺少关键信息，向用户提出简短问题。
+6. 创建或更新 ADR 文件。
+7. 回写 `.agents/active.md` 或 `.agents/progress.md`，记录本次 ADR 链接。
+8. 结束时说明写入的 ADR 路径、状态和是否建议后续运行 `$oblearn`。
+
+## 文件命名
+
+ADR 默认写入：
+
+```text
+docs/adr/
+```
+
+文件名使用递增编号和短标题：
+
+```text
+0001-use-project-agent-memory.md
+0002-keep-obsidian-as-context-layer.md
+```
+
+如果已有 ADR 不是编号风格，遵循项目现有命名方式。不要批量重命名已有 ADR。
+
+## ADR 模板
+
+新建 ADR 时使用这个模板：
+
+```md
+# <Decision Title>
+
+- Status: proposed | accepted | superseded | deprecated
+- Date: YYYY-MM-DD
+- Deciders: <people or agent/user session>
+
+## Context
+
+What problem, constraint, or pressure led to this decision.
+
+## Decision
+
+The decision that was made.
+
+## Options Considered
+
+- Option A: tradeoffs.
+- Option B: tradeoffs.
+
+## Consequences
+
+- Positive consequence.
+- Negative consequence or cost.
+- Follow-up work.
+
+## References
+
+- Related issue, PR, spec, plan, or project note.
+```
+
+默认状态：
+
+- 已经做出的决定用 `accepted`。
+- 还在讨论的决定用 `proposed`。
+- 被替代的决定用 `superseded`，并链接替代 ADR。
+- 不再建议使用的决定用 `deprecated`。
+
+## 与 oblearn 的关系
+
+`obadr` 写项目内决策，`oblearn` 提取跨项目经验。
+
+推荐链路：
+
+```text
+重要技术决策
+-> $obadr 写入 docs/adr/
+-> 如有跨项目可复用经验，再用 $oblearn 提取到 Agent/Knowledge/
+```
+
+不要把项目私有 ADR 直接复制进 Obsidian 公共知识笔记。提取时必须脱敏、泛化，并保留适用范围。
+
+## Memory 回写
+
+如果 `.agents/active.md` 存在，追加或更新：
+
+```md
+## Current ADRs
+
+- [0001 - <title>](docs/adr/0001-title.md): accepted.
+```
+
+如果 `.agents/progress.md` 存在，追加短记录：
+
+```md
+## YYYY-MM-DD
+
+- ADR: recorded [0001 - <title>](../docs/adr/0001-title.md).
+```
+
+不要创建聊天流水式日志。只记录能帮助下一次 agent 恢复项目上下文的信息。
+
