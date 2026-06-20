@@ -10,9 +10,10 @@ This repository follows the [Agent Skills specification](https://agentskills.io/
 
 ```text
 /plugin marketplace add GeekXtop/obsidian-agent-skills
-/plugin install obinit@obsidian-agent-skills
-/plugin install oblearn@obsidian-agent-skills
+/plugin install obsidian-agent-skills@obsidian-agent-skills
 ```
+
+The plugin exposes two skills: `obinit` and `oblearn`.
 
 ### npx skills
 

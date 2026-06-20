@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
 const skillsDir = join(root, "skills");
+const packageJsonPath = join(root, "package.json");
 
 function fail(message) {
   console.error(message);
@@ -59,6 +60,33 @@ if (!existsSync(skillsDir)) {
 
     if (!frontmatter.description) {
       fail(`${skillName}: missing description`);
+    }
+  }
+}
+
+if (existsSync(packageJsonPath)) {
+  const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8"));
+
+  for (const pluginDir of [".claude-plugin", ".codex-plugin"]) {
+    const manifestPath = join(root, pluginDir, "plugin.json");
+
+    if (!existsSync(manifestPath)) {
+      fail(`${pluginDir}: missing plugin.json`);
+      continue;
+    }
+
+    const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+
+    if (manifest.name !== packageJson.name) {
+      fail(`${pluginDir}: manifest name must match package name`);
+    }
+
+    if (manifest.version !== packageJson.version) {
+      fail(`${pluginDir}: manifest version must match package version`);
+    }
+
+    if (!manifest.description) {
+      fail(`${pluginDir}: missing description`);
     }
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "obsidian-agent-skills",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Obsidian-backed workflow skills for coding agents",
   "type": "module",
   "license": "MIT",

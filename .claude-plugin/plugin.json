@@ -1,0 +1,20 @@
+{
+  "name": "obsidian-agent-skills",
+  "version": "0.1.1",
+  "description": "Obsidian-backed workflow skills for initializing agent project memory and extracting reusable lessons.",
+  "author": {
+    "name": "GeekX.top",
+    "url": "https://github.com/GeekXtop"
+  },
+  "homepage": "https://github.com/GeekXtop/obsidian-agent-skills",
+  "repository": "https://github.com/GeekXtop/obsidian-agent-skills",
+  "license": "MIT",
+  "keywords": [
+    "obsidian",
+    "agent-skills",
+    "project-memory",
+    "knowledge-management",
+    "codex",
+    "claude-code"
+  ]
+}

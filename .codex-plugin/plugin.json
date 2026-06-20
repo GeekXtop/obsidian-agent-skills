@@ -1,0 +1,42 @@
+{
+  "name": "obsidian-agent-skills",
+  "version": "0.1.1",
+  "description": "Obsidian-backed workflow skills for initializing agent project memory and extracting reusable lessons.",
+  "author": {
+    "name": "GeekX.top",
+    "url": "https://github.com/GeekXtop"
+  },
+  "homepage": "https://github.com/GeekXtop/obsidian-agent-skills",
+  "repository": "https://github.com/GeekXtop/obsidian-agent-skills",
+  "license": "MIT",
+  "keywords": [
+    "obsidian",
+    "agent-skills",
+    "project-memory",
+    "knowledge-management",
+    "codex",
+    "claude-code"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Obsidian Agent Skills",
+    "shortDescription": "Initialize project memory and extract reusable Obsidian lessons",
+    "longDescription": "Use Obsidian Agent Skills to initialize Obsidian-backed agent project conventions with obinit and extract reusable project lessons into Obsidian knowledge notes with oblearn.",
+    "developerName": "GeekX.top",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "使用 $obinit 初始化当前项目。",
+      "使用 $oblearn 从当前项目提取可复用公共知识。"
+    ],
+    "websiteURL": "https://github.com/GeekXtop/obsidian-agent-skills",
+    "privacyPolicyURL": "https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement",
+    "termsOfServiceURL": "https://docs.github.com/en/site-policy/github-terms/github-terms-of-service",
+    "brandColor": "#7C3AED",
+    "screenshots": []
+  }
+}
