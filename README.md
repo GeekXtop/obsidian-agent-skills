@@ -1,10 +1,10 @@
 # Obsidian Agent Skills
 
-Obsidian-backed workflow skills for coding agents.
+面向中文 coding agent 工作流的 Obsidian-backed skills 集合。
 
-This repository follows the [Agent Skills specification](https://agentskills.io/specification). It can be installed by skills-compatible agents such as Claude Code, Codex, OpenCode, and other clients that discover `skills/<skill-name>/SKILL.md`.
+本仓库遵循 [Agent Skills specification](https://agentskills.io/specification)。Claude Code、Codex、OpenCode 以及其他能发现 `skills/<skill-name>/SKILL.md` 的客户端都可以安装使用。
 
-## Installation
+## 安装
 
 ### Marketplace
 
@@ -13,9 +13,9 @@ This repository follows the [Agent Skills specification](https://agentskills.io/
 /plugin install obsidian-agent-skills@obsidian-agent-skills
 ```
 
-The plugin exposes four skills: `obinit`, `obadr`, `obclose`, and `oblearn`.
+插件提供四个 skills：`obinit`、`obadr`、`obclose`、`oblearn`。
 
-Claude Code also exposes matching slash commands:
+Claude Code 同时提供对应 slash command：
 
 ```text
 /obinit
@@ -26,21 +26,21 @@ Claude Code also exposes matching slash commands:
 
 ### npx skills
 
-```sh
+```bash
 npx skills add https://github.com/GeekXtop/obsidian-agent-skills
 ```
 
-If you prefer SSH:
+如果偏好 SSH：
 
-```sh
+```bash
 npx skills add git@github.com:GeekXtop/obsidian-agent-skills.git
 ```
 
-### Manual install
+### 手动安装
 
 #### Codex
 
-Copy the `skills/` directory into your Codex skills path:
+把 `skills/` 目录复制到 Codex skills 路径：
 
 ```text
 ~/.codex/skills
@@ -48,7 +48,7 @@ Copy the `skills/` directory into your Codex skills path:
 
 #### Claude Code
 
-Copy the skill directories under `skills/` into your Claude skills path:
+把 `skills/` 下的 skill 目录复制到 Claude skills 路径：
 
 ```text
 ~/.claude/skills
@@ -56,26 +56,26 @@ Copy the skill directories under `skills/` into your Claude skills path:
 
 #### OpenCode
 
-Clone the full repository into the OpenCode skills directory:
+把完整仓库 clone 到 OpenCode skills 目录：
 
-```sh
+```bash
 git clone https://github.com/GeekXtop/obsidian-agent-skills.git ~/.opencode/skills/obsidian-agent-skills
 ```
 
-OpenCode discovers `SKILL.md` files under nested `skills/` directories after restart.
+OpenCode 重启后会发现嵌套 `skills/` 目录下的 `SKILL.md`。
 
 ## Skills
 
-| Skill | Description |
+| Skill | 说明 |
 | --- | --- |
-| [obinit](skills/obinit) | Initialize or update an Obsidian-backed agent workspace for a software project. |
-| [obadr](skills/obadr) | Record project-local architecture decisions in `docs/adr/`. |
-| [obclose](skills/obclose) | Close out a task or session by updating `.agents/active.md`, `.agents/progress.md`, and `.agents/lessons.md`. |
-| [oblearn](skills/oblearn) | Extract reusable project lessons and write them into Obsidian public knowledge notes. |
+| [obinit](skills/obinit) | 初始化或更新软件项目的 Obsidian-backed agent 工作约定，默认生成简体中文文档。 |
+| [obadr](skills/obadr) | 把项目内长期架构决策记录到 `docs/adr/`。 |
+| [obclose](skills/obclose) | 在任务或会话收尾时更新 `.agents/active.md`、`.agents/progress.md` 和 `.agents/lessons.md`。 |
+| [oblearn](skills/oblearn) | 从项目内经验提取跨项目可复用知识，并写入 Obsidian 公共知识笔记。 |
 
-## Usage
+## 使用
 
-Ask your agent to use a skill explicitly:
+显式要求 agent 使用某个 skill：
 
 ```text
 $obinit
@@ -93,18 +93,18 @@ $obclose
 $oblearn
 ```
 
-The skills are written in Chinese because the workflow is intended for a Chinese-language Obsidian agent knowledge base. They keep Obsidian as a context and knowledge layer, not a build, test, deploy, or runtime dependency.
+这些 skills 默认使用简体中文生成长期文档和项目记忆；技术标识符、路径、命令、包名和英文专有名词保持原样。它们把 Obsidian 作为上下文和知识层，不把 Obsidian 变成构建、测试、部署或运行时依赖。
 
-Project memory files such as `.agents/active.md`, `.agents/progress.md`, and `.agents/lessons.md` are agent-driven updates. This repository does not install a background watcher or automatic sync hook. Use `$obclose` at task or session boundaries to write the current state back to project memory.
+`.agents/active.md`、`.agents/progress.md`、`.agents/lessons.md` 等项目 memory 文件不会后台自动同步。需要 agent 在任务开始、阶段结束或会话收尾时主动回写；常规收尾可使用 `$obclose`。
 
-Templates for files written by the skills live under each skill's `templates/` directory. The `SKILL.md` files define behavior and safety boundaries; templates define the output format.
+模板文件位于各 skill 的 `templates/` 目录。`SKILL.md` 定义行为和安全边界，模板定义写入项目或 Obsidian 的输出格式。
 
-## Development
+## 开发
 
-Validate the repository:
+验证仓库：
 
-```sh
+```bash
 npm test
 ```
 
-The validation script checks skill frontmatter, OpenAI agent metadata, Claude slash commands, templates, and plugin manifest versions.
+校验脚本会检查 skill frontmatter、OpenAI agent metadata、Claude slash command、模板中文化回归规则，以及插件 manifest 版本一致性。

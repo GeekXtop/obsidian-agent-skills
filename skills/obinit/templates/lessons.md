@@ -1,15 +1,14 @@
-# Lessons
+# 经验记录
 
-Use this file only for reusable project lessons.
+本文件只记录项目内可复用经验。
 
-## Format
+## 格式
 
 ```md
-## YYYY-MM-DD - <short lesson title>
+## YYYY-MM-DD - <简短经验标题>
 
-- Context:
-- Lesson:
-- Apply when:
-- Check next time:
+- 背景：
+- 经验：
+- 适用场景：
+- 下次检查：
 ```
-

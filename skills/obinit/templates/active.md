@@ -1,39 +1,39 @@
-# Active
+# 当前状态
 
-## Current Task
+## 当前任务
 
-- Goal:
-- Status: initialized
-- Last updated: <date>
+- 目标：
+- 状态：已初始化
+- 最后更新：<date>
 
-## Current State
+## 当前状态
 
-- Project initialized for agent memory.
+- 已为项目初始化 agent memory 结构。
 
-## Verification
+## 验证
 
-- Command:
-- Result:
+- 命令：
+- 结果：
 
-## Important Files
+## 关键文件
 
-- `.agents/instructions.md`: neutral project rules.
-- `.agents/progress.md`: milestone summaries.
-- `.agents/lessons.md`: reusable lessons.
-- `docs/adr/`: architecture decisions.
+- `.agents/instructions.md`：中立项目规则。
+- `.agents/progress.md`：阶段性进展摘要。
+- `.agents/lessons.md`：可复用经验。
+- `docs/adr/`：架构决策记录。
 
-## Next Steps
+## 下一步
 
-1. Update this file at the start and end of meaningful work.
+1. 在重要工作开始和结束时更新本文件。
 
-## Knowledge Used
+## 已使用知识
 
 - [[Knowledge Note]]
 
-## Knowledge Extracted
+## 已提取知识
 
-- [[Knowledge Note]]: short note.
+- [[Knowledge Note]]：简短说明。
 
 ## Obsidian
 
-- Project note: Agent/Projects/<project>.md
+- 项目笔记：`Agent/Projects/<project>.md`

@@ -19,6 +19,7 @@ description: 从项目内 agent 记忆库、Superpowers specs/plans、ADR、rece
 - 不扫描整个 vault。
 - 不写 secret、账号、token、客户信息、内部路径细节。
 - 不把 Superpowers spec/plan 原文复制进 Obsidian。
+- 新建或追加的 Obsidian 公共知识和项目回写内容默认使用简体中文；技术标识符、路径、命令、包名和英文专有名词保持原样。
 
 ## 输入来源
 

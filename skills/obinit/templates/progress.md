@@ -1,10 +1,9 @@
-# Progress
+# 进展记录
 
-Use this file for milestone summaries, not chat transcripts.
+本文件只记录阶段性进展摘要，不记录聊天流水。
 
-## <date> - Project Initialized
+## <date> - 项目初始化
 
-- Completed: initialized agent memory structure.
-- Verified:
-- Next:
-
+- 已完成：初始化 agent memory 结构。
+- 已验证：
+- 下一步：

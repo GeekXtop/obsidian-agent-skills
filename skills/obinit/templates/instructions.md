@@ -1,39 +1,38 @@
-# Agent Instructions
+# Agent 工作约定
 
-## Project Protocol
+## 项目规则
 
-- Read this file before changing code.
-- Project facts belong in this repository.
-- Agent scratch notes, plans, and investigation logs belong in `.agents/`.
-- Current task state belongs in `.agents/active.md`.
-- Progress summaries belong in `.agents/progress.md`.
-- Reusable lessons belong in `.agents/lessons.md`.
-- Durable documentation belongs in `docs/`.
-- Architecture decisions belong in `docs/adr/`.
-- Obsidian project note: Agent/Projects/<project>.md.
+- 修改代码前先读本文件。
+- 项目事实写在当前仓库内。
+- Agent 草稿、计划和调查记录写在 `.agents/`。
+- 当前任务状态写在 `.agents/active.md`。
+- 阶段进展摘要写在 `.agents/progress.md`。
+- 可复用经验写在 `.agents/lessons.md`。
+- 长期项目文档写在 `docs/`。
+- 架构决策写在 `docs/adr/`。
+- Obsidian 项目笔记：`Agent/Projects/<project>.md`。
 
-## Bootstrap Scope
+## 初始化范围
 
-During project initialization, agents may create or update only:
+项目初始化阶段，agent 只能创建或更新：
 
 - `AGENTS.md`
 - `CLAUDE.md`
 - `.agents/`
 - `docs/`
 
-Any other path requires an explicit user request.
+其他路径必须等待用户明确要求。
 
-## Normal Work
+## 日常工作
 
-- Modify code only within the user's requested task scope.
-- Ask before bulk moves, deletes, renames, generated-file churn, dependency changes, or documentation restructuring.
-- Do not require private notes, local vaults, or personal tools for build, test, deploy, or runtime behavior.
+- 只修改用户任务范围内的代码和文档。
+- 批量移动、删除、重命名、改生成文件、改依赖或重组文档前先问用户。
+- 构建、测试、部署和运行时不能依赖私人笔记、本地 vault 或个人工具。
 
-## Memory
+## 记忆库
 
-- Update `.agents/active.md` at task start, phase completion, and session closeout.
-- Update `.agents/progress.md` after meaningful milestones.
-- Update `.agents/lessons.md` only for reusable lessons.
-- Use `docs/adr/` for long-lived project decisions.
-- Use `docs/superpowers/` for specs and plans; link them from `.agents/active.md` instead of copying full content.
-
+- 任务开始、阶段完成、会话收尾时更新 `.agents/active.md`。
+- 有明确里程碑时更新 `.agents/progress.md`。
+- 只有可复用经验才更新 `.agents/lessons.md`。
+- 长期项目决策写入 `docs/adr/`。
+- `docs/superpowers/` 保存 spec 和 plan；在 `.agents/active.md` 链接当前文件，不复制全文。

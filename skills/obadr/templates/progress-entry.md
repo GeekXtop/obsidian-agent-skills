@@ -1,4 +1,3 @@
 ## YYYY-MM-DD
 
-- ADR: recorded [0001 - <title>](../docs/adr/0001-title.md).
-
+- ADR：记录 [0001 - <标题>](../docs/adr/0001-title.md)。

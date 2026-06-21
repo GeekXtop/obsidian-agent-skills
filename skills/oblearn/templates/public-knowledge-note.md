@@ -1,5 +1,5 @@
 ---
-title: <Knowledge Title>
+title: <知识标题>
 tags:
   - agent/knowledge
   - <domain>
@@ -8,13 +8,12 @@ created: YYYY-MM-DD
 updated: YYYY-MM-DD
 ---
 
-# <Knowledge Title>
+# <知识标题>
 
-## Use When
+## 适用场景
 
-## Always Check
+## 固定检查
 
-## Lessons
+## 经验
 
-## Related
-
+## 相关

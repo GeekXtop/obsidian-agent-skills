@@ -21,6 +21,7 @@ description: 在任务、阶段或会话收尾时更新项目内 agent memory。
 - 不自动提交、不自动推送、不自动创建 release。
 - 不扫描整个 Obsidian vault。
 - 不把项目私有内容写入 Obsidian 公共知识笔记。
+- 新建或追加的 memory 内容默认使用简体中文；技术标识符、路径、命令、包名和英文专有名词保持原样。
 
 如果项目还没有 `.agents/` 或 `.agents/instructions.md`，提示先运行 `$obinit`，不要自行创建完整初始化结构。
 

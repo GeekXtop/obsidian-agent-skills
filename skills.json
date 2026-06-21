@@ -1,13 +1,13 @@
 {
   "name": "obsidian-agent-skills",
-  "version": "0.1.6",
-  "description": "Obsidian-backed workflow skills for project memory, task closeout, ADRs, and reusable lessons",
+  "version": "0.1.7",
+  "description": "面向中文 agent 工作流的 Obsidian-backed 项目记忆、任务收尾、ADR 和经验沉淀 skills",
   "repository": "https://github.com/GeekXtop/obsidian-agent-skills",
   "skills": [
     {
       "name": "obinit",
       "path": "skills/obinit",
-      "description": "初始化或更新软件项目的 Obsidian-backed 通用 agent 工作约定。"
+      "description": "初始化或更新软件项目的 Obsidian-backed 通用 agent 工作约定，默认生成简体中文文档。"
     },
     {
       "name": "obadr",

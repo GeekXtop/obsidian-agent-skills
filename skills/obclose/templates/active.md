@@ -1,40 +1,39 @@
-# Active
+# 当前状态
 
-## Current Task
+## 当前任务
 
-- Goal:
-- Status:
-- Last updated: YYYY-MM-DD
+- 目标：
+- 状态：
+- 最后更新：YYYY-MM-DD
 
-## Current State
+## 当前状态
 
-- Completed:
-- In progress:
-- Blocked:
+- 已完成：
+- 进行中：
+- 阻塞：
 
-## Verification
+## 验证
 
-- Command:
-- Result:
+- 命令：
+- 结果：
 
-## Important Files
+## 关键文件
 
-- `path/to/file`: why it matters.
+- `path/to/file`：重要原因。
 
-## Next Steps
+## 下一步
 
-1. Next concrete step.
-2. Next concrete step.
+1. 下一个具体步骤。
+2. 下一个具体步骤。
 
-## Current ADRs
+## 当前 ADR
 
-- [0001 - <title>](../docs/adr/0001-title.md): accepted.
+- [0001 - <标题>](../docs/adr/0001-title.md)：accepted。
 
-## Knowledge Used
+## 已使用知识
 
 - [[Knowledge Note]]
 
-## Knowledge Extracted
+## 已提取知识
 
-- [[Knowledge Note]]: short note.
-
+- [[Knowledge Note]]：简短说明。

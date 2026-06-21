@@ -1,29 +1,28 @@
-# <Decision Title>
+# <决策标题>
 
-- Status: proposed | accepted | superseded | deprecated
-- Date: YYYY-MM-DD
-- Deciders: <people or agent/user session>
+- 状态：proposed | accepted | superseded | deprecated
+- 日期：YYYY-MM-DD
+- 决策人：<人员或 agent/user 会话>
 
-## Context
+## 背景
 
-What problem, constraint, or pressure led to this decision.
+说明促成该决策的问题、约束或压力。
 
-## Decision
+## 决策
 
-The decision that was made.
+说明最终做出的决定。
 
-## Options Considered
+## 备选方案
 
-- Option A: tradeoffs.
-- Option B: tradeoffs.
+- 方案 A：取舍。
+- 方案 B：取舍。
 
-## Consequences
+## 后果
 
-- Positive consequence.
-- Negative consequence or cost.
-- Follow-up work.
+- 正面影响。
+- 负面影响或成本。
+- 后续工作。
 
-## References
+## 参考
 
-- Related issue, PR, spec, plan, or project note.
-
+- 相关 issue、PR、spec、plan 或项目笔记。

@@ -1,8 +1,7 @@
-## YYYY-MM-DD - <short title>
+## YYYY-MM-DD - <简短标题>
 
-- Source project: [[<project>]]
-- Context: 什么时候遇到
-- Lesson: 可复用结论
-- Apply when: 哪类项目/任务适用
-- Check: 下次 agent 应该检查什么
-
+- 来源项目：[[<project>]]
+- 背景：什么时候遇到
+- 经验：可复用结论
+- 适用场景：哪类项目/任务适用
+- 检查：下次 agent 应该检查什么

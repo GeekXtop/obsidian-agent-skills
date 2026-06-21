@@ -1,13 +1,12 @@
 ---
-description: Initialize or update Obsidian-backed agent project memory
-argument-hint: '[project/vault options]'
+description: 初始化或更新 Obsidian-backed agent 项目记忆
+argument-hint: '[项目或 vault 选项]'
 ---
 
-Use the `obinit` skill to initialize or update the current project's Obsidian-backed agent workspace.
+使用 `obinit` skill 初始化或更新当前项目的 Obsidian-backed agent 工作区。
 
-User arguments:
+用户参数：
 
 ```text
 $ARGUMENTS
 ```
-

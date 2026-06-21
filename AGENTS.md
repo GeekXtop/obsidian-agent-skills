@@ -1,9 +1,10 @@
 # AGENTS.md
 
-## Project Protocol
+## 项目约定
 
-- Keep skills under `skills/<name>/SKILL.md`.
-- Preserve the Agent Skills frontmatter fields `name` and `description`.
-- Keep runtime assumptions inside each skill explicit.
-- Do not add hooks, generated files, or runtime dependencies unless a skill truly requires them.
-- Run `npm test` before publishing changes.
+- Skill 放在 `skills/<name>/SKILL.md`。
+- 保留 Agent Skills frontmatter 字段 `name` 和 `description`。
+- 每个 skill 内要明确运行时假设。
+- 除非 skill 确实需要，不要添加 hook、生成文件或运行时依赖。
+- 发布前运行 `npm test`。
+- 面向用户生成的项目文档默认使用简体中文；路径、命令、包名和英文专有名词保持原样。

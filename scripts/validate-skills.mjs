@@ -8,6 +8,34 @@ const commandsDir = join(root, "commands");
 const packageJsonPath = join(root, "package.json");
 let skillNames = [];
 
+const forbiddenGeneratedEnglish = [
+  "Read `.agents/instructions.md` first",
+  "# Agent Instructions",
+  "## Project Protocol",
+  "## Bootstrap Scope",
+  "## Normal Work",
+  "## Memory",
+  "# Agent Memory",
+  "# Active",
+  "## Current Task",
+  "## Current State",
+  "## Verification",
+  "## Important Files",
+  "## Next Steps",
+  "## Knowledge Used",
+  "## Knowledge Extracted",
+  "# Progress",
+  "# Lessons",
+  "# Architecture Decisions",
+  "# Specs",
+  "# Plans",
+  "## Links",
+  "Use this directory",
+  "Use this file",
+  "User arguments:",
+  "Use the `ob",
+];
+
 function fail(message) {
   console.error(message);
   process.exitCode = 1;
@@ -64,6 +92,21 @@ if (!existsSync(skillsDir)) {
       fail(`${skillName}: missing description`);
     }
 
+    if (skillName === "obinit") {
+      const requiredObinitRules = [
+        "## 入口文件保护",
+        "不得用 `templates/agent-entry.md` 整体替换",
+        "已有非空入口文件只追加中文入口段",
+        "默认使用简体中文",
+      ];
+
+      for (const rule of requiredObinitRules) {
+        if (!markdown.includes(rule)) {
+          fail(`${skillName}: missing required safety rule: ${rule}`);
+        }
+      }
+    }
+
     const openAiAgentPath = join(skillsDir, skillName, "agents", "openai.yaml");
     if (!existsSync(openAiAgentPath)) {
       fail(`${skillName}: missing agents/openai.yaml`);
@@ -80,6 +123,17 @@ if (!existsSync(skillsDir)) {
 
       if (templates.length === 0) {
         fail(`${skillName}: templates directory is empty`);
+      }
+
+      for (const template of templates) {
+        const templatePath = join(templatesDir, template);
+        const content = readFileSync(templatePath, "utf8");
+
+        for (const phrase of forbiddenGeneratedEnglish) {
+          if (content.includes(phrase)) {
+            fail(`${skillName}: template ${template} contains English generated-doc phrase: ${phrase}`);
+          }
+        }
       }
     }
   }
@@ -101,6 +155,12 @@ if (!existsSync(commandsDir)) {
 
     if (!frontmatter?.description) {
       fail(`${skillName}: command missing description`);
+    }
+
+    for (const phrase of forbiddenGeneratedEnglish) {
+      if (command.includes(phrase)) {
+        fail(`${skillName}: command contains English generated-doc phrase: ${phrase}`);
+      }
     }
   }
 }

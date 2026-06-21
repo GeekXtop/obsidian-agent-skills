@@ -1,6 +1,5 @@
-# Specs
+# 设计规格书
 
-Use this directory for Superpowers design specifications.
+本目录用于保存 Superpowers 设计规格书。
 
-Link current specs from `.agents/active.md` instead of copying their full content into agent memory.
-
+在 `.agents/active.md` 链接当前 spec，不要把全文复制进 agent memory。

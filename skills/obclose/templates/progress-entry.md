@@ -1,8 +1,7 @@
-## YYYY-MM-DD - <short task title>
+## YYYY-MM-DD - <简短任务标题>
 
-- Completed: concise list of durable changes.
-- Verified: commands run and results.
-- Changed: important files or modules.
-- Next: next concrete action.
-- Notes: blockers, decisions, or follow-up.
-
+- 已完成：简要列出长期有效的变更。
+- 已验证：运行的命令和结果。
+- 已变更：重要文件或模块。
+- 下一步：下一个具体动作。
+- 备注：阻塞、决策或后续事项。

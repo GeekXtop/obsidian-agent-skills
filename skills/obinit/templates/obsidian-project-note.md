@@ -4,37 +4,36 @@ tags:
   - project
   - agent/project
 status: active
-repo: <absolute repo path>
+repo: <仓库绝对路径>
 created: <date>
 updated: <date>
 ---
 
 # <project>
 
-## Links
+## 链接
 
-- Rules: <repo>/.agents/instructions.md
-- Active: <repo>/.agents/active.md
-- Progress: <repo>/.agents/progress.md
-- Lessons: <repo>/.agents/lessons.md
-- Specs: <repo>/docs/superpowers/specs/
-- Plans: <repo>/docs/superpowers/plans/
-- ADR: <repo>/docs/adr/
+- 规则：<repo>/.agents/instructions.md
+- 当前状态：<repo>/.agents/active.md
+- 进展：<repo>/.agents/progress.md
+- 经验：<repo>/.agents/lessons.md
+- Specs：<repo>/docs/superpowers/specs/
+- Plans：<repo>/docs/superpowers/plans/
+- ADR：<repo>/docs/adr/
 
-## Goal
+## 目标
 
-## Current State
+## 当前状态
 
-## Commands
+## 常用命令
 
-## Knowledge To Check
+## 待查知识
 
 - [[Frontend Design Pitfalls]]
 - [[React Project Conventions]]
 
-## Decisions
+## 决策
 
-## Open Questions
+## 开放问题
 
-## Agent Log
-
+## Agent 记录

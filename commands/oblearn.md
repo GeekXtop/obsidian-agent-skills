@@ -1,13 +1,12 @@
 ---
-description: Extract reusable lessons into Obsidian knowledge notes
-argument-hint: '[scope or lesson focus]'
+description: 提取可复用经验并写入 Obsidian 知识笔记
+argument-hint: '[范围或经验重点]'
 ---
 
-Use the `oblearn` skill to extract reusable lessons from the current project and write suitable knowledge into Obsidian.
+使用 `oblearn` skill 从当前项目提取可复用经验，并写入合适的 Obsidian 公共知识笔记。
 
-User arguments:
+用户参数：
 
 ```text
 $ARGUMENTS
 ```
-

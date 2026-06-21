@@ -1,7 +1,6 @@
-## YYYY-MM-DD - <short lesson title>
+## YYYY-MM-DD - <简短经验标题>
 
-- Context:
-- Lesson:
-- Apply when:
-- Check next time:
-
+- 背景：
+- 经验：
+- 适用场景：
+- 下次检查：

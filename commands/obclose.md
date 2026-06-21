@@ -1,13 +1,12 @@
 ---
-description: Close out the current task and update project memory
-argument-hint: '[task summary]'
+description: 收尾当前任务并更新项目 memory
+argument-hint: '[任务摘要]'
 ---
 
-Use the `obclose` skill to close out the current task or session and update the project's agent memory.
+使用 `obclose` skill 收尾当前任务或会话，并更新项目内 agent memory。
 
-User arguments:
+用户参数：
 
 ```text
 $ARGUMENTS
 ```
-
