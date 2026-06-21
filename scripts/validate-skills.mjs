@@ -69,6 +69,10 @@ function parseFrontmatter(markdown) {
   return result;
 }
 
+function countWordsish(markdown) {
+  return markdown.match(/[A-Za-z0-9_`$./-]+|[\u4e00-\u9fff]/g)?.length ?? 0;
+}
+
 if (!existsSync(skillsDir)) {
   fail("Missing skills directory.");
 } else {
@@ -104,26 +108,75 @@ if (!existsSync(skillsDir)) {
     }
 
     if (skillName === "obinit") {
-      const requiredObinitRules = [
-        "## 初始化模式选择",
-        "新项目模式",
-        "成熟项目接入模式",
-        "重复运行模式",
-        "索引型 `.agents/instructions.md`",
-        "重复运行时也要检查 Obsidian 项目笔记",
-        "Obsidian 项目笔记存在但内容过期时，按当前模式幂等更新",
-        "完成后必须读回 Obsidian 项目笔记",
-        "## 入口文件保护",
-        "不得用 `templates/agent-entry.md` 整体替换",
-        "已有非空入口文件只追加符合语言偏好的入口段",
-        "不要把 `AGENTS.md` / `CLAUDE.md` 的长内容完整复制进 `.agents/instructions.md`",
-        "默认遵循用户或项目既有语言偏好",
-        "Obsidian 项目笔记的相关知识只记录真实查阅或明确相关的公共知识笔记",
+      const body = markdown.replace(/^---\r?\n[\s\S]*?\r?\n---\s*/, "");
+      const bodyWordsish = countWordsish(body);
+      if (bodyWordsish > 2000) {
+        fail(`${skillName}: SKILL.md body is too long (${bodyWordsish} > 2000); move details to references or scripts`);
+      }
+
+      const requiredObinitReferences = [
+        "references/init-modes.md",
+        "references/entry-file-policy.md",
+        "references/obsidian-sync.md",
+        "references/memory-bank.md",
       ];
 
-      for (const rule of requiredObinitRules) {
-        if (!markdown.includes(rule)) {
-          fail(`${skillName}: missing required safety rule: ${rule}`);
+      for (const relativePath of requiredObinitReferences) {
+        if (!markdown.includes(relativePath)) {
+          fail(`${skillName}: SKILL.md must link ${relativePath}`);
+        }
+
+        if (!existsSync(join(skillsDir, skillName, relativePath))) {
+          fail(`${skillName}: missing ${relativePath}`);
+        }
+      }
+
+      const requiredObinitScripts = [
+        "scripts/inspect-project.mjs",
+        "scripts/check-generated-docs.mjs",
+      ];
+
+      for (const relativePath of requiredObinitScripts) {
+        if (!markdown.includes(relativePath)) {
+          fail(`${skillName}: SKILL.md must mention ${relativePath}`);
+        }
+
+        if (!existsSync(join(skillsDir, skillName, relativePath))) {
+          fail(`${skillName}: missing ${relativePath}`);
+        }
+      }
+
+      const requiredObinitConcepts = [
+        {
+          name: "init mode selection",
+          terms: ["## 初始化模式选择", "新项目模式", "成熟项目接入模式", "重复运行模式", "references/init-modes.md"],
+        },
+        {
+          name: "mature project index instructions",
+          terms: ["索引型 `.agents/instructions.md`", "AGENTS.md", "CLAUDE.md", "长内容完整复制"],
+        },
+        {
+          name: "entry file protection",
+          terms: ["## 入口文件保护", "templates/agent-entry.md", "整体替换", "已有非空入口文件"],
+        },
+        {
+          name: "language preference",
+          terms: ["默认遵循用户或项目既有语言偏好"],
+        },
+        {
+          name: "obsidian idempotent sync",
+          terms: ["重复运行", "Obsidian 项目笔记", "内容过期", "幂等更新", "读回"],
+        },
+        {
+          name: "obsidian related knowledge",
+          terms: ["相关知识", "真实查阅", "明确相关", "公共知识笔记"],
+        },
+      ];
+
+      for (const concept of requiredObinitConcepts) {
+        const missing = concept.terms.filter((term) => !markdown.includes(term));
+        if (missing.length > 0) {
+          fail(`${skillName}: missing required ${concept.name} concept terms: ${missing.join(", ")}`);
         }
       }
     }
