@@ -58,8 +58,6 @@ const allowlist = [
   "CLAUDE.md",
   ".agents",
   "docs/adr",
-  "docs/superpowers/specs",
-  "docs/superpowers/plans",
 ];
 
 const result = {

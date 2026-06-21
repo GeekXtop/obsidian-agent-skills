@@ -10,9 +10,6 @@
   lessons.md        # 可复用的坑、限制、经验
   scratch/          # 临时调查材料，可清理
 docs/
-  superpowers/
-    specs/          # 设计规格书
-    plans/          # 实现计划
   adr/              # 长期架构决策
 ```
 
@@ -22,6 +19,6 @@ docs/
 - 完成重要里程碑时追加 `.agents/progress.md`。
 - 只有可复用经验才写入 `.agents/lessons.md`。
 - 长期设计决策抽成 `docs/adr/`。
-- Superpowers 生成的 spec/plan 保留原文件，`.agents/active.md` 只链接当前使用的 spec/plan。
+- Superpowers 生成的 spec/plan 保留原文件，`.agents/active.md` 只链接当前使用的 spec/plan；obinit 不创建或改写 `docs/superpowers/` 内容。
 
-成熟项目的索引型 `.agents/instructions.md` 必须包含已有指南链接、memory 文件用途、Obsidian 项目笔记路径和写入边界。不要复制 `AGENTS.md` / `CLAUDE.md`、README 或 docs 的长章节。
+成熟项目的索引型 `.agents/instructions.md` 必须包含已有指南链接、memory 文件用途、Obsidian 项目笔记路径和写入边界。不要复制 `AGENTS.md` / `CLAUDE.md`、README、docs 或 Superpowers 文档的长章节。
