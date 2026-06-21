@@ -70,14 +70,14 @@ git log -5 --oneline
 优先追加到已有 Obsidian 公共知识笔记：
 
 ```text
-Agent/Knowledge/Frontend Design Pitfalls.md
-Agent/Knowledge/React Project Conventions.md
-Agent/Knowledge/Tailwind UI Pitfalls.md
-Agent/Knowledge/Shadcn Usage Notes.md
-Agent/Knowledge/Deployment Lessons.md
-Agent/Knowledge/Testing Lessons.md
-Agent/Knowledge/Windows Dev Lessons.md
-Agent/Knowledge/Agent Workflow Lessons.md
+Agent/Knowledge/前端设计避坑.md
+Agent/Knowledge/React 项目约定.md
+Agent/Knowledge/Tailwind UI 避坑.md
+Agent/Knowledge/Shadcn 使用经验.md
+Agent/Knowledge/部署经验.md
+Agent/Knowledge/测试经验.md
+Agent/Knowledge/Windows 开发经验.md
+Agent/Knowledge/Agent 工作流经验.md
 ```
 
 如果没有合适笔记，先向用户提出新建建议，不要擅自创建一堆分类。
@@ -93,7 +93,7 @@ Agent/Knowledge/Agent Workflow Lessons.md
 7. 用 Obsidian CLI 定向搜索目标笔记。
 8. 对明确匹配的已有笔记追加短条目。
 9. 对需要新建的笔记，先列清单等用户确认。
-10. 更新项目 Obsidian 笔记的 `Knowledge To Check`。
+10. 更新项目 Obsidian 笔记的 `相关知识`。
 11. 在 `.agents/active.md` 或 `.agents/lessons.md` 记录本次提取结果。
 
 ## Obsidian 查找
@@ -101,8 +101,8 @@ Agent/Knowledge/Agent Workflow Lessons.md
 使用关键词定向搜索：
 
 ```bash
-obsidian search query="frontend design pitfalls" limit=5
-obsidian read path="Agent/Knowledge/Frontend Design Pitfalls.md"
+obsidian search query="前端设计避坑" limit=5
+obsidian read path="Agent/Knowledge/前端设计避坑.md"
 ```
 
 不要使用全 vault 扫描来“找灵感”。搜索词应来自任务领域、技术栈、错误信息或候选知识分类。
@@ -121,7 +121,7 @@ obsidian read path="Agent/Knowledge/Frontend Design Pitfalls.md"
 
 使用 `templates/public-knowledge-note.md`。
 
-内部链接使用 Obsidian wikilink，例如 `[[Frontend Design Pitfalls]]`。外部链接用标准 Markdown 链接。
+内部链接使用 Obsidian wikilink，例如 `[[前端设计避坑]]`。外部链接用标准 Markdown 链接。
 
 ## 项目回写
 

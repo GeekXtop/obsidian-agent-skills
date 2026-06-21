@@ -27,10 +27,9 @@ updated: <date>
 
 ## 常用命令
 
-## 待查知识
+## 相关知识
 
-- [[Frontend Design Pitfalls]]
-- [[React Project Conventions]]
+- 暂无。需要时由 agent 按任务领域定向搜索并补充。
 
 ## 决策
 

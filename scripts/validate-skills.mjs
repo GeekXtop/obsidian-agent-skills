@@ -24,6 +24,7 @@ const forbiddenGeneratedEnglish = [
   "## Next Steps",
   "## Knowledge Used",
   "## Knowledge Extracted",
+  "Knowledge Note",
   "# Progress",
   "# Lessons",
   "# Architecture Decisions",
@@ -39,6 +40,11 @@ const forbiddenGeneratedEnglish = [
 const forbiddenProjectPositioning = [
   "面向中文 agent 工作流",
   "面向中文 coding agent 工作流",
+];
+
+const forbiddenDefaultKnowledgeLinks = [
+  "Frontend Design Pitfalls",
+  "React Project Conventions",
 ];
 
 function fail(message) {
@@ -112,6 +118,7 @@ if (!existsSync(skillsDir)) {
         "已有非空入口文件只追加符合语言偏好的入口段",
         "不要把 `AGENTS.md` / `CLAUDE.md` 的长内容完整复制进 `.agents/instructions.md`",
         "默认遵循用户或项目既有语言偏好",
+        "Obsidian 项目笔记的相关知识只记录真实查阅或明确相关的公共知识笔记",
       ];
 
       for (const rule of requiredObinitRules) {
@@ -150,6 +157,19 @@ if (!existsSync(skillsDir)) {
         for (const phrase of forbiddenGeneratedEnglish) {
           if (content.includes(phrase)) {
             fail(`${skillName}: template ${template} contains English generated-doc phrase: ${phrase}`);
+          }
+        }
+
+        for (const phrase of forbiddenDefaultKnowledgeLinks) {
+          if (content.includes(phrase)) {
+            fail(`${skillName}: template ${template} contains hardcoded default knowledge link: ${phrase}`);
+          }
+        }
+
+        if (skillName === "obinit" && template === "obsidian-project-note.md") {
+          const concreteKnowledgeLinks = content.match(/\[\[(?!<)[^\]]+\]\]/g) ?? [];
+          if (concreteKnowledgeLinks.length > 0) {
+            fail(`${skillName}: template ${template} must not prefill concrete knowledge wikilinks: ${concreteKnowledgeLinks.join(", ")}`);
           }
         }
       }
