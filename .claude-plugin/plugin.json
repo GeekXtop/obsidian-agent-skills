@@ -1,6 +1,6 @@
 {
   "name": "obsidian-agent-skills",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "面向中文 agent 工作流的 Obsidian-backed 项目记忆、任务收尾、ADR 和经验沉淀 skills。",
   "author": {
     "name": "GeekX.top",

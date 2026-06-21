@@ -94,9 +94,15 @@ if (!existsSync(skillsDir)) {
 
     if (skillName === "obinit") {
       const requiredObinitRules = [
+        "## 初始化模式选择",
+        "新项目模式",
+        "成熟项目接入模式",
+        "重复运行模式",
+        "索引型 `.agents/instructions.md`",
         "## 入口文件保护",
         "不得用 `templates/agent-entry.md` 整体替换",
         "已有非空入口文件只追加中文入口段",
+        "不要把 `AGENTS.md` / `CLAUDE.md` 的长内容完整复制进 `.agents/instructions.md`",
         "默认使用简体中文",
       ];
 
@@ -123,6 +129,10 @@ if (!existsSync(skillsDir)) {
 
       if (templates.length === 0) {
         fail(`${skillName}: templates directory is empty`);
+      }
+
+      if (skillName === "obinit" && !templates.includes("instructions-index.md")) {
+        fail(`${skillName}: missing templates/instructions-index.md for mature project onboarding`);
       }
 
       for (const template of templates) {

@@ -95,6 +95,12 @@ $oblearn
 
 这些 skills 默认使用简体中文生成长期文档和项目记忆；技术标识符、路径、命令、包名和英文专有名词保持原样。它们把 Obsidian 作为上下文和知识层，不把 Obsidian 变成构建、测试、部署或运行时依赖。
 
+`$obinit` 会按项目状态选择模式：
+
+- 新项目：创建完整 `.agents/instructions.md`，`AGENTS.md` / `CLAUDE.md` 作为薄入口。
+- 成熟项目或 fork：保留已有 `AGENTS.md` / `CLAUDE.md`，只追加中文入口提示；`.agents/instructions.md` 使用索引型结构，避免重复复制长规则。
+- 重复运行：只补缺失文件、链接和入口提示，不覆盖、不重复追加、不重置状态。
+
 `.agents/active.md`、`.agents/progress.md`、`.agents/lessons.md` 等项目 memory 文件不会后台自动同步。需要 agent 在任务开始、阶段结束或会话收尾时主动回写；常规收尾可使用 `$obclose`。
 
 模板文件位于各 skill 的 `templates/` 目录。`SKILL.md` 定义行为和安全边界，模板定义写入项目或 Obsidian 的输出格式。
