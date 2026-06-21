@@ -133,7 +133,6 @@ if (!existsSync(skillsDir)) {
 
       const requiredObinitScripts = [
         "scripts/inspect-project.mjs",
-        "scripts/check-generated-docs.mjs",
       ];
 
       for (const relativePath of requiredObinitScripts) {

@@ -23,11 +23,6 @@ node <skill>/scripts/inspect-project.mjs <project-root>
 5. 选择模板、合并已有内容、写入项目 memory。
 6. 如果 Obsidian CLI 可用且 Obsidian 已打开，创建或更新 `Agent/Projects/<project>.md`。
 7. 读回更新过的项目文件；完成后必须读回 Obsidian 项目笔记。
-8. 可运行 `scripts/check-generated-docs.mjs` 检查旧模板、短指针覆盖和默认知识链接回归：
-
-```bash
-node <skill>/scripts/check-generated-docs.mjs <project-root>
-```
 
 ## 初始化模式选择
 
