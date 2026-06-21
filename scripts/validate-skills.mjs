@@ -36,6 +36,11 @@ const forbiddenGeneratedEnglish = [
   "Use the `ob",
 ];
 
+const forbiddenProjectPositioning = [
+  "面向中文 agent 工作流",
+  "面向中文 coding agent 工作流",
+];
+
 function fail(message) {
   console.error(message);
   process.exitCode = 1;
@@ -99,11 +104,14 @@ if (!existsSync(skillsDir)) {
         "成熟项目接入模式",
         "重复运行模式",
         "索引型 `.agents/instructions.md`",
+        "重复运行时也要检查 Obsidian 项目笔记",
+        "Obsidian 项目笔记存在但内容过期时，按当前模式幂等更新",
+        "完成后必须读回 Obsidian 项目笔记",
         "## 入口文件保护",
         "不得用 `templates/agent-entry.md` 整体替换",
-        "已有非空入口文件只追加中文入口段",
+        "已有非空入口文件只追加符合语言偏好的入口段",
         "不要把 `AGENTS.md` / `CLAUDE.md` 的长内容完整复制进 `.agents/instructions.md`",
-        "默认使用简体中文",
+        "默认遵循用户或项目既有语言偏好",
       ];
 
       for (const rule of requiredObinitRules) {
@@ -177,6 +185,25 @@ if (!existsSync(commandsDir)) {
 
 if (existsSync(packageJsonPath)) {
   const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8"));
+
+  for (const relativePath of [
+    "package.json",
+    "skills.json",
+    "README.md",
+    join(".claude-plugin", "marketplace.json"),
+    join(".claude-plugin", "plugin.json"),
+    join(".codex-plugin", "plugin.json"),
+  ]) {
+    const filePath = join(root, relativePath);
+    if (!existsSync(filePath)) continue;
+
+    const content = readFileSync(filePath, "utf8");
+    for (const phrase of forbiddenProjectPositioning) {
+      if (content.includes(phrase)) {
+        fail(`${relativePath}: avoid positioning the project as Chinese-only: ${phrase}`);
+      }
+    }
+  }
 
   for (const pluginDir of [".claude-plugin", ".codex-plugin"]) {
     const manifestPath = join(root, pluginDir, "plugin.json");
