@@ -58,6 +58,7 @@ const allowlist = [
   "CLAUDE.md",
   ".agents",
   "docs/adr",
+  ".gitignore",
 ];
 
 const result = {

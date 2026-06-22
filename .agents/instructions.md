@@ -1,16 +1,16 @@
 # Agent 工作约定
 
-## 项目规则
+Obsidian 项目笔记：`Agent/Projects/obsidian-agent-skills.md`。
 
-- 修改代码前先读本文件。
-- 项目事实写在当前仓库内。
-- Agent 草稿、计划和调查记录写在 `.agents/`。
-- 当前任务状态写在 `.agents/active.md`。
-- 阶段进展摘要写在 `.agents/progress.md`。
-- 可复用经验写在 `.agents/lessons.md`。
-- 长期项目文档写在 `docs/`。
-- 架构决策写在 `docs/adr/`。
-- Obsidian 项目笔记：`Agent/Projects/<project>.md`。
+## 规则入口
+
+- 修改代码前先读本文件，确认 memory 位置、Obsidian 项目笔记和当前工作范围。
+- 仓库已有通用指南：`AGENTS.md`。
+- Claude Code 专用指南：`CLAUDE.md`。
+- 项目说明、安装方式和开发命令：`README.md`。
+- package metadata：`package.json`、`skills.json`。
+- 如果需要项目结构、命令、测试、架构或提交规范细节，读取上述源文件，不要依赖本文件的二次摘要。
+- 不要把 `AGENTS.md` / `CLAUDE.md` / `README.md` / docs 的长内容完整复制进本文件。
 
 ## 初始化范围
 
@@ -39,3 +39,9 @@
 - 长期项目决策写入 `docs/adr/`。
 - 如已有 Superpowers spec/plan，在 `.agents/active.md` 链接当前文件，不复制全文。
 - 临时调查草稿写入 `.agents/scratch/`；运行日志、缓存和生成物不要放进 agent memory。
+
+## 重复运行
+
+- 如果入口提示已经存在，不要重复追加。
+- 如果 `.agents/` 文件已经存在，保留现有内容，只补缺失段落或缺失文件。
+- 如果现有规则之间冲突，停止修改冲突文件并向用户列出待确认项。

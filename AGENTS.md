@@ -8,3 +8,5 @@
 - 除非 skill 确实需要，不要添加 hook、生成文件或运行时依赖。
 - 发布前运行 `npm test`。
 - 生成的项目文档默认遵循用户或项目既有语言偏好；当前模板使用简体中文，路径、命令、包名和英文专有名词保持原样。
+
+> Agent 规则入口：修改代码前先读 `.agents/instructions.md`。本文件保留仓库原有指南，`.agents/instructions.md` 是跨 agent 的工作约定汇总。

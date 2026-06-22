@@ -17,22 +17,14 @@ updated: <date>
 - 当前状态：<repo>/.agents/active.md
 - 进展：<repo>/.agents/progress.md
 - 经验：<repo>/.agents/lessons.md
-- Specs：<repo>/docs/superpowers/specs/
-- Plans：<repo>/docs/superpowers/plans/
 - ADR：<repo>/docs/adr/
-
-## 目标
 
 ## 当前状态
 
-## 常用命令
-
-## 相关知识
-
-- 暂无。需要时由 agent 按任务领域定向搜索并补充。
-
-## 决策
-
-## 开放问题
+- 接入模式：<新项目 / 成熟项目接入 / 重复运行>
+- Memory：<本次创建或更新的真实状态>
+- 最近更新：<date>
 
 ## Agent 记录
+
+- <date>：使用 `$obinit` 接入项目 memory；初始化模式记录在本节或当前状态，不写入决策。

@@ -2,7 +2,7 @@
 
 本目录保存项目内 agent memory。
 
-- `instructions.md`：中立项目规则。
+- `instructions.md`：成熟项目索引和 memory 协议。
 - `active.md`：当前任务状态和下一步。
 - `progress.md`：阶段性进展摘要。
 - `lessons.md`：项目内可复用经验。

@@ -18,6 +18,7 @@ Obsidian 项目笔记：`Agent/Projects/<project>.md`。
 - `CLAUDE.md`
 - `.agents/`
 - `docs/adr/`
+- `.gitignore` 中的 `.agents/scratch/` 条目
 
 其他路径必须等待用户明确要求。
 
@@ -35,6 +36,7 @@ Obsidian 项目笔记：`Agent/Projects/<project>.md`。
 - 只有可复用经验才更新 `.agents/lessons.md`。
 - 长期项目决策写入 `docs/adr/`。
 - 如已有 Superpowers spec/plan，在 `.agents/active.md` 链接当前文件，不复制全文。
+- 临时调查草稿写入 `.agents/scratch/`；运行日志、缓存和生成物不要放进 agent memory。
 
 ## 重复运行
 

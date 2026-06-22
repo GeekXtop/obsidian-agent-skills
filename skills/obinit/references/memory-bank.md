@@ -8,7 +8,7 @@
   active.md         # 当前任务、当前 spec/plan、下一步
   progress.md       # 里程碑式进展摘要
   lessons.md        # 可复用的坑、限制、经验
-  scratch/          # 临时调查材料，可清理
+  scratch/          # 临时调查草稿，可清理
 docs/
   adr/              # 长期架构决策
 ```
@@ -20,5 +20,6 @@ docs/
 - 只有可复用经验才写入 `.agents/lessons.md`。
 - 长期设计决策抽成 `docs/adr/`。
 - Superpowers 生成的 spec/plan 保留原文件，`.agents/active.md` 只链接当前使用的 spec/plan；obinit 不创建、不改写、不递归读取 `docs/superpowers/specs/` 或 `docs/superpowers/plans/`，只有 `.agents/active.md` 指向具体文件或用户指定时才读取。
+- 临时调查草稿写入 `.agents/scratch/`，并在 `.gitignore` 忽略；运行日志、缓存和生成物不要放进 agent memory。
 
 成熟项目的索引型 `.agents/instructions.md` 必须包含已有指南链接、memory 文件用途、Obsidian 项目笔记路径和写入边界。不要复制 `AGENTS.md` / `CLAUDE.md`、README、docs 或 Superpowers 文档的长章节。

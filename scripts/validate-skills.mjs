@@ -9,6 +9,7 @@ const skillsDir = join(root, "skills");
 const commandsDir = join(root, "commands");
 const packageJsonPath = join(root, "package.json");
 const skillsJsonPath = join(root, "skills.json");
+const gitignorePath = join(root, ".gitignore");
 const inspectProjectScriptPath = join(skillsDir, "obinit", "scripts", "inspect-project.mjs");
 let skillNames = [];
 
@@ -67,8 +68,28 @@ const forbiddenTemplatePlaceholders = [
   "0001-title.md",
 ];
 
+const forbiddenObsidianProjectNoteTemplatePhrases = [
+  "暂无",
+  "## 目标",
+  "## 常用命令",
+  "## 相关知识",
+  "## 决策",
+  "## 开放问题",
+  "Specs：",
+  "Plans：",
+];
+
 const unsupportedEntryFiles = [
   "GEMINI.md",
+];
+
+const requiredGitignoreEntries = [
+  ".agents/scratch/",
+];
+
+const forbiddenNonstandardAgentTempPaths = [
+  ".agents/tmp",
+  ".agent/tmp",
 ];
 
 const requiredObinitReferences = [
@@ -116,6 +137,14 @@ const requiredObinitConcepts = [
   {
     name: "bounded docs discovery",
     terms: ["docs 顶层", "不递归读取", "docs/superpowers/specs/", "docs/superpowers/plans/", "用户指定"],
+  },
+  {
+    name: "scratch-only temporary workspace",
+    terms: [".agents/scratch/", "临时调查草稿", "运行日志", "缓存", "生成物", "不要放进 agent memory"],
+  },
+  {
+    name: "clean Obsidian project note",
+    terms: ["干净索引", "只写真实链接", "省略空章节", "初始化模式", "Agent 记录", "不写入决策"],
   },
 ];
 
@@ -319,6 +348,9 @@ if (!existsSync(skillsDir)) {
     }
 
     assertNoDefaultKnowledgeNoteExamples(`${skillName}: SKILL.md`, markdown);
+    assertNoPhrases(`${skillName}: SKILL.md`, markdown, forbiddenNonstandardAgentTempPaths, (phrase) => {
+      return `must not use nonstandard agent temp path: ${phrase}`;
+    });
 
     if (skillName === "obinit") {
       const body = markdown.replace(/^---\r?\n[\s\S]*?\r?\n---\s*/, "");
@@ -337,7 +369,11 @@ if (!existsSync(skillsDir)) {
         if (!existsSync(referencePath)) {
           fail(`${skillName}: missing ${relativePath}`);
         } else {
-          assertNoDefaultKnowledgeNoteExamples(`${skillName}: ${relativePath}`, readFileSync(referencePath, "utf8"));
+          const referenceContent = readFileSync(referencePath, "utf8");
+          assertNoDefaultKnowledgeNoteExamples(`${skillName}: ${relativePath}`, referenceContent);
+          assertNoPhrases(`${skillName}: ${relativePath}`, referenceContent, forbiddenNonstandardAgentTempPaths, (phrase) => {
+            return `must not use nonstandard agent temp path: ${phrase}`;
+          });
         }
       }
 
@@ -391,6 +427,9 @@ if (!existsSync(skillsDir)) {
         const templatePath = join(templatesDir, template);
         const content = readFileSync(templatePath, "utf8");
         assertNoDefaultKnowledgeNoteExamples(`${skillName}: template ${template}`, content);
+        assertNoPhrases(`${skillName}: template ${template}`, content, forbiddenNonstandardAgentTempPaths, (phrase) => {
+          return `must not use nonstandard agent temp path: ${phrase}`;
+        });
         assertNoPhrases(`${skillName}: template ${template}`, content, forbiddenGeneratedEnglish, (phrase) => {
           return `contains English generated-doc phrase: ${phrase}`;
         });
@@ -412,6 +451,10 @@ if (!existsSync(skillsDir)) {
         }
 
         if (skillName === "obinit" && template === "obsidian-project-note.md") {
+          assertNoPhrases(`${skillName}: template ${template}`, content, forbiddenObsidianProjectNoteTemplatePhrases, (phrase) => {
+            return `must not include empty Obsidian project note scaffold: ${phrase}`;
+          });
+
           const concreteKnowledgeLinks = content.match(/\[\[(?!<)[^\]]+\]\]/g) ?? [];
           if (concreteKnowledgeLinks.length > 0) {
             fail(`${skillName}: template ${template} must not prefill concrete knowledge wikilinks: ${concreteKnowledgeLinks.join(", ")}`);
@@ -460,6 +503,19 @@ if (!existsSync(commandsDir)) {
 
 if (existsSync(packageJsonPath)) {
   const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8"));
+
+  if (!existsSync(gitignorePath)) {
+    fail("Missing .gitignore.");
+  } else {
+    const gitignore = readFileSync(gitignorePath, "utf8");
+    const missing = requiredGitignoreEntries.filter((entry) => !gitignore.includes(entry));
+    if (missing.length > 0) {
+      fail(`.gitignore: missing required entries: ${missing.join(", ")}`);
+    }
+    assertNoPhrases(".gitignore", gitignore, forbiddenNonstandardAgentTempPaths, (phrase) => {
+      return `must not keep compatibility ignore for nonstandard agent temp path: ${phrase}`;
+    });
+  }
 
   if (!existsSync(skillsJsonPath)) {
     fail("Missing skills.json.");
