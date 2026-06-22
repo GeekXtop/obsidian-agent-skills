@@ -42,7 +42,7 @@ node <skill>/scripts/inspect-project.mjs <project-root>
 
 ## 入口文件保护
 
-处理 `AGENTS.md`、`CLAUDE.md`、`GEMINI.md` 前先读 `references/entry-file-policy.md`。
+处理 `AGENTS.md`、`CLAUDE.md` 前先读 `references/entry-file-policy.md`。
 
 - 文件不存在或为空：可用 `templates/agent-entry.md` 创建。
 - 已有非空入口文件只追加符合语言偏好的入口段。

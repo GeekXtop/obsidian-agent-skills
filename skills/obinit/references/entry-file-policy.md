@@ -1,6 +1,6 @@
 # 入口文件保护
 
-`AGENTS.md`、`CLAUDE.md`、`GEMINI.md` 等入口文件经常已有项目约定。处理规则：
+`AGENTS.md`、`CLAUDE.md` 等当前支持的入口文件经常已有项目约定。处理规则：
 
 - 文件不存在或为空：可以用 `templates/agent-entry.md` 创建。
 - 文件已有非空内容且没有 `.agents/instructions.md` 指针：只追加符合语言偏好的短入口段。

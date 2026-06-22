@@ -17,7 +17,7 @@ Obsidian 项目笔记：`Agent/Projects/<project>.md`。
 - `AGENTS.md`
 - `CLAUDE.md`
 - `.agents/`
-- `docs/`
+- `docs/adr/`
 
 其他路径必须等待用户明确要求。
 
@@ -33,7 +33,7 @@ Obsidian 项目笔记：`Agent/Projects/<project>.md`。
 - 有明确里程碑时更新 `.agents/progress.md`。
 - 只有可复用经验才更新 `.agents/lessons.md`。
 - 长期项目决策写入 `docs/adr/`。
-- `docs/superpowers/` 保存 spec 和 plan；在 `.agents/active.md` 链接当前文件，不复制全文。
+- 如已有 Superpowers spec/plan，在 `.agents/active.md` 链接当前文件，不复制全文。
 
 ## 重复运行
 

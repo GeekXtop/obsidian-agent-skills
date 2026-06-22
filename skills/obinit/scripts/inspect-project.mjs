@@ -41,7 +41,7 @@ function pathExists(root, relativePath) {
 }
 
 const root = findRoot(process.argv[2] ? resolve(process.argv[2]) : process.cwd());
-const entryFiles = ["AGENTS.md", "CLAUDE.md", "GEMINI.md"].map((path) => readFileState(root, path));
+const entryFiles = ["AGENTS.md", "CLAUDE.md"].map((path) => readFileState(root, path));
 const memoryFiles = [".agents/instructions.md", ".agents/active.md", ".agents/progress.md", ".agents/lessons.md"].map((path) => readFileState(root, path));
 const docsSignals = ["README.md", "docs"].map((path) => ({
   path,

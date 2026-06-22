@@ -47,6 +47,10 @@ const forbiddenDefaultKnowledgeLinks = [
   "React Project Conventions",
 ];
 
+const unsupportedEntryFiles = [
+  "GEMINI.md",
+];
+
 function fail(message) {
   console.error(message);
   process.exitCode = 1;
@@ -178,6 +182,19 @@ if (!existsSync(skillsDir)) {
           fail(`${skillName}: missing required ${concept.name} concept terms: ${missing.join(", ")}`);
         }
       }
+
+      for (const unsupportedEntryFile of unsupportedEntryFiles) {
+        if (markdown.includes(unsupportedEntryFile)) {
+          fail(`${skillName}: SKILL.md must not advertise unsupported entry file: ${unsupportedEntryFile}`);
+        }
+      }
+
+      const inspectScript = readFileSync(join(skillsDir, skillName, "scripts", "inspect-project.mjs"), "utf8");
+      for (const unsupportedEntryFile of unsupportedEntryFiles) {
+        if (inspectScript.includes(unsupportedEntryFile)) {
+          fail(`${skillName}: inspect-project.mjs must not report unsupported entry file: ${unsupportedEntryFile}`);
+        }
+      }
     }
 
     const openAiAgentPath = join(skillsDir, skillName, "agents", "openai.yaml");
@@ -215,6 +232,18 @@ if (!existsSync(skillsDir)) {
         for (const phrase of forbiddenDefaultKnowledgeLinks) {
           if (content.includes(phrase)) {
             fail(`${skillName}: template ${template} contains hardcoded default knowledge link: ${phrase}`);
+          }
+        }
+
+        if (skillName === "obinit") {
+          for (const unsupportedEntryFile of unsupportedEntryFiles) {
+            if (content.includes(unsupportedEntryFile)) {
+              fail(`${skillName}: template ${template} must not advertise unsupported entry file: ${unsupportedEntryFile}`);
+            }
+          }
+
+          if (content.includes("- `docs/`")) {
+            fail(`${skillName}: template ${template} must use the narrower docs/adr/ initialization scope`);
           }
         }
 
