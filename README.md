@@ -103,6 +103,8 @@ $oblearn
 
 `.agents/active.md`、`.agents/progress.md`、`.agents/lessons.md` 等项目 memory 文件不会后台自动同步。需要 agent 在任务开始、阶段结束或会话收尾时主动回写；常规收尾可使用 `$obclose`。
 
+`Agent/Knowledge/` 中的跨项目公共知识不会被全量自动加载。接入项目后，agent 应在任务开始或遇到相关问题时按任务领域、技术栈、错误信息或用户问题关键词定向搜索；命中相关笔记后再明确读取并记录到当前项目的“已使用知识”或 Obsidian 项目笔记“相关知识”。
+
 模板文件位于各 skill 的 `templates/` 目录。`SKILL.md` 定义行为和安全边界，模板定义写入项目或 Obsidian 的输出格式。
 
 ## 开发

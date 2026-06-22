@@ -67,20 +67,13 @@ git log -5 --oneline
 
 ## 输出目标
 
-优先追加到已有 Obsidian 公共知识笔记：
+优先追加到定向搜索命中的已有 Obsidian 公共知识笔记：
 
 ```text
-Agent/Knowledge/前端设计避坑.md
-Agent/Knowledge/React 项目约定.md
-Agent/Knowledge/Tailwind UI 避坑.md
-Agent/Knowledge/Shadcn 使用经验.md
-Agent/Knowledge/部署经验.md
-Agent/Knowledge/测试经验.md
-Agent/Knowledge/Windows 开发经验.md
-Agent/Knowledge/Agent 工作流经验.md
+Agent/Knowledge/<主题>.md
 ```
 
-如果没有合适笔记，先向用户提出新建建议，不要擅自创建一堆分类。
+主题应来自候选知识分类、现有笔记命中或用户确认。如果没有合适笔记，先向用户提出新建建议，不要擅自创建一堆分类。
 
 ## 工作流
 
@@ -101,8 +94,8 @@ Agent/Knowledge/Agent 工作流经验.md
 使用关键词定向搜索：
 
 ```bash
-obsidian search query="前端设计避坑" limit=5
-obsidian read path="Agent/Knowledge/前端设计避坑.md"
+obsidian search query="<主题关键词>" limit=5
+obsidian read path="Agent/Knowledge/<实际命中笔记>.md"
 ```
 
 不要使用全 vault 扫描来“找灵感”。搜索词应来自任务领域、技术栈、错误信息或候选知识分类。
@@ -121,7 +114,7 @@ obsidian read path="Agent/Knowledge/前端设计避坑.md"
 
 使用 `templates/public-knowledge-note.md`。
 
-内部链接使用 Obsidian wikilink，例如 `[[前端设计避坑]]`。外部链接用标准 Markdown 链接。
+引用真实存在或本次确认创建的 Obsidian 笔记时使用 wikilink。外部链接用标准 Markdown 链接。
 
 ## 项目回写
 

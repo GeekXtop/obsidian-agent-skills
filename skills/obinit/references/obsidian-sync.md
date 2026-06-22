@@ -16,11 +16,17 @@ Obsidian 只承担三件事：
 - `相关知识` 只写实际查阅、已提取或用户明确要求关联的公共知识笔记；没有明确知识入口时保留空状态。
 - 完成后必须读回 Obsidian 项目笔记。
 
-公共知识查阅示例：
+公共知识按需查阅：
+
+- 任务开始或遇到相关问题时，按任务领域、技术栈、错误信息或用户问题在 `Agent/Knowledge/` 关键词定向搜索。
+- 只有命中相关笔记后才明确读取并使用。
+- 不全量自动加载公共知识，不扫描整个 vault。
+
+查阅示例：
 
 ```bash
-obsidian search query="前端设计避坑" limit=5
-obsidian read path="Agent/Knowledge/前端设计避坑.md"
+obsidian search query="<主题关键词>" limit=5
+obsidian read path="Agent/Knowledge/<实际命中笔记>.md"
 ```
 
 查到并使用公共知识后，在 `.agents/active.md` 的“已使用知识”记录链接。发现跨项目可复用经验时，先写 `.agents/lessons.md`，阶段结束再用 `$oblearn` 提取。

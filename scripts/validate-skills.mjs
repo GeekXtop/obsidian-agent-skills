@@ -1,4 +1,6 @@
-import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -6,6 +8,8 @@ const root = dirname(dirname(fileURLToPath(import.meta.url)));
 const skillsDir = join(root, "skills");
 const commandsDir = join(root, "commands");
 const packageJsonPath = join(root, "package.json");
+const skillsJsonPath = join(root, "skills.json");
+const inspectProjectScriptPath = join(skillsDir, "obinit", "scripts", "inspect-project.mjs");
 let skillNames = [];
 
 const forbiddenGeneratedEnglish = [
@@ -47,9 +51,106 @@ const forbiddenDefaultKnowledgeLinks = [
   "React Project Conventions",
 ];
 
+const forbiddenDefaultKnowledgeNoteExamples = [
+  "前端设计避坑",
+  "React 项目约定",
+  "Tailwind UI 避坑",
+  "Shadcn 使用经验",
+  "部署经验",
+  "测试经验",
+  "Windows 开发经验",
+  "Agent 工作流经验",
+];
+
+const forbiddenTemplatePlaceholders = [
+  "path/to/file",
+  "0001-title.md",
+];
+
 const unsupportedEntryFiles = [
   "GEMINI.md",
 ];
+
+const requiredObinitReferences = [
+  "references/init-modes.md",
+  "references/entry-file-policy.md",
+  "references/obsidian-sync.md",
+  "references/memory-bank.md",
+];
+
+const requiredObinitScripts = [
+  "scripts/inspect-project.mjs",
+];
+
+const requiredKnowledgeLookupTerms = ["Agent/Knowledge/", "关键词定向搜索", "明确读取"];
+
+const requiredObinitConcepts = [
+  {
+    name: "init mode selection",
+    terms: ["## 初始化模式选择", "新项目模式", "成熟项目接入模式", "重复运行模式", "references/init-modes.md"],
+  },
+  {
+    name: "mature project index instructions",
+    terms: ["索引型 `.agents/instructions.md`", "AGENTS.md", "CLAUDE.md", "长内容完整复制"],
+  },
+  {
+    name: "entry file protection",
+    terms: ["## 入口文件保护", "templates/agent-entry.md", "整体替换", "已有非空入口文件"],
+  },
+  {
+    name: "language preference",
+    terms: ["默认遵循用户或项目既有语言偏好"],
+  },
+  {
+    name: "obsidian idempotent sync",
+    terms: ["重复运行", "Obsidian 项目笔记", "内容过期", "幂等更新", "读回"],
+  },
+  {
+    name: "obsidian related knowledge",
+    terms: ["相关知识", "真实查阅", "明确相关", "公共知识笔记"],
+  },
+  {
+    name: "on-demand public knowledge lookup",
+    terms: ["任务开始", "遇到相关问题", "Agent/Knowledge/", "关键词定向搜索", "明确读取"],
+  },
+  {
+    name: "bounded docs discovery",
+    terms: ["docs 顶层", "不递归读取", "docs/superpowers/specs/", "docs/superpowers/plans/", "用户指定"],
+  },
+];
+
+const requiredSkillConcepts = {
+  obadr: [
+    {
+      name: "ADR scope and deduplication",
+      terms: ["docs/adr/", "避免重复记录", "不创建重复 ADR"],
+    },
+    {
+      name: "ADR safety boundaries",
+      terms: ["如果决策内容不明确", "先问用户", "不修改源码、依赖、构建配置或 git 配置", "$oblearn"],
+    },
+  ],
+  oblearn: [
+    {
+      name: "bounded knowledge extraction",
+      terms: ["不扫描整个 vault", "关键词定向搜索", "等待用户确认"],
+    },
+    {
+      name: "privacy and source boundaries",
+      terms: ["不写 secret", "不把 Superpowers spec/plan 原文复制", "用户指定范围"],
+    },
+  ],
+  obclose: [
+    {
+      name: "close-only safety boundary",
+      terms: ["不修改源码、依赖、构建配置或 git 配置", "不自动提交、不自动推送、不自动创建 release", "git status --short"],
+    },
+    {
+      name: "memory preservation",
+      terms: ["保留原结构", "不要整体重写", "只有发现可复用经验时才更新 `.agents/lessons.md`"],
+    },
+  ],
+};
 
 function fail(message) {
   console.error(message);
@@ -75,6 +176,112 @@ function parseFrontmatter(markdown) {
 
 function countWordsish(markdown) {
   return markdown.match(/[A-Za-z0-9_`$./-]+|[\u4e00-\u9fff]/g)?.length ?? 0;
+}
+
+function assertNoPhrases(label, content, phrases, describe) {
+  for (const phrase of phrases) {
+    if (content.includes(phrase)) {
+      fail(`${label}: ${describe(phrase)}`);
+    }
+  }
+}
+
+function assertNoDefaultKnowledgeNoteExamples(label, content) {
+  assertNoPhrases(label, content, forbiddenDefaultKnowledgeNoteExamples, (phrase) => {
+    return `must not suggest default public knowledge note examples: ${phrase}`;
+  });
+}
+
+function assertRequiredConcepts(label, content, concepts) {
+  for (const concept of concepts) {
+    const missing = concept.terms.filter((term) => !content.includes(term));
+    if (missing.length > 0) {
+      fail(`${label}: missing required ${concept.name} concept terms: ${missing.join(", ")}`);
+    }
+  }
+}
+
+function toPosix(path) {
+  return path.replace(/\\/g, "/");
+}
+
+function expectEqual(context, actual, expected) {
+  if (actual !== expected) {
+    fail(`${context}: expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
+  }
+}
+
+function runInspectProjectFixture(name, setup, assertResult) {
+  const tempRoot = mkdtempSync(join(tmpdir(), "obsidian-agent-skills-"));
+  const projectRoot = join(tempRoot, "project");
+
+  try {
+    mkdirSync(projectRoot);
+    const cwd = setup(projectRoot) ?? projectRoot;
+    const output = execFileSync(process.execPath, [inspectProjectScriptPath, cwd], {
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "pipe"],
+    });
+    const result = JSON.parse(output);
+    assertResult(result, projectRoot);
+  } catch (error) {
+    fail(`inspect-project fixture ${name}: ${error.message}`);
+  } finally {
+    rmSync(tempRoot, { recursive: true, force: true });
+  }
+}
+
+function modeFixture(name, expectedMode, setup = () => undefined) {
+  return {
+    name,
+    setup,
+    assert: (result) => expectEqual(`inspect-project fixture ${name} mode`, result.mode, expectedMode),
+  };
+}
+
+function runInspectProjectFixtures() {
+  if (!existsSync(inspectProjectScriptPath)) {
+    fail("obinit: missing scripts/inspect-project.mjs");
+    return;
+  }
+
+  const fixtures = [
+    modeFixture("empty project is new", "new"),
+    modeFixture("AGENTS.md marks mature", "mature", (projectRoot) => {
+      writeFileSync(join(projectRoot, "AGENTS.md"), "# Project Rules\n", "utf8");
+    }),
+    modeFixture("README.md marks mature", "mature", (projectRoot) => {
+      writeFileSync(join(projectRoot, "README.md"), "# Project\n", "utf8");
+    }),
+    modeFixture("docs directory marks mature", "mature", (projectRoot) => {
+      mkdirSync(join(projectRoot, "docs"));
+    }),
+    modeFixture(".agents memory marks repeat", "repeat", (projectRoot) => {
+      mkdirSync(join(projectRoot, ".agents"));
+      writeFileSync(join(projectRoot, ".agents", "instructions.md"), "# Instructions\n", "utf8");
+    }),
+    modeFixture("GEMINI.md is unsupported", "new", (projectRoot) => {
+      writeFileSync(join(projectRoot, "GEMINI.md"), "# Gemini\n", "utf8");
+    }),
+    {
+      name: "git subdirectory resolves repository root",
+      setup: (projectRoot) => {
+        execFileSync("git", ["init"], { cwd: projectRoot, stdio: "ignore" });
+        const subdir = join(projectRoot, "packages", "app");
+        mkdirSync(subdir, { recursive: true });
+        return subdir;
+      },
+      assert: (result, projectRoot) => expectEqual(
+        "inspect-project fixture git subdirectory resolves repository root",
+        result.root,
+        toPosix(projectRoot),
+      ),
+    },
+  ];
+
+  for (const fixture of fixtures) {
+    runInspectProjectFixture(fixture.name, fixture.setup, fixture.assert);
+  }
 }
 
 if (!existsSync(skillsDir)) {
@@ -111,6 +318,8 @@ if (!existsSync(skillsDir)) {
       fail(`${skillName}: missing description`);
     }
 
+    assertNoDefaultKnowledgeNoteExamples(`${skillName}: SKILL.md`, markdown);
+
     if (skillName === "obinit") {
       const body = markdown.replace(/^---\r?\n[\s\S]*?\r?\n---\s*/, "");
       const bodyWordsish = countWordsish(body);
@@ -118,26 +327,19 @@ if (!existsSync(skillsDir)) {
         fail(`${skillName}: SKILL.md body is too long (${bodyWordsish} > 2000); move details to references or scripts`);
       }
 
-      const requiredObinitReferences = [
-        "references/init-modes.md",
-        "references/entry-file-policy.md",
-        "references/obsidian-sync.md",
-        "references/memory-bank.md",
-      ];
-
       for (const relativePath of requiredObinitReferences) {
+        const referencePath = join(skillsDir, skillName, relativePath);
+
         if (!markdown.includes(relativePath)) {
           fail(`${skillName}: SKILL.md must link ${relativePath}`);
         }
 
-        if (!existsSync(join(skillsDir, skillName, relativePath))) {
+        if (!existsSync(referencePath)) {
           fail(`${skillName}: missing ${relativePath}`);
+        } else {
+          assertNoDefaultKnowledgeNoteExamples(`${skillName}: ${relativePath}`, readFileSync(referencePath, "utf8"));
         }
       }
-
-      const requiredObinitScripts = [
-        "scripts/inspect-project.mjs",
-      ];
 
       for (const relativePath of requiredObinitScripts) {
         if (!markdown.includes(relativePath)) {
@@ -149,53 +351,19 @@ if (!existsSync(skillsDir)) {
         }
       }
 
-      const requiredObinitConcepts = [
-        {
-          name: "init mode selection",
-          terms: ["## 初始化模式选择", "新项目模式", "成熟项目接入模式", "重复运行模式", "references/init-modes.md"],
-        },
-        {
-          name: "mature project index instructions",
-          terms: ["索引型 `.agents/instructions.md`", "AGENTS.md", "CLAUDE.md", "长内容完整复制"],
-        },
-        {
-          name: "entry file protection",
-          terms: ["## 入口文件保护", "templates/agent-entry.md", "整体替换", "已有非空入口文件"],
-        },
-        {
-          name: "language preference",
-          terms: ["默认遵循用户或项目既有语言偏好"],
-        },
-        {
-          name: "obsidian idempotent sync",
-          terms: ["重复运行", "Obsidian 项目笔记", "内容过期", "幂等更新", "读回"],
-        },
-        {
-          name: "obsidian related knowledge",
-          terms: ["相关知识", "真实查阅", "明确相关", "公共知识笔记"],
-        },
-      ];
+      assertRequiredConcepts(skillName, markdown, requiredObinitConcepts);
 
-      for (const concept of requiredObinitConcepts) {
-        const missing = concept.terms.filter((term) => !markdown.includes(term));
-        if (missing.length > 0) {
-          fail(`${skillName}: missing required ${concept.name} concept terms: ${missing.join(", ")}`);
-        }
-      }
-
-      for (const unsupportedEntryFile of unsupportedEntryFiles) {
-        if (markdown.includes(unsupportedEntryFile)) {
-          fail(`${skillName}: SKILL.md must not advertise unsupported entry file: ${unsupportedEntryFile}`);
-        }
-      }
+      assertNoPhrases(`${skillName}: SKILL.md`, markdown, unsupportedEntryFiles, (phrase) => {
+        return `must not advertise unsupported entry file: ${phrase}`;
+      });
 
       const inspectScript = readFileSync(join(skillsDir, skillName, "scripts", "inspect-project.mjs"), "utf8");
-      for (const unsupportedEntryFile of unsupportedEntryFiles) {
-        if (inspectScript.includes(unsupportedEntryFile)) {
-          fail(`${skillName}: inspect-project.mjs must not report unsupported entry file: ${unsupportedEntryFile}`);
-        }
-      }
+      assertNoPhrases(`${skillName}: inspect-project.mjs`, inspectScript, unsupportedEntryFiles, (phrase) => {
+        return `must not report unsupported entry file: ${phrase}`;
+      });
     }
+
+    assertRequiredConcepts(skillName, markdown, requiredSkillConcepts[skillName] ?? []);
 
     const openAiAgentPath = join(skillsDir, skillName, "agents", "openai.yaml");
     if (!existsSync(openAiAgentPath)) {
@@ -222,25 +390,21 @@ if (!existsSync(skillsDir)) {
       for (const template of templates) {
         const templatePath = join(templatesDir, template);
         const content = readFileSync(templatePath, "utf8");
-
-        for (const phrase of forbiddenGeneratedEnglish) {
-          if (content.includes(phrase)) {
-            fail(`${skillName}: template ${template} contains English generated-doc phrase: ${phrase}`);
-          }
-        }
-
-        for (const phrase of forbiddenDefaultKnowledgeLinks) {
-          if (content.includes(phrase)) {
-            fail(`${skillName}: template ${template} contains hardcoded default knowledge link: ${phrase}`);
-          }
-        }
+        assertNoDefaultKnowledgeNoteExamples(`${skillName}: template ${template}`, content);
+        assertNoPhrases(`${skillName}: template ${template}`, content, forbiddenGeneratedEnglish, (phrase) => {
+          return `contains English generated-doc phrase: ${phrase}`;
+        });
+        assertNoPhrases(`${skillName}: template ${template}`, content, forbiddenDefaultKnowledgeLinks, (phrase) => {
+          return `contains hardcoded default knowledge link: ${phrase}`;
+        });
+        assertNoPhrases(`${skillName}: template ${template}`, content, forbiddenTemplatePlaceholders, (phrase) => {
+          return `contains fake placeholder content: ${phrase}`;
+        });
 
         if (skillName === "obinit") {
-          for (const unsupportedEntryFile of unsupportedEntryFiles) {
-            if (content.includes(unsupportedEntryFile)) {
-              fail(`${skillName}: template ${template} must not advertise unsupported entry file: ${unsupportedEntryFile}`);
-            }
-          }
+          assertNoPhrases(`${skillName}: template ${template}`, content, unsupportedEntryFiles, (phrase) => {
+            return `must not advertise unsupported entry file: ${phrase}`;
+          });
 
           if (content.includes("- `docs/`")) {
             fail(`${skillName}: template ${template} must use the narrower docs/adr/ initialization scope`);
@@ -251,6 +415,18 @@ if (!existsSync(skillsDir)) {
           const concreteKnowledgeLinks = content.match(/\[\[(?!<)[^\]]+\]\]/g) ?? [];
           if (concreteKnowledgeLinks.length > 0) {
             fail(`${skillName}: template ${template} must not prefill concrete knowledge wikilinks: ${concreteKnowledgeLinks.join(", ")}`);
+          }
+        }
+
+        const placeholderKnowledgeLinks = content.match(/\[\[<[^>\]]+>\]\]/g) ?? [];
+        if (placeholderKnowledgeLinks.length > 0) {
+          fail(`${skillName}: template ${template} must not contain placeholder wikilinks: ${placeholderKnowledgeLinks.join(", ")}`);
+        }
+
+        if (skillName === "obinit" && ["instructions.md", "instructions-index.md"].includes(template)) {
+          const missing = requiredKnowledgeLookupTerms.filter((term) => !content.includes(term));
+          if (missing.length > 0) {
+            fail(`${skillName}: template ${template} must include on-demand public knowledge lookup terms: ${missing.join(", ")}`);
           }
         }
       }
@@ -276,16 +452,51 @@ if (!existsSync(commandsDir)) {
       fail(`${skillName}: command missing description`);
     }
 
-    for (const phrase of forbiddenGeneratedEnglish) {
-      if (command.includes(phrase)) {
-        fail(`${skillName}: command contains English generated-doc phrase: ${phrase}`);
-      }
-    }
+    assertNoPhrases(`${skillName}: command`, command, forbiddenGeneratedEnglish, (phrase) => {
+      return `contains English generated-doc phrase: ${phrase}`;
+    });
   }
 }
 
 if (existsSync(packageJsonPath)) {
   const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8"));
+
+  if (!existsSync(skillsJsonPath)) {
+    fail("Missing skills.json.");
+  } else {
+    const skillsJson = JSON.parse(readFileSync(skillsJsonPath, "utf8"));
+
+    if (skillsJson.name !== packageJson.name) {
+      fail("skills.json: name must match package name");
+    }
+
+    if (skillsJson.version !== packageJson.version) {
+      fail("skills.json: version must match package version");
+    }
+
+    if (!Array.isArray(skillsJson.skills)) {
+      fail("skills.json: skills must be an array");
+    } else {
+      const declaredSkillNames = skillsJson.skills.map((skill) => skill.name).sort();
+      const actualSkillNames = [...skillNames].sort();
+
+      if (JSON.stringify(declaredSkillNames) !== JSON.stringify(actualSkillNames)) {
+        fail(`skills.json: skill names must match skills directory names (${actualSkillNames.join(", ")})`);
+      }
+
+      for (const skill of skillsJson.skills) {
+        const expectedPath = `skills/${skill.name}`;
+        if (skill.path !== expectedPath) {
+          fail(`${skill.name}: skills.json path must be ${expectedPath}`);
+        }
+
+        const skillPath = join(root, skill.path);
+        if (!existsSync(skillPath) || !statSync(skillPath).isDirectory()) {
+          fail(`${skill.name}: skills.json path does not exist or is not a directory`);
+        }
+      }
+    }
+  }
 
   for (const relativePath of [
     "package.json",
@@ -299,11 +510,9 @@ if (existsSync(packageJsonPath)) {
     if (!existsSync(filePath)) continue;
 
     const content = readFileSync(filePath, "utf8");
-    for (const phrase of forbiddenProjectPositioning) {
-      if (content.includes(phrase)) {
-        fail(`${relativePath}: avoid positioning the project as Chinese-only: ${phrase}`);
-      }
-    }
+    assertNoPhrases(relativePath, content, forbiddenProjectPositioning, (phrase) => {
+      return `avoid positioning the project as Chinese-only: ${phrase}`;
+    });
   }
 
   for (const pluginDir of [".claude-plugin", ".codex-plugin"]) {
@@ -353,6 +562,8 @@ if (existsSync(packageJsonPath)) {
     }
   }
 }
+
+runInspectProjectFixtures();
 
 if (process.exitCode) {
   process.exit();

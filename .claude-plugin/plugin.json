@@ -1,6 +1,6 @@
 {
   "name": "obsidian-agent-skills",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "description": "Obsidian-backed 项目记忆、任务收尾、ADR 和经验沉淀 skills。",
   "author": {
     "name": "GeekX.top",
