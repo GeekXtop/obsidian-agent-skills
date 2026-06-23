@@ -158,6 +158,18 @@ const requiredSkillConcepts = {
       name: "ADR safety boundaries",
       terms: ["如果决策内容不明确", "先问用户", "不修改源码、依赖、构建配置或 git 配置", "$oblearn"],
     },
+    {
+      name: "ADR boundary and relationship fields",
+      terms: ["适用范围", "非目标", "有助于下一次 agent 恢复上下文", "替代 ADR", "废弃原因"],
+    },
+    {
+      name: "ADR template migration compatibility",
+      terms: ["模板升级", "历史 ADR", "默认保持原样", "最小回填", "不要批量迁移"],
+    },
+    {
+      name: "existing ADR maintenance",
+      terms: ["已有 ADR 维护", "更新状态", "追加后续说明", "修正会导致误读的标题或链接", "保持历史决策原意"],
+    },
   ],
   oblearn: [
     {
@@ -167,6 +179,14 @@ const requiredSkillConcepts = {
     {
       name: "privacy and source boundaries",
       terms: ["不写 secret", "不把 Superpowers spec/plan 原文复制", "用户指定范围"],
+    },
+    {
+      name: "knowledge template migration compatibility",
+      terms: ["模板升级", "历史公共知识", "默认保持原样", "最小回填", "不要批量迁移"],
+    },
+    {
+      name: "existing public knowledge maintenance",
+      terms: ["已有公共知识维护", "重命名主题", "aliases", "修正 wikilink", "合并或拆分笔记", "可发现性"],
     },
   ],
   obclose: [
