@@ -5,3 +5,4 @@
 - 经验：可复用结论
 - 适用场景：哪类项目/任务适用
 - 检查：下次 agent 应该检查什么
+- Catalog：如需后续自动发现，更新 `Agent/Knowledge/_catalog.md` 的 `terms` / `aliases` / `notes`；不确定则不登记

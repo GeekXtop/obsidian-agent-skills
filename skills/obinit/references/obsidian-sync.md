@@ -6,7 +6,7 @@ Obsidian 只承担三件事：
 2. 给 `.agents/instructions.md` 提供稳定引用：`Obsidian project note: Agent/Projects/<project>.md`。
 3. 保存跨项目复用知识入口：框架约定、设计坑、部署坑、调试经验等公共笔记。
 
-不要把 Obsidian 当成项目源码、运行依赖或全库搜索入口。访问范围默认只限配置好的项目笔记和按任务关键词命中的公共知识笔记。
+不要把 Obsidian 当成项目源码、运行依赖或全库搜索入口。访问范围默认只限配置好的项目笔记、`Agent/Knowledge/_catalog.md` 和有限关键词命中的公共知识笔记。
 
 项目笔记规则：
 
@@ -21,13 +21,16 @@ Obsidian 只承担三件事：
 
 公共知识按需查阅：
 
-- 任务开始或遇到相关问题时，按任务领域、技术栈、错误信息或用户问题在 `Agent/Knowledge/` 关键词定向搜索。
+- 任务开始或遇到相关问题时，不凭空假设哪些领域已有公共知识。
+- 优先读取 `Agent/Knowledge/_catalog.md`；它是已沉淀领域的事实来源，不存在或不命中时不要强行扩展搜索。
+- 仅在用户明确要求、catalog 的 `terms` / `aliases` 命中任务关键词，或风险较高且关键词明确时，在 `Agent/Knowledge/` 做有限关键词定向搜索。
 - 只有命中相关笔记后才明确读取并使用。
 - 不全量自动加载公共知识，不扫描整个 vault。
 
 查阅示例：
 
 ```bash
+obsidian read path="Agent/Knowledge/_catalog.md"
 obsidian search query="<主题关键词>" limit=5
 obsidian read path="Agent/Knowledge/<实际命中笔记>.md"
 ```

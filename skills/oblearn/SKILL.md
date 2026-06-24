@@ -7,16 +7,29 @@ description: 从项目内 agent 记忆库、Superpowers specs/plans、ADR、rece
 
 从当前项目提取“可复用知识”，写入 Obsidian 的 `Agent/Knowledge/`。它不是初始化工具，不创建项目入口文件；项目初始化使用 `$obinit`。
 
+## 职责边界
+
+`oblearn` 只负责从当前项目材料中提取、脱敏和写入可复用知识。
+
+- 可以追加到明确匹配的已有公共知识笔记。
+- 可以在新知识无明确稳定主题时，建议写入 `Agent/Knowledge/Inbox/`。
+- 可以在追加或新建笔记时只做最小维护，例如补必要 frontmatter、`aliases` 或修正当前写入会用到的 wikilink。
+- 不负责全库重分类，不做批量移动、重命名、合并、拆分或重建索引。
+- 结构性整理交给 `$obcurate`，例如清理 Inbox、合并重复主题、拆分过长笔记、整理 `Agent/Knowledge/_catalog.md`。
+
 ## 默认行为
 
 用户只说 `$oblearn` 或“提取公共知识”时，按安全默认值执行：
 
 - 只读取当前项目的记忆库、设计/计划/ADR 和最近变更摘要。
 - 只提取跨项目可复用的经验，不复制项目私有业务内容。
-- 先搜索 Obsidian 是否已有相关公共知识笔记。
+- 先读取 `Agent/Knowledge/_catalog.md`（如果存在）作为已沉淀领域的事实来源。
+- 再用候选主题、技术栈、错误信息或平台名做关键词定向搜索。
 - 明确匹配已有笔记时，可以追加短条目。
-- 需要新建公共知识笔记时，先列出建议并等待用户确认。
+- 需要新建公共知识笔记时，优先建议写入 `Agent/Knowledge/Inbox/` 并等待用户确认。
+- 只有写入目标和关键词明确时，才同步更新 `Agent/Knowledge/_catalog.md`。
 - 不扫描整个 vault。
+- 不凭空假设某个领域已经沉淀；没有 `_catalog.md` 命中或搜索命中时，就按新知识处理。
 - 不写 secret、账号、token、客户信息、内部路径细节。
 - 不把 Superpowers spec/plan 原文复制进 Obsidian。
 - 新建或追加的 Obsidian 公共知识和项目回写内容默认遵循用户或项目既有语言偏好；当前模板使用简体中文。技术标识符、路径、命令、包名和英文专有名词保持原样。
@@ -73,7 +86,28 @@ git log -5 --oneline
 Agent/Knowledge/<主题>.md
 ```
 
-主题应来自候选知识分类、现有笔记命中或用户确认。如果没有合适笔记，先向用户提出新建建议，不要擅自创建一堆分类。
+主题应来自 `Agent/Knowledge/_catalog.md` 命中、定向搜索命中或用户确认。如果没有合适笔记，先向用户提出新建建议，不要擅自创建一堆分类。
+
+新知识尚未稳定归类时，建议目标是：
+
+```text
+Agent/Knowledge/Inbox/<简短主题>.md
+```
+
+`Agent/Knowledge/_catalog.md` 是已沉淀领域的事实来源。它只记录已经存在或本次确认创建的公共知识入口，不记录猜测分类。
+
+建议结构：
+
+```yaml
+## terms
+
+- term: <关键词>
+  aliases: [<别名>]
+  notes:
+    - [[<真实笔记标题>]]
+```
+
+更新 catalog 时只使用真实笔记标题、已有 frontmatter、用户确认的别名或本次知识的明确关键词。无法判断时，不更新 catalog。
 
 ## 工作流
 
@@ -83,22 +117,27 @@ Agent/Knowledge/<主题>.md
 4. 按 `.agents/active.md` 指向读取相关 spec/plan/ADR。
 5. 从材料中列出候选知识，每条包含来源、证据、适用范围、建议目标笔记。
 6. 过滤掉项目私有、未验证、过细或不可复用内容。
-7. 用 Obsidian CLI 定向搜索目标笔记。
-8. 对明确匹配的已有笔记追加短条目。
-9. 对需要新建的笔记，先列清单等用户确认。
-10. 更新项目 Obsidian 笔记的 `相关知识`。
-11. 在 `.agents/active.md` 或 `.agents/lessons.md` 记录本次提取结果。
+7. 读取 `Agent/Knowledge/_catalog.md`（如果存在），用候选关键词匹配 `terms` 和 `aliases`。
+8. 用 Obsidian CLI 定向搜索目标笔记。
+9. 对明确匹配的已有笔记追加短条目。
+10. 对需要新建的笔记，先列清单等用户确认；默认建议放入 `Agent/Knowledge/Inbox/`。
+11. 写入完成后，如关键词和目标明确，更新 `Agent/Knowledge/_catalog.md` 的 `terms` / `aliases` / `notes`。
+12. 更新项目 Obsidian 笔记的 `相关知识`。
+13. 在 `.agents/active.md` 或 `.agents/lessons.md` 记录本次提取结果。
 
 ## Obsidian 查找
 
 使用关键词定向搜索：
 
 ```bash
+obsidian read path="Agent/Knowledge/_catalog.md"
 obsidian search query="<主题关键词>" limit=5
 obsidian read path="Agent/Knowledge/<实际命中笔记>.md"
 ```
 
-不要使用全 vault 扫描来“找灵感”。搜索词应来自任务领域、技术栈、错误信息或候选知识分类。
+如果 `Agent/Knowledge/_catalog.md` 不存在，不要为了查找而创建空 catalog；只有本次实际写入公共知识且有明确关键词时再建议创建或更新。
+
+不要使用全 vault 扫描来“找灵感”。搜索词应来自候选知识本身的技术栈、错误信息、平台名、命令名或用户确认的主题；搜索没有命中时，按新知识处理。
 
 ## 公共知识条目格式
 
@@ -114,7 +153,26 @@ obsidian read path="Agent/Knowledge/<实际命中笔记>.md"
 
 使用 `templates/public-knowledge-note.md`。
 
+如果用户没有指定稳定主题，默认创建在 `Agent/Knowledge/Inbox/`，并设置 `status: draft`。稳定归类、移动、合并或拆分由 `$obcurate` 后续处理。
+
 引用真实存在或本次确认创建的 Obsidian 笔记时使用 wikilink。外部链接用标准 Markdown 链接。
+
+## Catalog 更新
+
+`Agent/Knowledge/_catalog.md` 用于让后续 agent 知道哪些领域已经沉淀过。它不是分类体系，不要求完整，不是全 vault 索引。
+
+可以更新 catalog 的情况：
+
+- 本次追加到已有笔记，且候选关键词明确匹配该笔记。
+- 本次新建笔记，且用户确认标题、别名或关键词。
+- 正在补充的笔记已有 `aliases`、`platform`、`topic` 或 tags 可直接转换为 `terms` / `aliases`。
+
+不要更新 catalog 的情况：
+
+- 只是猜测某平台或领域可能以后会用到。
+- 搜索结果不明确。
+- 目标笔记仍需要用户确认。
+- 关键词包含本地事实、内网地址、账号、客户名或其他需要脱敏的信息。
 
 ## 模板升级与历史公共知识
 
@@ -132,11 +190,11 @@ obsidian read path="Agent/Knowledge/<实际命中笔记>.md"
 
 ## 已有公共知识维护
 
-当用户明确要求维护已有公共知识时，可以重命名主题、添加 `aliases`、更新 `title` / H1 / tags、修正 wikilink、合并或拆分笔记、追加新条目，或修正过期和不够脱敏的内容。
+`oblearn` 对已有公共知识维护只做最小修改：添加当前写入必需的 `aliases`、更新 `title` / H1 / tags、修正 wikilink、追加新条目，或修正当前条目中不够脱敏的内容。
 
-维护动作应服务于可复用性和可发现性，只做最小修改。重命名主题前先读取目标笔记和 backlinks；重命名后更新明确指向旧标题的相关 wikilink，并保留旧标题为 `aliases`，避免旧搜索词失效。
+维护动作应服务于可复用性和可发现性，只做最小修改。
 
-合并或拆分笔记前先列出建议并等待用户确认；不要把不同适用范围的经验强行放进同一个杂项笔记。
+如果用户要求移动、重命名主题、合并或拆分笔记、批量修正 catalog、清理 Inbox，转交 `$obcurate`；不要把这些结构性整理塞进一次经验提取。
 
 ## 项目回写
 
@@ -152,5 +210,7 @@ obsidian read path="Agent/Knowledge/<实际命中笔记>.md"
 
 - 读取了哪些项目文件。
 - 追加了哪些 Obsidian 公共知识笔记。
+- 新建或建议写入了哪些 `Agent/Knowledge/Inbox/` 笔记。
+- 是否更新了 `Agent/Knowledge/_catalog.md`。
 - 建议新建但等待确认的笔记。
 - 回写了哪些项目内 memory 文件。

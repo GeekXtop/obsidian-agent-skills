@@ -103,7 +103,7 @@ const requiredObinitScripts = [
   "scripts/inspect-project.mjs",
 ];
 
-const requiredKnowledgeLookupTerms = ["Agent/Knowledge/", "关键词定向搜索", "明确读取"];
+const requiredKnowledgeLookupTerms = ["Agent/Knowledge/", "Agent/Knowledge/_catalog.md", "关键词定向搜索", "明确读取"];
 
 const requiredObinitConcepts = [
   {
@@ -132,7 +132,7 @@ const requiredObinitConcepts = [
   },
   {
     name: "on-demand public knowledge lookup",
-    terms: ["任务开始", "遇到相关问题", "Agent/Knowledge/", "关键词定向搜索", "明确读取"],
+    terms: ["任务开始", "遇到相关问题", "Agent/Knowledge/", "Agent/Knowledge/_catalog.md", "关键词定向搜索", "明确读取", "不凭空假设"],
   },
   {
     name: "bounded docs discovery",
@@ -174,11 +174,19 @@ const requiredSkillConcepts = {
   oblearn: [
     {
       name: "bounded knowledge extraction",
-      terms: ["不扫描整个 vault", "关键词定向搜索", "等待用户确认"],
+      terms: ["不扫描整个 vault", "关键词定向搜索", "等待用户确认", "Agent/Knowledge/Inbox/"],
     },
     {
       name: "privacy and source boundaries",
       terms: ["不写 secret", "不把 Superpowers spec/plan 原文复制", "用户指定范围"],
+    },
+    {
+      name: "knowledge catalog source",
+      terms: ["Agent/Knowledge/_catalog.md", "事实来源", "terms", "aliases", "不凭空假设"],
+    },
+    {
+      name: "oblearn curation boundary",
+      terms: ["只做最小维护", "结构性整理", "$obcurate", "不负责全库重分类"],
     },
     {
       name: "knowledge template migration compatibility",
@@ -186,7 +194,25 @@ const requiredSkillConcepts = {
     },
     {
       name: "existing public knowledge maintenance",
-      terms: ["已有公共知识维护", "重命名主题", "aliases", "修正 wikilink", "合并或拆分笔记", "可发现性"],
+      terms: ["已有公共知识维护", "最小修改", "aliases", "修正 wikilink", "可发现性"],
+    },
+  ],
+  obcurate: [
+    {
+      name: "bounded knowledge curation",
+      terms: ["Agent/Knowledge/_catalog.md", "Agent/Knowledge/Inbox/", "有限范围", "不扫描整个 vault"],
+    },
+    {
+      name: "curation confirmation boundary",
+      terms: ["先列出整理计划", "等待用户确认", "移动", "合并", "拆分", "重命名"],
+    },
+    {
+      name: "catalog maintenance",
+      terms: ["事实来源", "terms", "aliases", "notes", "不凭空假设"],
+    },
+    {
+      name: "privacy-preserving curation",
+      terms: ["不写 secret", "本地事实", "脱敏"],
     },
   ],
   obclose: [
