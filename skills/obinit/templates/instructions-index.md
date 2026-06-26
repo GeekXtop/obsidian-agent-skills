@@ -32,8 +32,10 @@ Obsidian 项目笔记：`Agent/Projects/<project>.md`。
 ## 记忆库
 
 - 任务开始、阶段完成、会话收尾时更新 `.agents/active.md`。
+- 完成实质代码/文档改动、阶段性验证或复杂任务暂停时，按 `$obclose` 收尾。
 - 有明确里程碑时更新 `.agents/progress.md`。
 - 只有可复用经验才更新 `.agents/lessons.md`。
+- `.agents/archive/` 保存过长 `progress.md` 的历史归档，应提交。
 - 长期项目决策写入 `docs/adr/`。
 - 如已有 Superpowers spec/plan，在 `.agents/active.md` 链接当前文件，不复制全文。
 - 临时调查草稿写入 `.agents/scratch/`；运行日志、缓存和生成物不要放进 agent memory。

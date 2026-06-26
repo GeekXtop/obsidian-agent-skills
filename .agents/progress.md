@@ -26,3 +26,26 @@
 - 已完成：README 和插件更新流程 ADR 记录后续发版只创建 `obsidian-agent-skills--vX.Y.Z`，不再额外创建平行的 `vX.Y.Z` tag。
 - 已保留：历史 `v0.1.x` tag 不主动删除，避免影响已发布引用。
 - 已验证：`npm test` 通过，输出 `All skills are valid.`。
+
+## 2026-06-27 - obclose 主动收尾与 memory 膨胀控制
+
+- 已完成：`$obclose` 增加主动触发规则，明确 agent 在完成实质代码/文档改动、阶段性验证、复杂任务暂停或发现项目内可复用经验时应主动收尾。
+- 已完成：`$obclose` 增加跳过条件，轻量问答、无项目状态变化或用户明确要求不更新 memory 时不执行。
+- 已完成：`$obclose` 增加项目 memory 维护规则，检查 `progress.md` / `lessons.md` 是否过长或重复；轻量合并、压缩和归档可直接做，拆分 lessons、删除历史、大规模重组需用户确认。
+- 已保留：公共知识提取仍由 `$oblearn` 负责，公共知识库整理仍由 `$obcurate` 负责。
+- 已验证：目标文本断言通过；`npm test` 通过，输出 `All skills are valid.`。
+
+## 2026-06-27 - 五个 skill 职责边界同步
+
+- 已完成：`$obclose` 的主动收尾和 memory 膨胀控制语义同步到 `README.md`、`skills.json` 和 `skills/obclose/agents/openai.yaml`。
+- 已完成：`$obinit` 的 memory 规则和模板补充 `.agents/archive/`，明确它保存过长 `progress.md` 的历史归档，应提交，不同于 `scratch/`。
+- 已完成：`$oblearn` 触发描述从“任务完成后记录踩坑”收窄为“把已记录的项目经验转成跨项目公共知识”，避免抢 `$obclose` 的项目内收尾职责。
+- 已完成：`$oblearn` 输入范围补充 `.agents/archive/progress-YYYY.md`，仅在当前材料指向归档、用户要求长期复盘或候选知识需要旧阶段证据时读取相关归档。
+- 已验证：目标文本断言通过；旧触发词 `任务完成后记录踩坑` / `记录踩坑` 无命中；`npm test` 通过，输出 `All skills are valid.`。
+
+## 2026-06-27 - 0.1.19 发版准备
+
+- 已完成：版本号推进到 `0.1.19`，同步 `package.json`、`skills.json`、`.claude-plugin/plugin.json`、`.claude-plugin/marketplace.json`、`.codex-plugin/plugin.json`。
+- 已完成：`.codex-plugin/plugin.json` 的 `$obclose` 默认 prompt 更新为收尾、更新 memory 并检查 `progress/lessons` 轻量维护。
+- 已验证：`npm test` 通过，输出 `All skills are valid.`。
+- 下一步：提交、创建并推送 `obsidian-agent-skills--v0.1.19`，再用 marketplace/plugin 命令更新本地插件。

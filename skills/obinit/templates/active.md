@@ -20,6 +20,7 @@
 - `.agents/instructions.md`：中立项目规则。
 - `.agents/progress.md`：阶段性进展摘要。
 - `.agents/lessons.md`：可复用经验。
+- `.agents/archive/`：过长进展归档。
 - `docs/adr/`：架构决策记录。
 
 ## 下一步

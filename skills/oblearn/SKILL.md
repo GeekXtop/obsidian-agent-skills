@@ -1,6 +1,6 @@
 ---
 name: oblearn
-description: 从项目内 agent 记忆库、Superpowers specs/plans、ADR、recent changes 中提取可跨项目复用的经验，并沉淀到 Obsidian 公共知识笔记。适用于用户说 $oblearn、沉淀经验、提取公共知识、复盘项目、同步 lessons 到 Obsidian、任务完成后记录踩坑，或希望后续项目避免重复踩坑。
+description: 从项目内 agent 记忆库、Superpowers specs/plans、ADR、recent changes 中提取可跨项目复用的经验，并沉淀到 Obsidian 公共知识笔记。适用于用户说 $oblearn、沉淀经验、提取公共知识、复盘项目、同步 lessons 到 Obsidian，或希望把已记录的项目经验转成跨项目公共知识。
 ---
 
 # Oblearn
@@ -43,10 +43,13 @@ description: 从项目内 agent 记忆库、Superpowers specs/plans、ADR、rece
 .agents/active.md
 .agents/progress.md
 .agents/lessons.md
+.agents/archive/progress-YYYY.md
 docs/superpowers/specs/
 docs/superpowers/plans/
 docs/adr/
 ```
+
+`.agents/archive/` 只在以下情况读取相关文件：`.agents/active.md`、`.agents/progress.md` 或 `.agents/lessons.md` 明确指向归档；用户要求复盘长期项目；或当前候选知识需要旧阶段证据。不要为了找灵感全量扫描 archive。
 
 如果是 git 项目，可以读取最近变更摘要：
 
@@ -114,16 +117,17 @@ Agent/Knowledge/Inbox/<简短主题>.md
 1. 确定项目根目录。
 2. 读取 `.agents/active.md`，确认当前任务、当前 spec/plan、项目笔记路径。
 3. 读取 `.agents/lessons.md` 和相关 `.agents/progress.md` 条目。
-4. 按 `.agents/active.md` 指向读取相关 spec/plan/ADR。
-5. 从材料中列出候选知识，每条包含来源、证据、适用范围、建议目标笔记。
-6. 过滤掉项目私有、未验证、过细或不可复用内容。
-7. 读取 `Agent/Knowledge/_catalog.md`（如果存在），用候选关键词匹配 `terms` 和 `aliases`。
-8. 用 Obsidian CLI 定向搜索目标笔记。
-9. 对明确匹配的已有笔记追加短条目。
-10. 对需要新建的笔记，先列清单等用户确认；默认建议放入 `Agent/Knowledge/Inbox/`。
-11. 写入完成后，如关键词和目标明确，更新 `Agent/Knowledge/_catalog.md` 的 `terms` / `aliases` / `notes`。
-12. 更新项目 Obsidian 笔记的 `相关知识`。
-13. 在 `.agents/active.md` 或 `.agents/lessons.md` 记录本次提取结果。
+4. 如当前材料指向归档或用户要求长期复盘，读取 `.agents/archive/` 中相关年份文件。
+5. 按 `.agents/active.md` 指向读取相关 spec/plan/ADR。
+6. 从材料中列出候选知识，每条包含来源、证据、适用范围、建议目标笔记。
+7. 过滤掉项目私有、未验证、过细或不可复用内容。
+8. 读取 `Agent/Knowledge/_catalog.md`（如果存在），用候选关键词匹配 `terms` 和 `aliases`。
+9. 用 Obsidian CLI 定向搜索目标笔记。
+10. 对明确匹配的已有笔记追加短条目。
+11. 对需要新建的笔记，先列清单等用户确认；默认建议放入 `Agent/Knowledge/Inbox/`。
+12. 写入完成后，如关键词和目标明确，更新 `Agent/Knowledge/_catalog.md` 的 `terms` / `aliases` / `notes`。
+13. 更新项目 Obsidian 笔记的 `相关知识`。
+14. 在 `.agents/active.md` 或 `.agents/lessons.md` 记录本次提取结果。
 
 ## Obsidian 查找
 

@@ -6,6 +6,7 @@
 - `active.md`：当前任务状态和下一步。
 - `progress.md`：阶段性进展摘要。
 - `lessons.md`：项目内可复用经验。
+- `archive/`：过长 `progress.md` 的历史归档，应提交。
 - `scratch/`：临时调查草稿，可清理。
 
 临时调查草稿写入 `scratch/`；运行日志、缓存和生成物不要放进 agent memory。`scratch/` 不提交。

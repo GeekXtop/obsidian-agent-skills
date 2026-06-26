@@ -63,15 +63,17 @@ node <skill>/scripts/inspect-project.mjs <project-root>
 .agents/active.md
 .agents/progress.md
 .agents/lessons.md
+.agents/archive/
 .agents/scratch/
 docs/adr/
 ```
 
 更新时机：
 
-- 任务开始、阶段完成、会话结束时更新 `.agents/active.md`。
+- 任务开始、阶段完成、会话结束时更新 `.agents/active.md`；完成实质任务或复杂任务暂停时按 `$obclose` 收尾。
 - 重要里程碑追加 `.agents/progress.md`。
 - 可跨任务复用的坑和规则写入 `.agents/lessons.md`。
+- `.agents/archive/` 保存过长 `progress.md` 的历史归档，应提交；它不是临时草稿。
 - 长期技术决策写入 `docs/adr/`。
 - Superpowers spec/plan 保留原文件，memory 只链接；obinit 不创建、不改写、不递归读取 `docs/superpowers/specs/` 或 `docs/superpowers/plans/`。
 - 临时调查草稿写入 `.agents/scratch/`；运行日志、缓存和生成物不要放进 agent memory。

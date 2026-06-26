@@ -1,6 +1,6 @@
 {
   "name": "obsidian-agent-skills",
-  "version": "0.1.18",
+  "version": "0.1.19",
   "description": "Obsidian-backed 项目记忆、任务收尾、ADR、经验沉淀和知识整理 skills。",
   "author": {
     "name": "GeekX.top",
@@ -32,7 +32,7 @@
     "defaultPrompt": [
       "使用 $obinit 初始化当前项目。",
       "使用 $obadr 为当前项目记录一个架构决策。",
-      "使用 $obclose 更新当前项目的任务状态和 memory。",
+      "使用 $obclose 收尾当前任务，更新项目 memory，并检查 progress/lessons 是否需要轻量维护。",
       "使用 $oblearn 从当前项目提取可复用公共知识。",
       "使用 $obcurate 整理 Agent/Knowledge 公共知识库。"
     ],
