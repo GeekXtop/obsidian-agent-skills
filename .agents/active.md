@@ -3,7 +3,7 @@
 ## 当前任务
 
 - 目标：发布 `0.1.20` 并更新本地插件安装。
-- 状态：发版准备已完成；待提交、tag、推送和本地插件更新。
+- 状态：已完成。`main` 已推送，插件发布 tag `obsidian-agent-skills--v0.1.20` 已推送，本地 Codex / Claude Code 插件均已更新到 `0.1.20`。
 - 最后更新：2026-06-27
 
 ## 当前状态
@@ -28,8 +28,8 @@
 - `$oblearn` 已收窄触发：项目内经验先由 `$obclose` 写入 `.agents/lessons.md`，只有需要转成跨项目公共知识时才用 `$oblearn`。
 - `$oblearn` 已补 archive 读取规则：仅在 active/progress/lessons 指向归档、用户要求长期复盘或候选知识需要旧阶段证据时读取相关归档，不全量扫描。
 - 版本号已从 `0.1.19` 推进到 `0.1.20`：`package.json`、`skills.json`、`.claude-plugin/plugin.json`、`.claude-plugin/marketplace.json`、`.codex-plugin/plugin.json`。
-- 按 ADR，发版只创建并推送 `obsidian-agent-skills--v0.1.19`，未创建平行 `v0.1.19`。
-- 本地更新已按 marketplace/plugin 流程完成：`codex plugin add obsidian-agent-skills@obsidian-agent-skills` 安装到 `0.1.19`；`claude plugin update obsidian-agent-skills@obsidian-agent-skills --scope user` 从 `0.1.18` 更新到 `0.1.19`。
+- 按 ADR，发版只创建并推送 `obsidian-agent-skills--v0.1.20`，未创建平行 `v0.1.20`。
+- 本地更新已按 marketplace/plugin 流程完成：`codex plugin add obsidian-agent-skills@obsidian-agent-skills` 安装到 `0.1.20`；`claude plugin update obsidian-agent-skills@obsidian-agent-skills --scope user` 从 `0.1.19` 更新到 `0.1.20`。
 - 注意：Claude Code 输出提示需要 restart 才能应用新插件；Codex 当前会话也需要重启或开新会话才能加载新 skill 内容。
 
 ## 验证
@@ -50,8 +50,8 @@
 - 0.1.19 版本一致性检查：`rg -n '"version": "0\.1\.19"|"version": "0\.1\.18"' package.json skills.json .claude-plugin .codex-plugin` 仅命中 `0.1.19`。
 - 命令：`npm test`。
 - 结果：通过，`All skills are valid.`
-- Git：提交 `ffbe90b Release v0.1.19` 已推送到 `origin/main`；tag `obsidian-agent-skills--v0.1.19` 已推送。
-- 本地插件验证：`codex plugin list --json` 和 `claude plugin list --json` 均显示 `obsidian-agent-skills@obsidian-agent-skills` 版本 `0.1.19`。
+- Git：提交 `3786dc2 Release v0.1.20` 已推送到 `origin/main`；tag `obsidian-agent-skills--v0.1.20` 已推送。
+- 本地插件验证：`codex plugin list --json` 和 `claude plugin list --json` 均显示 `obsidian-agent-skills@obsidian-agent-skills` 版本 `0.1.20`。
 
 ## 关键文件
 
@@ -76,9 +76,7 @@
 
 ## 下一步
 
-1. 提交 `0.1.20` 发版改动。
-2. 创建并推送 `obsidian-agent-skills--v0.1.20` tag。
-3. 按 ADR 用 marketplace/plugin 命令更新本地 Codex / Claude Code 插件。
+1. 重启 Codex / Claude Code 或开启新会话，让 `0.1.20` skill 内容进入当前运行环境。
 
 ## 已使用知识
 

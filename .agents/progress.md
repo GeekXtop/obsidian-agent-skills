@@ -87,3 +87,12 @@
 - 已包含：`$obadr` 历史材料读取边界、`$oblearn` 非项目临时会话模式、Codex session id 精确查找、显式非项目材料优先和跨平台 Codex home 路径说明。
 - 已同步：`commands/oblearn.md`、`README.md`、`skills/oblearn/agents/openai.yaml`、`.codex-plugin/plugin.json` 的 `$oblearn` 发现层说明。
 - 已验证：版本一致性检查通过；`npm test` 通过，输出 `All skills are valid.`。
+
+## 2026-06-27 - 0.1.20 发布与本地更新
+
+- 已发布：提交 `3786dc2 Release v0.1.20` 已推送到 `origin/main`。
+- 已发布：按 ADR 只创建并推送插件 tag `obsidian-agent-skills--v0.1.20`，未创建平行 `v0.1.20`。
+- 已更新：Codex marketplace 已 upgrade，并通过 `codex plugin add obsidian-agent-skills@obsidian-agent-skills` 安装到 `0.1.20`。
+- 已更新：Claude Code marketplace 已 update，并通过 `claude plugin update obsidian-agent-skills@obsidian-agent-skills --scope user` 从 `0.1.19` 更新到 `0.1.20`。
+- 已验证：`codex plugin list --json` 与 `claude plugin list --json` 均显示 `obsidian-agent-skills@obsidian-agent-skills` 版本 `0.1.20`。
+- 注意：Claude Code 提示需要 restart 才能应用；Codex 也需要重启或开启新会话加载新 skill。
