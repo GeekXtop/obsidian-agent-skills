@@ -1,6 +1,6 @@
 {
   "name": "obsidian-agent-skills",
-  "version": "0.1.19",
+  "version": "0.1.20",
   "description": "Obsidian-backed 项目记忆、任务收尾、ADR、经验沉淀和知识整理 skills",
   "repository": "https://github.com/GeekXtop/obsidian-agent-skills",
   "skills": [
@@ -22,7 +22,7 @@
     {
       "name": "oblearn",
       "path": "skills/oblearn",
-      "description": "从项目内 agent 记忆库提取可跨项目复用的经验，并沉淀到 Obsidian 公共知识笔记。"
+      "description": "从项目内 agent 记忆库、非项目临时会话材料或 Codex session 提取可复用经验，并沉淀到 Obsidian 公共知识笔记。"
     },
     {
       "name": "obcurate",

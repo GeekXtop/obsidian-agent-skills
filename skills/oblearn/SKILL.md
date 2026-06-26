@@ -1,19 +1,21 @@
 ---
 name: oblearn
-description: 从项目内 agent 记忆库、Superpowers specs/plans、ADR、recent changes 中提取可跨项目复用的经验，并沉淀到 Obsidian 公共知识笔记。适用于用户说 $oblearn、沉淀经验、提取公共知识、复盘项目、同步 lessons 到 Obsidian，或希望把已记录的项目经验转成跨项目公共知识。
+description: 从项目内 agent 记忆库、Superpowers specs/plans、ADR、recent changes，或非项目临时会话摘要、Codex session id 中提取可跨场景复用的经验，并沉淀到 Obsidian 公共知识笔记。适用于用户说 $oblearn、沉淀经验、提取公共知识、复盘项目、同步 lessons 到 Obsidian、从当前对话、粘贴 transcript 或 Codex 会话提炼经验，或希望把已记录经验转成公共知识。
 ---
 
 # Oblearn
 
-从当前项目提取“可复用知识”，写入 Obsidian 的 `Agent/Knowledge/`。它不是初始化工具，不创建项目入口文件；项目初始化使用 `$obinit`。
+从当前项目或用户明确提供的临时会话材料提取“可复用知识”，写入 Obsidian 的 `Agent/Knowledge/`。它不是初始化工具，不创建项目入口文件；项目初始化使用 `$obinit`。
 
 ## 职责边界
 
-`oblearn` 只负责从当前项目材料中提取、脱敏和写入可复用知识。
+`oblearn` 只负责从当前项目材料或非项目临时会话材料中提取、脱敏和写入可复用知识。
 
 - 可以追加到明确匹配的已有公共知识笔记。
 - 可以在新知识无明确稳定主题时，建议写入 `Agent/Knowledge/Inbox/`。
 - 可以在追加或新建笔记时只做最小维护，例如补必要 frontmatter、`aliases` 或修正当前写入会用到的 wikilink。
+- 可以在没有项目 memory 时，从当前对话、用户摘要、粘贴 transcript 或用户提供的 Codex session id 中提取公共经验。
+- 不负责初始化临时目录或为非项目任务创建 `.agents/`。
 - 不负责全库重分类，不做批量移动、重命名、合并、拆分或重建索引。
 - 结构性整理交给 `$obcurate`，例如清理 Inbox、合并重复主题、拆分过长笔记、整理 `Agent/Knowledge/_catalog.md`。
 
@@ -21,7 +23,9 @@ description: 从项目内 agent 记忆库、Superpowers specs/plans、ADR、rece
 
 用户只说 `$oblearn` 或“提取公共知识”时，按安全默认值执行：
 
-- 只读取当前项目的记忆库、设计/计划/ADR 和最近变更摘要。
+- 如果用户明确提供临时会话摘要、transcript、Codex session id 或指定非项目材料，按非项目临时会话模式处理，即使当前目录存在项目 memory。
+- 如果用户没有指定非项目材料，且当前目录有项目 memory，读取当前项目的记忆库、设计/计划/ADR 和最近变更摘要。
+- 如果用户没有指定非项目材料，且当前目录没有项目 memory，按非项目临时会话处理；只使用当前对话、用户提供的摘要、transcript 或可精确定位的 Codex session id，不要求先 `$obinit`。
 - 只提取跨项目可复用的经验，不复制项目私有业务内容。
 - 先读取 `Agent/Knowledge/_catalog.md`（如果存在）作为已沉淀领域的事实来源。
 - 再用候选主题、技术栈、错误信息或平台名做关键词定向搜索。
@@ -36,7 +40,7 @@ description: 从项目内 agent 记忆库、Superpowers specs/plans、ADR、rece
 
 ## 输入来源
 
-按需读取这些项目内文件：
+项目模式下，按需读取这些项目内文件：
 
 ```text
 .agents/instructions.md
@@ -61,6 +65,41 @@ git log -5 --oneline
 
 只读取与当前任务、当前 spec/plan 或用户指定范围相关的文档；不要遍历大型目录。
 
+## 非项目临时会话
+
+当前目录没有 `.agents/instructions.md`，或任务明显不属于软件项目时，不要要求用户先运行 `$obinit`。
+
+可用输入：
+
+- 当前对话中明确出现的事实、命令、错误和结论。
+- 用户粘贴的 transcript、命令输出或会话摘要。
+- 用户提供的 Codex session id，且本机能在 Codex 会话存储中精确定位对应 transcript。
+- 用户明确指定的本地文件或笔记。
+
+如果用户提到“昨天的 Codex app 对话”“之前那个临时任务”等历史会话，但当前上下文没有 transcript、摘要或 Codex session id，不能假装能自动读取历史；先请用户提供摘要、关键命令、错误信息、结论或 session id。
+
+### Codex 会话 ID
+
+用户提供 Codex session id 时，可把该 ID 作为授权和定位线索，做精确本地查找：
+
+- 只查找 `$CODEX_HOME/session_index.jsonl`、`$CODEX_HOME/sessions/`、`$CODEX_HOME/archived_sessions/`；未设置 `$CODEX_HOME` 时使用用户主目录下的 `.codex`，Windows 通常是 `%USERPROFILE%\.codex`，macOS/Linux 通常是 `~/.codex`。
+- 只用完整 ID 做 fixed-string 精确匹配；不要按日期、关键词或标题扩大扫描历史会话。
+- 优先使用文件名或 `session_meta.session_id` / `payload.id` 精确等于该 ID 的 JSONL。
+- 如果只命中其他会话的 `forked_from_id`，那只是派生关系，不等于目标 transcript；继续查找目标 ID，找不到就向用户说明。
+- 不运行 `codex resume <id>` 来读取 transcript；`resume` 是恢复交互会话，不是导出命令。
+- 找到唯一 JSONL 后，可以读取该文件并从 user / assistant / tool 事件中提取候选经验；不要把完整对话原文写入公共知识。
+- 找不到或命中不唯一时，请用户提供摘要、导出的 transcript 或明确文件路径。
+
+非项目模式下：
+
+- 只提取跨场景可复用的操作经验、检查清单、风险提示或调试结论。
+- 默认建议写入 `Agent/Knowledge/Inbox/<简短主题>.md`，并设置 `status: draft`。
+- 主题应从候选知识的核心适用范围中提炼，优先使用平台、技术栈、命令、错误类型、风险类型或工作流类型等真实信号；不要把说明性示例、会话背景或临时任务外壳当成固定分类，也不要把所有临时会话归到同一主题。
+- 仍然先读 `Agent/Knowledge/_catalog.md` 并用关键词定向搜索；不要全 vault 扫描。
+- 不创建 `.agents/`、`docs/adr/`、项目 Obsidian 笔记或项目 memory。
+- 不记录本机磁盘清单、绝对路径细节、账号、隐私信息、客户数据、token 或 secret。
+- 不把聊天摘要原文作为公共知识；只把经过泛化、脱敏、可执行的经验写入公共知识。
+
 ## 可提取内容
 
 只提取满足至少一条的内容：
@@ -71,12 +110,13 @@ git log -5 --oneline
 - 已验证的调试结论。
 - 长期有效的技术取舍。
 - 多次出现或明显高成本的错误模式。
+- 临时会话中可迁移到其他机器、项目或操作任务的安全步骤。
 
 不要提取：
 
 - 本项目专属业务逻辑。
 - 临时任务状态。
-- 聊天摘要。
+- 聊天摘要原文。
 - 未验证猜测。
 - 大段 spec/plan 原文。
 - secret、账号、密钥、客户数据、隐私信息。
@@ -114,6 +154,8 @@ Agent/Knowledge/Inbox/<简短主题>.md
 
 ## 工作流
 
+项目模式：
+
 1. 确定项目根目录。
 2. 读取 `.agents/active.md`，确认当前任务、当前 spec/plan、项目笔记路径。
 3. 读取 `.agents/lessons.md` 和相关 `.agents/progress.md` 条目。
@@ -128,6 +170,19 @@ Agent/Knowledge/Inbox/<简短主题>.md
 12. 写入完成后，如关键词和目标明确，更新 `Agent/Knowledge/_catalog.md` 的 `terms` / `aliases` / `notes`。
 13. 更新项目 Obsidian 笔记的 `相关知识`。
 14. 在 `.agents/active.md` 或 `.agents/lessons.md` 记录本次提取结果。
+
+非项目临时会话模式：
+
+1. 确认没有可用项目 memory，或用户明确要求从临时会话提取经验。
+2. 从当前对话、用户摘要、transcript 或精确匹配的 Codex session JSONL 中列出候选知识，每条包含来源、证据、适用范围、脱敏点和建议目标笔记。
+3. 如果证据不足，先请用户补充关键命令、错误信息、结论或上下文。
+4. 过滤掉本机私有路径、隐私、secret、未验证猜测和不可复用聊天内容。
+5. 读取 `Agent/Knowledge/_catalog.md`（如果存在），用候选关键词匹配 `terms` 和 `aliases`。
+6. 用 Obsidian CLI 定向搜索目标笔记。
+7. 对明确匹配的已有笔记追加短条目。
+8. 对需要新建的笔记，先列清单等用户确认；默认建议放入 `Agent/Knowledge/Inbox/`。
+9. 写入完成后，如关键词和目标明确，更新 `Agent/Knowledge/_catalog.md`。
+10. 不回写项目 memory。
 
 ## Obsidian 查找
 
@@ -202,6 +257,8 @@ obsidian read path="Agent/Knowledge/<实际命中笔记>.md"
 
 ## 项目回写
 
+仅项目模式执行项目回写。
+
 如果提取了公共知识，在 `.agents/active.md` 追加或更新：
 
 使用 `templates/active-knowledge-extracted.md` 的结构。
@@ -213,6 +270,7 @@ obsidian read path="Agent/Knowledge/<实际命中笔记>.md"
 结束时只汇报：
 
 - 读取了哪些项目文件。
+- 非项目模式下，说明使用了哪些当前对话、用户摘要、transcript 或 Codex session JSONL 材料。
 - 追加了哪些 Obsidian 公共知识笔记。
 - 新建或建议写入了哪些 `Agent/Knowledge/Inbox/` 笔记。
 - 是否更新了 `Agent/Knowledge/_catalog.md`。

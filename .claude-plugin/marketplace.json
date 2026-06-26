@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Obsidian-backed 项目记忆、任务收尾、ADR、经验沉淀和知识整理 skills。",
-    "version": "0.1.19"
+    "version": "0.1.20"
   },
   "plugins": [
     {
@@ -16,7 +16,7 @@
         "url": "https://github.com/GeekXtop/obsidian-agent-skills.git"
       },
       "description": "Obsidian-backed 项目记忆、任务收尾、ADR、经验沉淀和知识整理 skills。",
-      "version": "0.1.19",
+      "version": "0.1.20",
       "strict": true
     }
   ]

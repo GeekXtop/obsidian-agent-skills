@@ -57,3 +57,33 @@
 - 已更新：Claude Code marketplace 已 update，并通过 `claude plugin update obsidian-agent-skills@obsidian-agent-skills --scope user` 从 `0.1.18` 更新到 `0.1.19`。
 - 已验证：`codex plugin list --json` 与 `claude plugin list --json` 均显示 `obsidian-agent-skills@obsidian-agent-skills` 版本 `0.1.19`。
 - 注意：Claude Code 提示需要 restart 才能应用；Codex 也需要重启或开启新会话加载新 skill。
+
+## 2026-06-27 - obadr 历史材料读取边界
+
+- 已完成：`$obadr` 新增“历史材料读取”小节，明确历史材料只用于避免重复 ADR 或补足当前决策背景。
+- 已完成：`$obadr` 明确默认读取 `.agents/active.md`、必要的 `.agents/progress.md`、`docs/adr/` 索引/标题/相关 ADR。
+- 已完成：`$obadr` 明确只有用户指定、当前 memory/ADR 明确链接、或当前决策依赖历史阶段证据时，才读取额外历史材料。
+- 已完成：`$obadr` 明确禁止全量扫描 `.agents/archive/`、全量读取历史 `progress`、为找灵感遍历 `docs/`、把历史计划/进展/ADR 原文复制进新 ADR。
+- 已验证：目标文本断言通过；`npm test` 通过，输出 `All skills are valid.`。
+- 备注：按用户要求，本轮只改文档，不发版。
+
+## 2026-06-27 - oblearn 非项目临时会话模式
+
+- 已完成：`$oblearn` 支持从非项目临时会话提取可复用经验；当前目录没有项目 memory 或用户明确要求从当前对话、粘贴 transcript、临时任务摘要、Codex session id 提取经验时，不要求先 `$obinit`。
+- 已完成：`$oblearn` 模式选择改为显式非项目材料优先；用户提供临时会话摘要、transcript、Codex session id 或指定非项目材料时，即使当前目录存在项目 memory，也按非项目临时会话模式处理。
+- 已完成：`$oblearn` 非项目模式只使用当前对话、用户提供摘要、transcript、明确指定材料，或能精确定位的 Codex session JSONL；无法定位历史 Codex app 对话时要求用户补充关键事实。
+- 已完成：`$oblearn` 支持用户提供 Codex session id 后，在 `$CODEX_HOME/session_index.jsonl`、`$CODEX_HOME/sessions/`、`$CODEX_HOME/archived_sessions/` 做完整 ID fixed-string 精确查找；未设置 `$CODEX_HOME` 时使用用户主目录下的 `.codex`，Windows 通常是 `%USERPROFILE%\.codex`，macOS/Linux 通常是 `~/.codex`。
+- 已完成：`$oblearn` 明确不使用 `codex resume <id>` 读取 transcript；只命中其他会话的 `forked_from_id` 时不等于找到目标 transcript。
+- 已完成：`$oblearn` 非项目模式默认建议写入 `Agent/Knowledge/Inbox/`，不创建 `.agents/`、`docs/adr/`、项目 Obsidian 笔记或项目 memory。
+- 已完成：`$oblearn` 非项目模式的主题命名改为从候选知识核心适用范围提炼，使用平台、技术栈、命令、错误类型、风险类型或工作流类型等真实信号，避免把说明性示例、会话背景或临时任务外壳当成固定分类。
+- 已完成：`$oblearn` 非项目模式仍使用 `_catalog.md` 和关键词定向搜索，不全 vault 扫描，并要求脱敏本机路径、隐私、secret、账号等信息。
+- 已完成：同步更新 `commands/oblearn.md`、`README.md`、`skills.json`、`skills/oblearn/agents/openai.yaml`、`.codex-plugin/plugin.json`。
+- 已验证：非项目模式和 session ID 目标文本断言通过；`npm test` 通过，输出 `All skills are valid.`。
+- 备注：按用户要求，本轮只改文档，不发版。
+
+## 2026-06-27 - 0.1.20 发版准备
+
+- 已完成：版本号推进到 `0.1.20`，同步 `package.json`、`skills.json`、`.claude-plugin/plugin.json`、`.claude-plugin/marketplace.json`、`.codex-plugin/plugin.json`。
+- 已包含：`$obadr` 历史材料读取边界、`$oblearn` 非项目临时会话模式、Codex session id 精确查找、显式非项目材料优先和跨平台 Codex home 路径说明。
+- 已同步：`commands/oblearn.md`、`README.md`、`skills/oblearn/agents/openai.yaml`、`.codex-plugin/plugin.json` 的 `$oblearn` 发现层说明。
+- 已验证：版本一致性检查通过；`npm test` 通过，输出 `All skills are valid.`。
