@@ -96,3 +96,11 @@
 - 已更新：Claude Code marketplace 已 update，并通过 `claude plugin update obsidian-agent-skills@obsidian-agent-skills --scope user` 从 `0.1.19` 更新到 `0.1.20`。
 - 已验证：`codex plugin list --json` 与 `claude plugin list --json` 均显示 `obsidian-agent-skills@obsidian-agent-skills` 版本 `0.1.20`。
 - 注意：Claude Code 提示需要 restart 才能应用；Codex 也需要重启或开启新会话加载新 skill。
+
+## 2026-06-28 - 发现层与校验脚本质量修复
+
+- 已完成：`scripts/validate-skills.mjs` 增加 `agents/openai.yaml` 内容校验（`interface` 块 + `display_name` / `short_description` / `default_prompt` 非空），补上 README 声称但原先缺失的 OpenAI agent metadata 检查。
+- 已完成：`skills/obadr/SKILL.md` frontmatter 补“回写项目 memory 的 ADR 链接”，与 `skills.json` 对齐（obadr 正文确实回写 active/progress）。
+- 已完成：`README.md` 开发章节说明 `.codex-plugin` 显式 `skills` 字段与 `.claude-plugin` 约定式发现的差异。
+- 已验证：红灯/绿灯断言通过；`npm test` 通过，输出 `All skills are valid.`。
+- 备注：本轮只改文档与校验脚本，未改版本号，未提交未推送，等用户决定是否发版。
