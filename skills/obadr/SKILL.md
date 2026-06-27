@@ -1,6 +1,6 @@
 ---
 name: obadr
-description: 为当前项目记录 Architecture Decision Record。适用于用户要求记录技术决策、沉淀架构取舍、解释为什么选择或放弃某个方案、把重要决定写入 docs/adr/，或希望后续 agent 能理解项目级决策背景。
+description: 为当前项目记录 Architecture Decision Record，并在需要时回写项目 memory 的 ADR 链接。适用于用户要求记录技术决策、沉淀架构取舍、解释为什么选择或放弃某个方案、把重要决定写入 docs/adr/，或希望后续 agent 能理解项目级决策背景。
 ---
 
 # Obadr

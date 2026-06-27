@@ -249,6 +249,18 @@ function parseFrontmatter(markdown) {
   return result;
 }
 
+function parseOpenAiInterface(yaml) {
+  if (!/^interface:\s*$/m.test(yaml)) return null;
+
+  const fields = {};
+  for (const key of ["display_name", "short_description", "default_prompt"]) {
+    const match = yaml.match(new RegExp(`^\\s+${key}:\\s*(.*)$`, "m"));
+    if (match) fields[key] = match[1].trim().replace(/^["']|["']$/g, "");
+  }
+
+  return fields;
+}
+
 function countWordsish(markdown) {
   return markdown.match(/[A-Za-z0-9_`$./-]+|[\u4e00-\u9fff]/g)?.length ?? 0;
 }
@@ -450,6 +462,17 @@ if (!existsSync(skillsDir)) {
     const openAiAgentPath = join(skillsDir, skillName, "agents", "openai.yaml");
     if (!existsSync(openAiAgentPath)) {
       fail(`${skillName}: missing agents/openai.yaml`);
+    } else {
+      const openAiInterface = parseOpenAiInterface(readFileSync(openAiAgentPath, "utf8"));
+      if (!openAiInterface) {
+        fail(`${skillName}: openai.yaml must define a top-level interface block`);
+      } else {
+        for (const key of ["display_name", "short_description", "default_prompt"]) {
+          if (!openAiInterface[key]) {
+            fail(`${skillName}: openai.yaml interface.${key} must be a non-empty string`);
+          }
+        }
+      }
     }
 
     const templatesDir = join(skillsDir, skillName, "templates");
