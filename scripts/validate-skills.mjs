@@ -103,6 +103,10 @@ const requiredObinitScripts = [
   "scripts/inspect-project.mjs",
 ];
 
+const requiredSkillNames = ["obinit", "obadr", "obclose", "oblearn", "obcurate", "obdoc"];
+
+const requiredProjectDescriptionTerms = ["文档整理"];
+
 const requiredKnowledgeLookupTerms = ["Agent/Knowledge/", "Agent/Knowledge/_catalog.md", "关键词定向搜索", "明确读取"];
 
 const requiredObinitConcepts = [
@@ -173,6 +177,10 @@ const requiredSkillConcepts = {
   ],
   oblearn: [
     {
+      name: "shared document and knowledge target policy",
+      terms: ["用户指定路径优先", "已有明确命中", "不稳定时", "Agent/Knowledge/Inbox/", "$obcurate"],
+    },
+    {
       name: "bounded knowledge extraction",
       terms: ["不扫描整个 vault", "关键词定向搜索", "等待用户确认", "Agent/Knowledge/Inbox/"],
     },
@@ -183,6 +191,10 @@ const requiredSkillConcepts = {
     {
       name: "knowledge catalog source",
       terms: ["Agent/Knowledge/_catalog.md", "事实来源", "terms", "aliases", "不凭空假设"],
+    },
+    {
+      name: "catalog maintenance boundary",
+      terms: ["最小明确更新", "结构性 catalog 维护", "$obcurate", "catalog"],
     },
     {
       name: "oblearn curation boundary",
@@ -197,6 +209,32 @@ const requiredSkillConcepts = {
       terms: ["已有公共知识维护", "最小修改", "aliases", "修正 wikilink", "可发现性"],
     },
   ],
+  obdoc: [
+    {
+      name: "shared document and knowledge target policy",
+      terms: ["用户指定路径优先", "已有明确命中", "不稳定时", "Agent/Knowledge/Inbox/", "$obcurate"],
+    },
+    {
+      name: "document extraction boundary",
+      terms: ["文档型输出", "不是短知识条目", "$oblearn", "可提取知识候选"],
+    },
+    {
+      name: "free-form document metadata",
+      terms: ["doc_type", "source", "自由描述字段", "不是固定枚举"],
+    },
+    {
+      name: "document source safety",
+      terms: ["Codex session id", "精确定位", "脱敏", "不写 secret"],
+    },
+    {
+      name: "flexible Obsidian document targets",
+      terms: ["候选路径", "不要固定目录", "用户指定路径", "Agent/Knowledge/Inbox/"],
+    },
+    {
+      name: "document catalog boundary",
+      terms: ["最小明确 catalog 更新", "Agent/Knowledge/_catalog.md", "$obcurate"],
+    },
+  ],
   obcurate: [
     {
       name: "bounded knowledge curation",
@@ -209,6 +247,10 @@ const requiredSkillConcepts = {
     {
       name: "catalog maintenance",
       terms: ["事实来源", "terms", "aliases", "notes", "不凭空假设"],
+    },
+    {
+      name: "knowledge and document metadata",
+      terms: ["kind", "source_skill", "doc_type", "knowledge", "document"],
     },
     {
       name: "privacy-preserving curation",
@@ -381,6 +423,11 @@ if (!existsSync(skillsDir)) {
 
   if (skillNames.length === 0) fail("No skills found.");
 
+  const missingRequiredSkillNames = requiredSkillNames.filter((skillName) => !skillNames.includes(skillName));
+  if (missingRequiredSkillNames.length > 0) {
+    fail(`skills directory: missing required skills: ${missingRequiredSkillNames.join(", ")}`);
+  }
+
   for (const skillName of skillNames) {
     const skillPath = join(skillsDir, skillName, "SKILL.md");
 
@@ -535,10 +582,49 @@ if (!existsSync(skillsDir)) {
           fail(`${skillName}: template ${template} must not contain placeholder wikilinks: ${placeholderKnowledgeLinks.join(", ")}`);
         }
 
+        const angleBracketEnums = content.match(/<[^>\r\n]*\|[^>\r\n]*>/g) ?? [];
+        if (angleBracketEnums.length > 0) {
+          fail(`${skillName}: template ${template} must not constrain placeholders to fixed enum choices: ${angleBracketEnums.join(", ")}`);
+        }
+
         if (skillName === "obinit" && ["instructions.md", "instructions-index.md"].includes(template)) {
           const missing = requiredKnowledgeLookupTerms.filter((term) => !content.includes(term));
           if (missing.length > 0) {
             fail(`${skillName}: template ${template} must include on-demand public knowledge lookup terms: ${missing.join(", ")}`);
+          }
+        }
+
+        if (skillName === "oblearn" && template === "public-knowledge-note.md") {
+          for (const term of ["kind: knowledge", "source_skill: oblearn"]) {
+            if (!content.includes(term)) {
+              fail(`${skillName}: template ${template} must include ${term}`);
+            }
+          }
+        }
+
+        if (skillName === "oblearn" && template === "public-knowledge-entry.md") {
+          for (const term of ["最小更新", "Agent/Knowledge/_catalog.md", "$obcurate"]) {
+            if (!content.includes(term)) {
+              fail(`${skillName}: template ${template} must include ${term}`);
+            }
+          }
+        }
+
+        if (skillName === "obdoc" && template === "document-note.md") {
+          for (const term of ["kind: document", "source_skill: obdoc", "doc_type:", "source:"]) {
+            if (!content.includes(term)) {
+              fail(`${skillName}: template ${template} must include ${term}`);
+            }
+          }
+        }
+
+        if (skillName === "obcurate" && template === "catalog-entry.md") {
+          if (!content.includes("aliases: []")) {
+            fail(`${skillName}: template ${template} must default catalog aliases to an empty list`);
+          }
+
+          if (content.includes("aliases: [<别名>]")) {
+            fail(`${skillName}: template ${template} must not imply aliases are required`);
           }
         }
       }
@@ -638,6 +724,21 @@ if (existsSync(packageJsonPath)) {
     assertNoPhrases(relativePath, content, forbiddenProjectPositioning, (phrase) => {
       return `avoid positioning the project as Chinese-only: ${phrase}`;
     });
+
+    for (const term of requiredProjectDescriptionTerms) {
+      if (!content.includes(term)) {
+        fail(`${relativePath}: project description must mention ${term}`);
+      }
+    }
+
+    if (relativePath === "README.md") {
+      const prerequisiteLine = content.split(/\r?\n/).find((line) => line.includes("需要上述前提")) ?? "";
+      for (const skillName of ["$obinit", "$oblearn", "$obdoc", "$obcurate"]) {
+        if (!prerequisiteLine.includes(skillName)) {
+          fail(`README.md: Obsidian prerequisites line must mention ${skillName}`);
+        }
+      }
+    }
   }
 
   for (const pluginDir of [".claude-plugin", ".codex-plugin"]) {
@@ -660,6 +761,27 @@ if (existsSync(packageJsonPath)) {
 
     if (!manifest.description) {
       fail(`${pluginDir}: missing description`);
+    }
+
+    if (pluginDir === ".codex-plugin") {
+      const longDescription = manifest.interface?.longDescription ?? "";
+      const defaultPrompt = Array.isArray(manifest.interface?.defaultPrompt)
+        ? manifest.interface.defaultPrompt.join("\n")
+        : "";
+
+      if (longDescription.includes("五个")) {
+        fail(`${pluginDir}: longDescription must not say five workflows after adding obdoc`);
+      }
+
+      for (const skillName of skillNames) {
+        if (!longDescription.includes(skillName)) {
+          fail(`${pluginDir}: longDescription must mention ${skillName}`);
+        }
+
+        if (!defaultPrompt.includes(`$${skillName}`)) {
+          fail(`${pluginDir}: defaultPrompt must include $${skillName}`);
+        }
+      }
     }
   }
 

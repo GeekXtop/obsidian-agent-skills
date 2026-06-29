@@ -1,7 +1,7 @@
 {
   "name": "obsidian-agent-skills",
-  "version": "0.1.21",
-  "description": "Obsidian-backed 项目记忆、任务收尾、ADR、经验沉淀和知识整理 skills。",
+  "version": "0.1.22",
+  "description": "Obsidian-backed 项目记忆、任务收尾、ADR、经验沉淀、文档整理和知识整理 skills。",
   "author": {
     "name": "GeekX.top",
     "url": "https://github.com/GeekXtop"

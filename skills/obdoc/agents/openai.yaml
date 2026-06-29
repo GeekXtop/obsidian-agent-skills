@@ -1,0 +1,4 @@
+interface:
+  display_name: "Obdoc"
+  short_description: "把会话或材料整理成 Obsidian 文档"
+  default_prompt: "使用 $obdoc 从当前对话、材料或 Codex session 整理配置文档、教程或 runbook。"

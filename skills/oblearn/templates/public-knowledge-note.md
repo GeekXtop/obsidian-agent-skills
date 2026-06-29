@@ -1,6 +1,8 @@
 ---
 title: <知识标题>
 aliases: []
+kind: knowledge
+source_skill: oblearn
 domain: <主领域或留空>
 platform: []
 topic: []

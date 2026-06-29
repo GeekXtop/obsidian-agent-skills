@@ -31,7 +31,7 @@ description: 从项目内 agent 记忆库、Superpowers specs/plans、ADR、rece
 - 再用候选主题、技术栈、错误信息或平台名做关键词定向搜索。
 - 明确匹配已有笔记时，可以追加短条目。
 - 需要新建公共知识笔记时，优先建议写入 `Agent/Knowledge/Inbox/` 并等待用户确认。
-- 只有写入目标和关键词明确时，才同步更新 `Agent/Knowledge/_catalog.md`。
+- 只有本次已确认写入目标、关键词明确且不含敏感信息时，才对 `Agent/Knowledge/_catalog.md` 做最小明确更新。
 - 不扫描整个 vault。
 - 不凭空假设某个领域已经沉淀；没有 `_catalog.md` 命中或搜索命中时，就按新知识处理。
 - 不写 secret、账号、token、客户信息、内部路径细节。
@@ -123,19 +123,23 @@ git log -5 --oneline
 
 ## 输出目标
 
+路径规则和 `$obdoc` 保持一致：路径不负责区分产物类型，产物类型由 frontmatter 和正文结构区分。用户指定路径优先；已有明确命中的公共知识笔记优先追加；不稳定时建议写入 `Agent/Knowledge/Inbox/` 并设置 `status: draft`；稳定归类、移动、合并或拆分交给 `$obcurate`。
+
 优先追加到定向搜索命中的已有 Obsidian 公共知识笔记：
 
 ```text
 Agent/Knowledge/<主题>.md
 ```
 
-主题应来自 `Agent/Knowledge/_catalog.md` 命中、定向搜索命中或用户确认。如果没有合适笔记，先向用户提出新建建议，不要擅自创建一堆分类。
+主题应来自用户指定路径、`Agent/Knowledge/_catalog.md` 命中、定向搜索命中或用户确认。如果没有合适笔记，先向用户提出新建建议，不要擅自创建一堆分类。
 
 新知识尚未稳定归类时，建议目标是：
 
 ```text
 Agent/Knowledge/Inbox/<简短主题>.md
 ```
+
+`oblearn` 可以和 `$obdoc` 的文档产物处于同一目录；不要通过目录判断它们的区别。`oblearn` 新建笔记使用 `kind: knowledge` 和 `source_skill: oblearn`，`$obdoc` 文档使用 `kind: document` 和 `source_skill: obdoc`。
 
 `Agent/Knowledge/_catalog.md` 是已沉淀领域的事实来源。它只记录已经存在或本次确认创建的公共知识入口，不记录猜测分类。
 
@@ -145,12 +149,12 @@ Agent/Knowledge/Inbox/<简短主题>.md
 ## terms
 
 - term: <关键词>
-  aliases: [<别名>]
+  aliases: []
   notes:
     - [[<真实笔记标题>]]
 ```
 
-更新 catalog 时只使用真实笔记标题、已有 frontmatter、用户确认的别名或本次知识的明确关键词。无法判断时，不更新 catalog。
+最小明确更新 catalog 时只使用真实笔记标题、已有 frontmatter、用户确认的别名或本次知识的明确关键词。无法判断时，不登记，只列出维护建议并交给 `$obcurate`。
 
 ## 工作流
 
@@ -167,7 +171,7 @@ Agent/Knowledge/Inbox/<简短主题>.md
 9. 用 Obsidian CLI 定向搜索目标笔记。
 10. 对明确匹配的已有笔记追加短条目。
 11. 对需要新建的笔记，先列清单等用户确认；默认建议放入 `Agent/Knowledge/Inbox/`。
-12. 写入完成后，如关键词和目标明确，更新 `Agent/Knowledge/_catalog.md` 的 `terms` / `aliases` / `notes`。
+12. 写入完成后，如关键词和目标明确，对 `Agent/Knowledge/_catalog.md` 做最小明确更新；不明确时只列出 `terms` / `aliases` / `notes` 建议，并建议 `$obcurate` 处理。
 13. 更新项目 Obsidian 笔记的 `相关知识`。
 14. 在 `.agents/active.md` 或 `.agents/lessons.md` 记录本次提取结果。
 
@@ -181,7 +185,7 @@ Agent/Knowledge/Inbox/<简短主题>.md
 6. 用 Obsidian CLI 定向搜索目标笔记。
 7. 对明确匹配的已有笔记追加短条目。
 8. 对需要新建的笔记，先列清单等用户确认；默认建议放入 `Agent/Knowledge/Inbox/`。
-9. 写入完成后，如关键词和目标明确，更新 `Agent/Knowledge/_catalog.md`。
+9. 写入完成后，如关键词和目标明确，对 `Agent/Knowledge/_catalog.md` 做最小明确更新；不明确时只列出 catalog 建议，并建议 `$obcurate` 处理。
 10. 不回写项目 memory。
 
 ## Obsidian 查找
@@ -216,15 +220,21 @@ obsidian read path="Agent/Knowledge/<实际命中笔记>.md"
 
 引用真实存在或本次确认创建的 Obsidian 笔记时使用 wikilink。外部链接用标准 Markdown 链接。
 
-## Catalog 更新
+## Catalog 最小更新
 
 `Agent/Knowledge/_catalog.md` 用于让后续 agent 知道哪些领域已经沉淀过。它不是分类体系，不要求完整，不是全 vault 索引。
 
-可以更新 catalog 的情况：
+可以最小更新 catalog 的情况：
 
 - 本次追加到已有笔记，且候选关键词明确匹配该笔记。
 - 本次新建笔记，且用户确认标题、别名或关键词。
 - 正在补充的笔记已有 `aliases`、`platform`、`topic` 或 tags 可直接转换为 `terms` / `aliases`。
+
+最小更新只允许：
+
+- 为本次实际写入或更新的真实笔记新增一个入口。
+- 为已存在的匹配入口追加少量明确 `terms`、`aliases` 或 `notes`。
+- 保留 catalog 既有结构，不重排、不移动、不删除、不批量改名。
 
 不要更新 catalog 的情况：
 
@@ -232,6 +242,8 @@ obsidian read path="Agent/Knowledge/<实际命中笔记>.md"
 - 搜索结果不明确。
 - 目标笔记仍需要用户确认。
 - 关键词包含本地事实、内网地址、账号、客户名或其他需要脱敏的信息。
+
+结构性 catalog 维护由 `$obcurate` 执行，包括清理 Inbox、移动或重命名主题、合并重复入口、拆分大主题、批量修正 aliases/tags/wikilink、删除过期入口和全局重分类。
 
 ## 模板升级与历史公共知识
 
@@ -273,6 +285,6 @@ obsidian read path="Agent/Knowledge/<实际命中笔记>.md"
 - 非项目模式下，说明使用了哪些当前对话、用户摘要、transcript 或 Codex session JSONL 材料。
 - 追加了哪些 Obsidian 公共知识笔记。
 - 新建或建议写入了哪些 `Agent/Knowledge/Inbox/` 笔记。
-- 是否更新了 `Agent/Knowledge/_catalog.md`。
+- 是否最小更新了 `Agent/Knowledge/_catalog.md`，或只提出了维护建议。
 - 建议新建但等待确认的笔记。
 - 回写了哪些项目内 memory 文件。
