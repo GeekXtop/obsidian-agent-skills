@@ -149,3 +149,15 @@
 - 已验证：新增校验后先出现目标红灯；修复后 `npm test` 通过，输出 `All skills are valid.`。
 - 已验证：最终再次运行 `npm test` 通过，输出 `All skills are valid.`；旧文案搜索无命中。
 - 备注：本轮未改版本号，未提交未推送。
+
+## 2026-06-30 - 0.1.22 发布与本地更新
+
+- 已完成：版本号推进到 `0.1.22`，同步 `package.json`、`skills.json`、`.claude-plugin/plugin.json`、`.claude-plugin/marketplace.json`、`.codex-plugin/plugin.json`。
+- 已发布：提交 `0df8046 Release v0.1.22` 已推送到 `origin/main`。
+- 已发布：按 ADR 只创建并推送插件 tag `obsidian-agent-skills--v0.1.22`，未创建平行 `v0.1.22`。
+- 已更新：Codex marketplace 已 upgrade，并通过 `codex plugin add obsidian-agent-skills@obsidian-agent-skills` 安装到 `0.1.22`。
+- 已更新：Claude Code marketplace 已 update，并通过 `claude plugin update obsidian-agent-skills@obsidian-agent-skills --scope user` 从 `0.1.21` 更新到 `0.1.22`。
+- 已验证：`npm test` 通过，输出 `All skills are valid.`。
+- 已验证：`codex plugin list --json` 显示 `obsidian-agent-skills@obsidian-agent-skills` 版本 `0.1.22` 且 enabled。
+- 已验证：`claude plugin list --json` 显示 `obsidian-agent-skills@obsidian-agent-skills` 版本 `0.1.22`；当前 Claude Code 列表里该插件 enabled 为 false。
+- 注意：Claude Code 提示 restart 才能应用；Codex 也需要重启或开启新会话加载新 skill。

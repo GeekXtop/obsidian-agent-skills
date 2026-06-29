@@ -3,7 +3,7 @@
 ## 当前任务
 
 - 目标：新增 `$obdoc` skill，用于把会话、材料、本地文件或 Codex session 整理成 Obsidian 文档型输出。
-- 状态：已完成。新增 skill、命令入口、模板、README、插件/包描述和校验覆盖；`npm test` 全绿；未提交、未推送。
+- 状态：已完成并发布 `0.1.22`。新增 skill、命令入口、模板、README、插件/包描述和校验覆盖；已提交、打 tag、推送并更新本地 Codex / Claude Code 插件。
 - 最后更新：2026-06-30
 
 ## 当前状态
@@ -22,6 +22,10 @@
 - 已完成：`$obdoc` 的 `doc_type` 和 `source` 改为自由描述字段，不再使用 `guide|runbook|config|migration|troubleshooting` 或 `current-conversation|transcript|...` 这类固定枚举占位。
 - 已完成：catalog 示例中的 `aliases` 默认改为 `[]`，避免暗示必须填写别名；只有用户确认、已有 frontmatter、标题可直接推出或重命名/合并保留旧名时才填写。
 - 已完成：`scripts/validate-skills.mjs` 增加必备 skill 名称、`obdoc` 概念、统一路径规则、模板字段、README 使用前提、项目描述、Codex plugin interface/defaultPrompt 等校验。
+- 已发布：提交 `0df8046 Release v0.1.22` 已推送到 `origin/main`。
+- 已发布：按 ADR 只创建并推送插件 tag `obsidian-agent-skills--v0.1.22`，未创建平行 `v0.1.22`。
+- 已更新：Codex marketplace 已 upgrade，并通过 `codex plugin add obsidian-agent-skills@obsidian-agent-skills` 安装到 `0.1.22`。
+- 已更新：Claude Code marketplace 已 update，并通过 `claude plugin update obsidian-agent-skills@obsidian-agent-skills --scope user` 从 `0.1.21` 更新到 `0.1.22`。
 - 进行中：无。
 - 阻塞：无。
 
@@ -34,6 +38,9 @@
 - 红灯：新增 `public-knowledge-entry.md` catalog 边界校验后，`npm test` 失败并指出模板仍要求直接更新 catalog。
 - 绿灯：补齐 `oblearn` / `obdoc` / `obcurate` 规则、模板、README、Codex manifest 和校验脚本后运行 `npm test`，输出 `All skills are valid.`。
 - 绿灯：补齐顶层项目描述和对应校验后再次运行 `npm test`，输出 `All skills are valid.`；旧文案搜索无命中。
+- 绿灯：发版后再次运行 `npm test`，输出 `All skills are valid.`。
+- 已验证：`codex plugin list --json` 显示 `obsidian-agent-skills@obsidian-agent-skills` 版本 `0.1.22` 且 enabled。
+- 已验证：`claude plugin list --json` 显示 `obsidian-agent-skills@obsidian-agent-skills` 版本 `0.1.22`；Claude Code 报告该插件 enabled 为 false，需按用户配置启用并重启或 reload 后应用。
 
 ## 关键文件
 
@@ -52,8 +59,8 @@
 
 ## 下一步
 
-1. 由用户决定是否提交并发版；本轮未改版本号。
-2. 如果要本机立即使用，需要发布/安装新版插件或手动同步到客户端 skills 路径。
+1. 若要在 Claude Code 中立即使用新版，按当前客户端状态需要启用该插件并重启或 `/reload`。
+2. Codex 当前会话不一定热加载新插件；需要新会话或重启后使用 `0.1.22` skill。
 
 ## 当前 ADR
 
