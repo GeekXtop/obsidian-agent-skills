@@ -161,3 +161,14 @@
 - 已验证：`codex plugin list --json` 显示 `obsidian-agent-skills@obsidian-agent-skills` 版本 `0.1.22` 且 enabled。
 - 已验证：`claude plugin list --json` 显示 `obsidian-agent-skills@obsidian-agent-skills` 版本 `0.1.22`；当前 Claude Code 列表里该插件 enabled 为 false。
 - 注意：Claude Code 提示 restart 才能应用；Codex 也需要重启或开启新会话加载新 skill。
+
+## 2026-06-30 - 版本号同步脚本
+
+- 已完成：新增 `scripts/bump-version.mjs`，用一个版本参数同步更新 `package.json`、`skills.json`、`.claude-plugin/plugin.json`、`.claude-plugin/marketplace.json` 和 `.codex-plugin/plugin.json`。
+- 已完成：`package.json` 增加 `version:set` 命令，用法为 `npm run version:set -- 0.1.23`。
+- 已完成：README 开发章节记录版本同步命令和覆盖的文件。
+- 已完成：`scripts/validate-skills.mjs` 增加版本同步脚本和 README 命令说明校验。
+- 已验证：先运行 `npm test` 得到缺少 `version:set` / `bump-version.mjs` 的红灯；实现后 `npm test` 通过。
+- 已验证：临时执行 `npm run version:set -- 0.1.23` 后五个版本位置均变为 `0.1.23`，再执行 `npm run version:set -- 0.1.22` 恢复当前版本。
+- 已验证：无效版本参数 `nope` 会输出用法并失败。
+- 备注：本轮未发版，未提交未推送。

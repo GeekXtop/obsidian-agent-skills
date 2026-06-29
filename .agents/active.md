@@ -2,8 +2,8 @@
 
 ## 当前任务
 
-- 目标：新增 `$obdoc` skill，用于把会话、材料、本地文件或 Codex session 整理成 Obsidian 文档型输出。
-- 状态：已完成并发布 `0.1.22`。新增 skill、命令入口、模板、README、插件/包描述和校验覆盖；已提交、打 tag、推送并更新本地 Codex / Claude Code 插件。
+- 目标：新增统一版本号同步脚本，避免发版时手工修改多个 manifest。
+- 状态：已完成。新增 `scripts/bump-version.mjs` 和 `npm run version:set -- <version>`；README 和校验脚本已同步；未提交、未推送。
 - 最后更新：2026-06-30
 
 ## 当前状态
@@ -26,6 +26,9 @@
 - 已发布：按 ADR 只创建并推送插件 tag `obsidian-agent-skills--v0.1.22`，未创建平行 `v0.1.22`。
 - 已更新：Codex marketplace 已 upgrade，并通过 `codex plugin add obsidian-agent-skills@obsidian-agent-skills` 安装到 `0.1.22`。
 - 已更新：Claude Code marketplace 已 update，并通过 `claude plugin update obsidian-agent-skills@obsidian-agent-skills --scope user` 从 `0.1.21` 更新到 `0.1.22`。
+- 已完成：新增 `scripts/bump-version.mjs`，统一更新 `package.json`、`skills.json`、`.claude-plugin/plugin.json`、`.claude-plugin/marketplace.json` 和 `.codex-plugin/plugin.json` 的版本字段。
+- 已完成：`package.json` 增加 `version:set` 脚本；README 开发章节增加 `npm run version:set -- 0.1.23` 用法。
+- 已完成：`scripts/validate-skills.mjs` 要求版本同步脚本和 README 说明存在，避免后续回退到手工多文件改版本。
 - 进行中：无。
 - 阻塞：无。
 
@@ -41,6 +44,11 @@
 - 绿灯：发版后再次运行 `npm test`，输出 `All skills are valid.`。
 - 已验证：`codex plugin list --json` 显示 `obsidian-agent-skills@obsidian-agent-skills` 版本 `0.1.22` 且 enabled。
 - 已验证：`claude plugin list --json` 显示 `obsidian-agent-skills@obsidian-agent-skills` 版本 `0.1.22`；Claude Code 报告该插件 enabled 为 false，需按用户配置启用并重启或 reload 后应用。
+- 红灯：新增版本脚本校验后，`npm test` 失败并指出缺少 `scripts.version:set` 和 `scripts/bump-version.mjs`。
+- 红灯：新增 README 命令说明校验后，`npm test` 失败并指出 README 缺少 `npm run version:set --`。
+- 绿灯：实现脚本、npm 命令和 README 后运行 `npm test`，输出 `All skills are valid.`。
+- 已验证：`npm run version:set -- 0.1.23` 能同步更新五个版本位置，再运行 `npm run version:set -- 0.1.22` 能恢复当前版本。
+- 已验证：`node scripts/bump-version.mjs nope` 对无效版本输出用法并非 0 退出。
 
 ## 关键文件
 
@@ -56,11 +64,14 @@
 - `.claude-plugin/plugin.json`、`.claude-plugin/marketplace.json`、`package.json`：同步顶层描述。
 - `README.md`：安装、命令、skills 表和使用说明增加 `$obdoc`。
 - `scripts/validate-skills.mjs`：新增 `obdoc` 存在性、关键概念、发现层、README 前提、项目描述、`doc_type` / `source` 自由字段、模板禁用 `<a|b>` 枚举占位、catalog aliases 默认空列表和 catalog 最小更新边界校验。
+- `scripts/bump-version.mjs`：统一同步 release 版本号。
+- `package.json`：新增 `version:set` 命令。
 
 ## 下一步
 
-1. 若要在 Claude Code 中立即使用新版，按当前客户端状态需要启用该插件并重启或 `/reload`。
-2. Codex 当前会话不一定热加载新插件；需要新会话或重启后使用 `0.1.22` skill。
+1. 用户决定是否提交当前版本同步脚本改动。
+2. 若要在 Claude Code 中立即使用 `0.1.22`，按当前客户端状态需要启用该插件并重启或 `/reload`。
+3. Codex 当前会话不一定热加载新插件；需要新会话或重启后使用 `0.1.22` skill。
 
 ## 当前 ADR
 

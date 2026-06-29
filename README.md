@@ -182,12 +182,20 @@ $obcurate
 
 ## 开发
 
+同步更新 release 版本号：
+
+```bash
+npm run version:set -- 0.1.23
+```
+
+该命令会同步更新 `package.json`、`skills.json`、`.claude-plugin/plugin.json`、`.claude-plugin/marketplace.json` 和 `.codex-plugin/plugin.json` 的版本字段。
+
 验证仓库：
 
 ```bash
 npm test
 ```
 
-校验脚本会检查 skill frontmatter、OpenAI agent metadata、命令入口、模板语言回归规则、Codex 插件 interface 发现层，以及插件 manifest 版本一致性。
+校验脚本会检查 skill frontmatter、OpenAI agent metadata、命令入口、模板语言回归规则、Codex 插件 interface 发现层、版本同步脚本，以及插件 manifest 版本一致性。
 
 两个 plugin manifest 的 skills 发现方式不同，这是有意为之：`.codex-plugin/plugin.json` 用 `"skills": "./skills/"` 显式声明，`.claude-plugin/plugin.json` 依赖 Claude Code 对仓库根 `skills/` 与 `commands/` 目录的约定式发现，因此不重复声明。两者指向同一套 `skills/`，`.claude-plugin/plugin.json` 缺少 `skills` 字段不是配置遗漏。

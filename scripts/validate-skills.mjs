@@ -10,6 +10,7 @@ const commandsDir = join(root, "commands");
 const packageJsonPath = join(root, "package.json");
 const skillsJsonPath = join(root, "skills.json");
 const gitignorePath = join(root, ".gitignore");
+const bumpVersionScriptPath = join(root, "scripts", "bump-version.mjs");
 const inspectProjectScriptPath = join(skillsDir, "obinit", "scripts", "inspect-project.mjs");
 let skillNames = [];
 
@@ -659,6 +660,14 @@ if (!existsSync(commandsDir)) {
 if (existsSync(packageJsonPath)) {
   const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8"));
 
+  if (packageJson.scripts?.["version:set"] !== "node scripts/bump-version.mjs") {
+    fail("package.json: scripts.version:set must be node scripts/bump-version.mjs");
+  }
+
+  if (!existsSync(bumpVersionScriptPath)) {
+    fail("Missing scripts/bump-version.mjs.");
+  }
+
   if (!existsSync(gitignorePath)) {
     fail("Missing .gitignore.");
   } else {
@@ -737,6 +746,10 @@ if (existsSync(packageJsonPath)) {
         if (!prerequisiteLine.includes(skillName)) {
           fail(`README.md: Obsidian prerequisites line must mention ${skillName}`);
         }
+      }
+
+      if (!content.includes("npm run version:set --")) {
+        fail("README.md: must document npm run version:set -- for synchronized release version bumps");
       }
     }
   }

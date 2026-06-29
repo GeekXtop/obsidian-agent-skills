@@ -17,7 +17,8 @@
     "skills"
   ],
   "scripts": {
-    "test": "node scripts/validate-skills.mjs"
+    "test": "node scripts/validate-skills.mjs",
+    "version:set": "node scripts/bump-version.mjs"
   },
   "skills": [
     "./skills"
