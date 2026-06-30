@@ -41,19 +41,19 @@
 - 适用场景：维护 `SKILL.md`、命令入口、模板说明、校验脚本和 agent 工作约定。
 - 下次检查：遇到“不要为了...”“不把...改成...”“不要用...替代...”这类表述时，先判断是否为安全边界；如果是行为塑造，改为正向 contract，并在 `scripts/validate-skills.mjs` 中同时检查正向术语和禁止旧措辞回归。
 
-## 2026-06-30 - obcurate 整理 document 只处理入口和 metadata
+## 2026-06-30 - obcurate 整理 document 以实践文档为一等产物
 
-- 背景：一次 `$obcurate` 计划把三件事混在一起：整理已有 `kind: document`、从 document 正文抽取新经验、以及判断含内网拓扑的文档是否能作为公共经验传播。
-- 经验：`$obcurate` 可以整理 `kind: document` / `source_skill: obdoc`，但产物限于整理计划、metadata/catalog/wikilink/path 调整、`sensitivity` 判断、相关链接和必要的私有化建议；从文档正文提炼可复用经验是单独 `$oblearn` 任务。
+- 背景：一次 `$obcurate` 计划把三件事混在一起：整理已有 `kind: document`、从 document 正文抽取新经验、以及判断含内网拓扑的文档是否能作为公共经验传播。后续对 PVE 既有指南复核后，确认实践文档本身就是一等知识库产物。
+- 经验：`$obcurate` 可以整理 `kind: document` / `source_skill: obdoc`，目标是让实践文档稳定归类、可发现、可读、可执行，并处理 metadata/catalog/wikilink/path、`sensitivity`、相关链接和必要的私有化建议。文档里的“可提取知识候选”只作为 `$oblearn` 线索，不在 `$obcurate` 中直接转成短经验知识。
 - 适用场景：维护 `$obcurate`、清理 `Agent/Knowledge/Inbox/`、处理 `source_skill: obdoc` 文档、修正 `_catalog.md` stale link 或含本地事实的公共文档入口。
-- 下次检查：看到 `kind: document` 时先判断本轮范围；在 `$obcurate` 中只检查 `kind`、`source_skill`、`doc_type`、`sensitivity`、路径、catalog 是否保留和 `## 相关`，不要把 `## 可提取知识候选` 直接晋升为公共知识。
+- 下次检查：看到 `kind: document` 时先判断本轮范围；稳定但敏感的文档不要长期留在 Inbox，应有稳定路径和明确 `sensitivity`；不要把 `## 可提取知识候选` 直接转成短经验知识。
 
 ## 2026-06-30 - catalog 需要表达查到后怎么用
 
-- 背景：只用 `_catalog.md` 记录 `terms` / `aliases` / `notes` 时，新项目 agent 能查到相关笔记，但无法稳定判断命中项是可直接应用的公共经验，还是只能作为参考材料的 document；tags 也容易被误用成主发现入口。
-- 经验：catalog entry 应包含 `kind` 和 `use_as`。`kind` 表示命中对象是 `knowledge` 还是 `document`；`use_as` 表示查到后怎么用，例如 `rule`、`checklist`、`reference`、`evidence`。tags 只作为 Obsidian UI、人工筛选和整理辅助，不作为 agent 发现入口。
+- 背景：只用 `_catalog.md` 记录 `terms` / `aliases` / `notes` 时，新项目 agent 能查到相关笔记，但无法稳定判断命中项是短经验规则，还是面向人类实践的文档；tags 也容易被误用成主发现入口。
+- 经验：catalog entry 应包含 `kind` 和 `use_as`。`kind` 表示命中对象是短经验知识还是实践文档；`use_as` 表示查到后怎么用，例如 `rule`、`checklist`、`guide`、`runbook`、`reference`、`evidence`。`kind: document` 是一等知识库产物，读取时应理解上下文并替换本地参数，不能把正文里的当前环境值直接泛化成公共规则。tags 只作为 Obsidian UI、人工筛选和整理辅助，不作为 agent 发现入口。
 - 适用场景：维护 `_catalog.md`、设计 `obinit` 项目规则、整理 `Agent/Knowledge/`、新增 `oblearn` / `obdoc` 模板字段。
-- 下次检查：新增或整理 catalog entry 时确认 `terms` / `aliases` / `kind` / `use_as` / `notes` 是否一致；新项目模板是否说明 `knowledge` 可作为公共经验使用、`document` 只作为参考材料使用。
+- 下次检查：新增或整理 catalog entry 时确认 `terms` / `aliases` / `kind` / `use_as` / `notes` 是否一致；新项目模板是否说明 `knowledge` 可作为公共经验使用、`document` 可作为面向人类实践的指南、runbook、参考材料或证据使用。
 
 ## 2026-06-30 - obinit 相关知识应重复初始化逐步回写
 

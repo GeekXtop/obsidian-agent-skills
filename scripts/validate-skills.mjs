@@ -117,6 +117,8 @@ const requiredKnowledgeUseSemanticsTerms = [
   "document",
   "rule",
   "reference",
+  "一等知识库产物",
+  "人类实践",
 ];
 
 const requiredProjectKnowledgeBindingTerms = [
@@ -195,7 +197,7 @@ const requiredObinitConcepts = [
   },
   {
     name: "catalog hit use semantics",
-    terms: ["kind", "use_as", "knowledge", "document", "rule", "reference", "公共经验", "参考材料"],
+    terms: ["kind", "use_as", "knowledge", "document", "rule", "reference", "公共经验", "参考材料", "一等知识库产物", "人类实践"],
   },
   {
     name: "progressive project knowledge binding",
@@ -288,7 +290,7 @@ const requiredSkillConcepts = {
     },
     {
       name: "document extraction boundary",
-      terms: ["文档型输出", "不是短知识条目", "$oblearn", "可提取知识候选"],
+      terms: ["文档型输出", "不是短知识条目", "$oblearn", "可提取知识候选", "一等知识库产物", "人类实践"],
     },
     {
       name: "free-form document metadata",
@@ -304,7 +306,7 @@ const requiredSkillConcepts = {
     },
     {
       name: "document catalog boundary",
-      terms: ["最小明确 catalog 更新", "Agent/Knowledge/_catalog.md", "$obcurate"],
+      terms: ["最小明确 catalog 更新", "Agent/Knowledge/_catalog.md", "$obcurate", "guide", "runbook"],
     },
     sharedObsidianMarkdownWritePolicy,
     {
@@ -326,12 +328,16 @@ const requiredSkillConcepts = {
       terms: ["先列出整理计划", "等待用户确认", "移动", "合并", "拆分", "重命名"],
     },
     {
+      name: "batch curation strategy",
+      terms: ["批量整理", "先分组", "按组确认", "不逐篇确认", "稳定归类", "保持 Inbox", "建议私有化", "需要人工判断", "高风险例外"],
+    },
+    {
       name: "catalog maintenance",
       terms: ["事实来源", "terms", "aliases", "kind", "use_as", "notes", "不凭空假设"],
     },
     {
       name: "catalog use semantics",
-      terms: ["查到后怎么用", "公共经验", "参考材料", "rule", "reference"],
+      terms: ["查到后怎么用", "公共经验", "参考材料", "一等知识库产物", "人类实践", "rule", "reference"],
     },
     {
       name: "knowledge and document metadata",
@@ -339,7 +345,7 @@ const requiredSkillConcepts = {
     },
     {
       name: "document curation boundary",
-      terms: ["kind: document", "source_skill: obdoc", "doc_type", "sensitivity", "catalog 是否保留", "$oblearn"],
+      terms: ["kind: document", "source_skill: obdoc", "doc_type", "sensitivity", "catalog 是否保留", "$oblearn", "稳定归类"],
     },
     {
       name: "curation output contract",
@@ -355,11 +361,11 @@ const requiredSkillConcepts = {
     },
     {
       name: "no direct document promotion",
-      terms: ["`## 可提取知识候选`", "不在 `$obcurate` 中直接晋升为公共知识"],
+      terms: ["`## 可提取知识候选`", "不在 `$obcurate` 中直接转成短经验知识"],
     },
     {
       name: "internal document metadata handling",
-      terms: ["含内网拓扑", "仍可整理 metadata/catalog", "经验提取和脱敏公共化属于 `$oblearn`"],
+      terms: ["含内网拓扑", "仍可整理 metadata/catalog", "经验提取和脱敏公共化属于 `$oblearn`", "不是敏感文档长期归档"],
     },
     {
       name: "scope-specific skip reasons",
@@ -772,6 +778,14 @@ if (!existsSync(skillsDir)) {
 
           if (content.includes("aliases: [<别名>]")) {
             fail(`${skillName}: template ${template} must not imply aliases are required`);
+          }
+        }
+
+        if (skillName === "obcurate" && template === "curation-plan.md") {
+          for (const term of ["批量分组", "按组确认", "高风险例外", "稳定归类", "保持 Inbox", "建议私有化", "需要人工判断"]) {
+            if (!content.includes(term)) {
+              fail(`${skillName}: template ${template} must include batch curation term: ${term}`);
+            }
           }
         }
       }

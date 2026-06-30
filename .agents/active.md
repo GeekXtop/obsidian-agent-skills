@@ -2,8 +2,8 @@
 
 ## 当前任务
 
-- 目标：把 release 专用 memory 边界改成通用“权威状态载体”规则。
-- 状态：已完成。`.agents/instructions.md`、`$obinit` 模板/参考、`$obclose` 和 validator 已统一为通用规则：git commit、tag、PR、CI/CD、release、artifact、ADR、migration、issue/ticket、runbook 已承载状态时，memory 只记录下一次 agent 需要接手的载体外信息。
+- 目标：修正 `$obdoc` / `$obcurate` / catalog 使用语义，让文档成为面向人类实践的一等知识库产物，而不是低于短经验条目的参考材料。
+- 状态：已完成。README、`$obdoc`、`$obcurate`、`$obinit` 及模板/reference 已统一：`kind: document` 表示可读、可执行、可复盘、可迁移的实践文档；`use_as` 支持 `guide` / `runbook` / `reference` / `evidence`；敏感但稳定的文档应稳定归类并用 `sensitivity` 控制复用方式，`Inbox/` 不是敏感文档长期归档。`$obcurate` 已补批量整理策略：先分组为稳定归类、保持 Inbox、建议私有化、需要人工判断，再按组确认；高风险例外逐项确认。
 - 最后更新：2026-07-01
 
 ## 当前状态
@@ -36,9 +36,12 @@
 - 已完成：使用 `$oblearn` 提取公共知识 `[[Skill 行为规则使用正向 contract]]`，并对 `Agent/Knowledge/_catalog.md` 增加 `skill-positive-contract` 最小入口。
 - 已完成：`$obcurate` 明确自身产物是整理计划、metadata/catalog/wikilink/path 调整和必要的私有化建议。
 - 已完成：`$obcurate` 新增 knowledge/document 职责矩阵；`kind: document` / `source_skill: obdoc` 可以整理，但只处理文档入口、metadata、catalog、路径、链接、脱敏状态和可发现性。
-- 已完成：`$obcurate` 明确文档正文里的可复用经验候选作为后续 `$oblearn` 任务，不在 `$obcurate` 中直接晋升为公共知识。
+- 已完成：`$obcurate` 明确文档正文里的可复用经验候选作为后续 `$oblearn` 任务，不在 `$obcurate` 中直接转成短经验知识。
+- 已完成：修正此前过窄的 document 语义；文档是一等知识库产物，面向人类实践可读、可执行、可复用，短经验只是另一种更紧凑的知识产物。
 - 已完成：`scripts/validate-skills.mjs` 增加 `$obcurate` 产物边界、document 经验转交、职责矩阵、内网拓扑文档 metadata/catalog 整理边界校验。
-- 已完成：`Agent/Knowledge/_catalog.md` 规则增加 `kind` 和 `use_as`；`kind: knowledge` / `use_as: rule` 等公共经验可作为规则或检查清单，`kind: document` / `use_as: reference` 等文档只作为参考材料、证据或操作记录。
+- 已完成：`$obcurate` 增加批量整理策略；多篇 Inbox 或 catalog 条目先分组为稳定归类、保持 Inbox、建议私有化、需要人工判断，低风险条目按组确认，高风险例外逐项确认。
+- 已完成：`skills/obcurate/templates/curation-plan.md` 增加批量分组和高风险例外区块，避免大型整理计划退化为逐篇确认清单。
+- 已完成：`Agent/Knowledge/_catalog.md` 规则增加 `kind` 和 `use_as`；`kind: knowledge` / `use_as: rule` 等公共经验可作为规则或检查清单，`kind: document` / `use_as: guide|runbook|reference|evidence` 等文档作为面向人类实践的一等知识库产物使用。
 - 已完成：`$obinit` 生成的 `.agents/instructions.md` 模板同步 catalog 命中后的使用语义，避免新项目只知道查 catalog、不知道如何区分 knowledge 和 document。
 - 已完成：`$oblearn` / `$obdoc` / `$obcurate` 明确 tags 是辅助 metadata，用于 Obsidian UI、Bases、Dataview、人工筛选和低频整理辅助，不作为 agent 发现入口。
 - 已完成：`skills/obdoc/templates/document-note.md` 增加 `tags: []` 和 `use_as`，`skills/oblearn/templates/public-knowledge-note.md` 增加 `use_as`，`skills/obcurate/templates/catalog-entry.md` 增加 `kind` / `use_as`。
@@ -80,6 +83,8 @@
 - 绿灯：补齐 `$obinit` 主规则、模板和 references 后运行 `npm test`，输出 `All skills are valid.`。
 - 红灯：将 validator 改为要求通用“权威状态载体”术语后运行 `npm test`，指出 `$obclose`、`$obinit` 和 obinit templates 仍缺少通用边界术语。
 - 绿灯：补齐通用 memory 边界规则后运行 `npm test`，输出 `All skills are valid.`。
+- 红灯：新增 `$obcurate` 批量整理策略校验后运行 `npm test`，指出缺少 `批量整理`、`先分组`、`按组确认`、`不逐篇确认`、`需要人工判断`、`高风险例外` 和整理计划模板批量分组术语。
+- 绿灯：补齐 `$obcurate` 正文和 `curation-plan.md` 后运行 `npm test`，输出 `All skills are valid.`；`git diff --check` 无输出；旧文案搜索无命中。
 
 ## 关键文件
 
@@ -101,6 +106,7 @@
 - `scripts/validate-skills.mjs`：当前工作区已有对应校验项。
 - `skills/oblearn/SKILL.md`：archive/catalog/Obsidian 查找规则改为正向范围描述。
 - `skills/obcurate/SKILL.md`：整理输入范围改为正向描述，并新增 document 整理职责矩阵和正文经验转交 `$oblearn` 规则。
+- `skills/obcurate/templates/curation-plan.md`：新增批量分组和高风险例外区块。
 - `skills/obinit/SKILL.md`、`skills/obinit/templates/instructions.md`、`skills/obinit/templates/instructions-index.md`、`skills/obinit/references/obsidian-sync.md`：新增 catalog 命中后的 `kind` / `use_as` 使用语义。
 - `skills/obcurate/templates/catalog-entry.md`：catalog entry 模板新增 `kind` 和 `use_as`。
 - `skills/obdoc/templates/document-note.md`：文档模板新增 `tags: []` 和 `use_as`。

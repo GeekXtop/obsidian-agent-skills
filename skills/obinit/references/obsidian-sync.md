@@ -28,7 +28,7 @@ Obsidian 只承担三件事：
 - 优先读取 `Agent/Knowledge/_catalog.md`；它是已沉淀领域的事实来源，不存在或不命中时不要强行扩展搜索。
 - 仅在用户明确要求、catalog 的 `terms` / `aliases` 命中任务关键词，或风险较高且关键词明确时，在 `Agent/Knowledge/` 做有限关键词定向搜索。
 - 只有命中相关笔记后才明确读取并使用。
-- 读取 catalog 命中项时看 `kind` 和 `use_as`：`kind: knowledge` / `use_as: rule` 这类公共经验可以作为规则、检查清单或启发式判断；`kind: document` / `use_as: reference` 这类文档作为参考材料、证据或操作记录，不能把正文直接当公共经验。
+- 读取 catalog 命中项时看 `kind` 和 `use_as`：`kind: knowledge` / `use_as: rule` 这类公共经验可以作为规则、检查清单或启发式判断；`kind: document` / `use_as: reference` 这类文档是一等知识库产物，面向人类实践，可作为参考材料、证据、操作记录或实践指南使用，不能把正文里的当前环境值直接当公共经验。
 - 不全量自动加载公共知识，不扫描整个 vault。
 
 查阅示例：

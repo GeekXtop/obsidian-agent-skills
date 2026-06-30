@@ -2,6 +2,31 @@
 
 本文件只记录阶段性进展摘要，不记录聊天流水。
 
+## 2026-07-01 - obcurate 批量整理策略
+
+- 已完成：`$obcurate` 增加批量整理策略；处理多篇 Inbox 或 catalog 条目时先分组，不把低风险条目逐篇确认。
+- 已完成：默认分组明确为稳定归类、保持 Inbox、建议私有化、需要人工判断；结构性修改优先按组确认，高风险例外逐项确认。
+- 已完成：`skills/obcurate/templates/curation-plan.md` 增加批量分组和高风险例外区块，要求列数量、代表样例、共同理由、建议处理和确认方式。
+- 已完成：`scripts/validate-skills.mjs` 增加 `$obcurate` 批量整理策略和 `curation-plan.md` 模板术语校验，防止回退到逐篇确认流程。
+- 已验证：先运行 `npm test` 得到目标红灯，指出缺少 `批量整理`、`先分组`、`按组确认`、`不逐篇确认`、`需要人工判断`、`高风险例外` 和模板批量分组术语；补齐后 `npm test` 通过，输出 `All skills are valid.`。
+- 已验证：`git diff --check` 无输出；旧文案搜索无命中。
+
+## 2026-07-01 - 文档作为一等知识库产物
+
+- 已完成：根据 PVE 项目既有指南形态，修正 `$obdoc` / `$obcurate` / catalog 使用语义：文档是一等知识库产物，面向人类实践的可读、可执行、可复盘和可迁移使用；短经验只是另一种更紧凑的知识产物。
+- 已完成：`$obdoc` 明确文档可保留经过确认和脱敏的当前环境值、验证证据和回滚信息；复用方式是理解上下文并替换本地参数，不把正文里的当前环境值直接泛化成公共规则。
+- 已完成：`$obcurate` 将 Inbox 处理语义从“晋升”改为“稳定归类”；敏感但稳定的 document 应有稳定路径和明确 `sensitivity`，`Inbox/` 不是敏感文档长期归档。
+- 已完成：`$obinit`、生成模板和 `references/obsidian-sync.md` 同步 catalog 命中后的新使用语义；`skills/obcurate/templates/catalog-entry.md` 的 `use_as` 示例加入 `guide` / `runbook`。
+- 已验证：先扩展 `scripts/validate-skills.mjs` 后运行 `npm test` 得到目标红灯；补齐文案和模板后 `npm test` 通过，输出 `All skills are valid.`。
+
+## 2026-07-01 - Obsidian 公共知识 catalog 整理
+
+- 已完成：按 `$obcurate` 整理 `Agent/Knowledge/` 中“Agent 工作流经验”相关主题，将其重命名并收窄为 `[[计划文档 checklist 收尾规则]]`。
+- 已完成：移除“公共知识写入后要登记 catalog”经验段落；该行为已由 `$oblearn` / README 规则承载，不再作为并行公共经验维护。
+- 已完成：`Agent/Knowledge/_catalog.md` 补齐现有入口的 `kind` / `use_as`，将 `agent-workflow` 改为 `plan-checklist-closure`，并移除含内网拓扑的 PVE document catalog 入口。
+- 已完成：将 `[[Marketplace 插件更新流程]]` 和 `[[Skill 行为规则使用正向 contract]]` 从 Inbox 移入稳定路径；当时保留 PVE 文档在 Inbox，后续已在“文档作为一等知识库产物”语义修正中明确这不是敏感稳定文档的长期策略。
+- 已验证：`rg` 检查旧小节标题、旧 `[[Agent 工作流经验]]` wikilink 和 PVE catalog 入口无残留；Obsidian 成功读回 catalog，`[[计划文档 checklist 收尾规则]]` backlinks 指向 catalog、相关知识和项目笔记。
+
 ## 2026-07-01 - memory 权威状态载体边界
 
 - 已完成：将 release 专用 memory 边界推广为通用“权威状态载体”规则，覆盖 git commit、tag、PR、CI/CD、release、artifact、ADR、migration、issue/ticket、runbook。
@@ -212,7 +237,7 @@
 ## 2026-06-30 - catalog 使用语义和 tags 边界
 
 - 已完成：将 `Agent/Knowledge/_catalog.md` 规则从纯链接索引扩展为发现入口和使用语义入口，新增 `kind` / `use_as` 字段约定。
-- 已完成：`kind: knowledge` / `use_as: rule` 等公共经验可作为规则、检查清单或启发式判断；`kind: document` / `use_as: reference` 等文档只作为参考材料、证据或操作记录。
+- 已完成：`kind: knowledge` / `use_as: rule` 等公共经验可作为规则、检查清单或启发式判断；`kind: document` / `use_as: guide|runbook|reference|evidence` 等文档作为面向人类实践的一等知识库产物使用。
 - 已完成：`$obinit` 生成的 `.agents/instructions.md` 模板同步 catalog 命中后的使用语义，避免新项目只会查 catalog、不会区分 knowledge 和 document。
 - 已完成：`$oblearn`、`$obdoc`、`$obcurate` 明确 tags 是辅助 metadata，用于 Obsidian UI、Bases、Dataview、人工筛选和低频整理辅助，不作为 agent 发现入口。
 - 已完成：`skills/obcurate/templates/catalog-entry.md` 增加 `kind` / `use_as`；`skills/obdoc/templates/document-note.md` 增加 `tags: []` 和 `use_as`；`skills/oblearn/templates/public-knowledge-note.md` 增加 `use_as`。
