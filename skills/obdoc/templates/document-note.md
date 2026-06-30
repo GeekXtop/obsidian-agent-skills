@@ -18,6 +18,8 @@ updated: YYYY-MM-DD
 
 ## 摘要
 
+- 类型：文档（`kind: document`）
+- 用途：<中文展示用途>（`use_as: <英文 token>`）
 - 目标：
 - 适用场景：
 - 最终状态：

@@ -2,6 +2,15 @@
 
 本文件只记录阶段性进展摘要，不记录聊天流水。
 
+## 2026-07-01 - Knowledge 与 Documents 硬分流
+
+- 已完成：将 `$oblearn` 固定为只写 `Agent/Knowledge/`，不稳定时进 `Agent/Knowledge/Inbox/`，并只维护 `Agent/Knowledge/_catalog.md`。
+- 已完成：将 `$obdoc` 固定为只写 `Agent/Documents/`，不稳定时进 `Agent/Documents/Inbox/`，并只维护 `Agent/Documents/_catalog.md`；文档中的可复用经验候选继续建议后续 `$oblearn`。
+- 已完成：`$obcurate` 默认可同时整理 `Agent/Knowledge/_catalog.md`、`Agent/Knowledge/Inbox/`、`Agent/Documents/_catalog.md`、`Agent/Documents/Inbox/`，也可按用户指定只整理 Knowledge 或 Documents。
+- 已完成：去掉单独 Private 路径设计；敏感文档稳定归类到 `Agent/Documents/`，通过 `sensitivity` 和读取条件控制复用。
+- 已完成：metadata 机器层保留英文 token，模板、整理计划和完成说明使用中文展示层。
+- 已验证：先扩展 `scripts/validate-skills.mjs` 后运行 `npm test` 得到目标红灯；补齐 skill 文案、模板、README、命令和 manifest 后 `npm test` 通过，输出 `All skills are valid.`；`git diff --check` 无输出。
+
 ## 2026-07-01 - obcurate 批量整理策略
 
 - 已完成：`$obcurate` 增加批量整理策略；处理多篇 Inbox 或 catalog 条目时先分组，不把低风险条目逐篇确认。

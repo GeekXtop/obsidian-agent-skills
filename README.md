@@ -128,7 +128,7 @@ claude plugin list --json
 | [obclose](skills/obclose) | 在任务或会话收尾时更新项目 memory；实质任务结束后 agent 可主动执行，并控制 `progress` / `lessons` 膨胀。 |
 | [oblearn](skills/oblearn) | 从项目内经验、非项目临时会话材料或 Codex session 提取跨场景可复用知识，并写入或建议写入 Obsidian 公共知识笔记。 |
 | [obdoc](skills/obdoc) | 从当前对话、材料、本地文件或 Codex session 整理配置文档、教程、runbook 和排障记录到 Obsidian。 |
-| [obcurate](skills/obcurate) | 整理和维护 `Agent/Knowledge/` 公共知识库、Inbox 和 `_catalog.md`。 |
+| [obcurate](skills/obcurate) | 整理和维护 `Agent/Knowledge/` 公共知识库、`Agent/Documents/` 文档库、Inbox 和 `_catalog.md`。 |
 
 ## 使用
 
@@ -170,15 +170,15 @@ $obcurate
 
 `.agents/active.md`、`.agents/progress.md`、`.agents/lessons.md` 等项目 memory 文件不会后台自动同步。需要 agent 在任务开始、阶段结束或会话收尾时主动回写；完成实质代码/文档改动、阶段性验证或复杂任务暂停时，agent 应按 `$obclose` 收尾。`$obclose` 还会检查 `progress` / `lessons` 是否过长或重复，必要时轻量合并、压缩或把旧进展归档到 `.agents/archive/`。
 
-`Agent/Knowledge/` 中的跨项目公共知识不会被全量自动加载。接入项目后，agent 不应凭空假设哪些领域已经沉淀；只有用户明确要求、`Agent/Knowledge/_catalog.md` 命中任务关键词，或风险较高且关键词明确时，才做有限关键词定向搜索。命中后读取 catalog 的 `kind` / `use_as`：`knowledge` 可作为公共经验、规则或检查清单使用，`document` 是一等知识库产物，面向人类实践，可作为指南、runbook、参考材料、证据或操作记录使用；读取文档时要理解上下文并替换本地参数，不能把正文里的当前环境值直接泛化成公共规则。命中相关笔记后再明确读取并记录到当前项目的“已使用知识”或 Obsidian 项目笔记“相关知识”。
+`Agent/Knowledge/` 中的跨项目公共知识不会被全量自动加载。接入项目后，agent 不应凭空假设哪些领域已经沉淀；只有用户明确要求、`Agent/Knowledge/_catalog.md` 命中任务关键词，或风险较高且关键词明确时，才做有限关键词定向搜索。命中后读取 catalog 的 `kind` / `use_as`：`knowledge` 可作为公共经验、规则、检查清单或启发式判断使用。`Agent/Documents/` 中的文档不进入公共知识自动发现；`Agent/Documents/_catalog.md` 是人类可读文档目录，只有用户明确指定、任务明确涉及文档主题，或执行 `$obdoc` / `$obcurate` 文档流程时才读取。
 
 `$oblearn` 负责把当前项目经验提取为跨项目公共知识；项目内经验先由 `$obclose` 写入 `.agents/lessons.md`。它也支持非项目临时会话：当当前目录没有项目 memory，或用户明确要求从当前对话、粘贴 transcript、临时任务摘要、Codex session id 中提取经验时，不要求先 `$obinit`，不创建 `.agents/`，只把脱敏后的可复用经验写入或建议写入 `Agent/Knowledge/Inbox/`。Codex session id 只用于在本机 Codex 会话存储中精确定位对应 JSONL，不使用 `codex resume` 读取，也不扩大扫描无关历史。不稳定归类的新知识可建议写入 Inbox；写入目标和关键词明确时，允许对 catalog 做最小明确更新。
 
-`$obdoc` 负责把当前对话、粘贴材料、本地文件或 Codex session 整理成可独立阅读的 Obsidian 文档，例如服务器配置、教程、运维 runbook、迁移指南和排障记录。文档保留脱敏、来源摘要、验证和回滚信息，是面向人类实践的可读、可执行、可复用知识库产物。短经验条目仍交给 `$oblearn`。
+`$obdoc` 负责把当前对话、粘贴材料、本地文件或 Codex session 整理成可独立阅读的 Obsidian 文档，例如服务器配置、教程、运维 runbook、迁移指南和排障记录。文档写入或建议写入 `Agent/Documents/`，不写入 `Agent/Knowledge/`；不稳定时建议写入 `Agent/Documents/Inbox/`。文档保留脱敏、来源摘要、验证和回滚信息，是面向人类实践的可读、可执行、可复用知识库产物。短经验条目仍交给 `$oblearn`。
 
-`$oblearn` 和 `$obdoc` 使用统一路径规则：用户指定路径优先，已有明确命中的公共知识笔记或文档优先更新；不稳定时建议写入 `Agent/Knowledge/Inbox/`；稳定归类、移动、合并、拆分和批量 catalog 维护交给 `$obcurate`。两者可以处于同一文件夹，使用 frontmatter 和正文结构区分：`kind: knowledge` / `source_skill: oblearn` 表示短经验知识，`kind: document` / `source_skill: obdoc` 表示可阅读或可执行文档。
+`$oblearn` 和 `$obdoc` 采用硬分流：`$oblearn` 只写入 `Agent/Knowledge/`，不稳定时建议写入 `Agent/Knowledge/Inbox/`，并可最小维护 `Agent/Knowledge/_catalog.md`；`$obdoc` 只写入 `Agent/Documents/`，不稳定时建议写入 `Agent/Documents/Inbox/`，并可最小维护 `Agent/Documents/_catalog.md`。稳定归类、移动、合并、拆分和批量 catalog 维护交给 `$obcurate`。
 
-`$oblearn` 和 `$obdoc` 可以为本次实际写入或更新的明确产物最小更新 `_catalog.md`，例如新增一个真实入口或追加少量明确 `terms` / `aliases` / `kind` / `use_as` / `notes`。`$obcurate` 负责低频结构性整理公共知识库，例如清理 Inbox、移动或重命名主题、合并或拆分主题、删除过期入口、批量维护 `_catalog.md`、修正 aliases/tags/wikilink。
+`kind`、`use_as`、`sensitivity` 等 metadata 的机器层字段值保持英文 token；模板、整理计划和完成说明使用中文展示，例如“类型：文档（`kind: document`）”“用途：操作手册（`use_as: runbook`）”。`$obcurate` 负责低频结构性整理公共知识库和文档库，例如清理两个 Inbox、移动或重命名主题、合并或拆分主题、删除过期入口、批量维护 `_catalog.md`、修正 aliases/tags/wikilink。
 
 模板文件位于各 skill 的 `templates/` 目录。`SKILL.md` 定义行为和安全边界，模板定义写入项目或 Obsidian 的输出格式。
 

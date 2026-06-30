@@ -1,4 +1,4 @@
 interface:
   display_name: "Obcurate"
-  short_description: "整理和维护 Obsidian 公共知识库"
-  default_prompt: "使用 $obcurate 整理 Agent/Knowledge 公共知识库。"
+  short_description: "整理 Obsidian 公共知识库和文档库"
+  default_prompt: "使用 $obcurate 整理 Agent/Knowledge 公共知识库和 Agent/Documents 文档库。"

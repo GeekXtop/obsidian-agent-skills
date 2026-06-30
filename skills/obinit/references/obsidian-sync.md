@@ -4,9 +4,9 @@ Obsidian 只承担三件事：
 
 1. 保存跨会话项目上下文：真实链接、当前状态、已记录决策、开放问题和 agent 记录。
 2. 给 `.agents/instructions.md` 提供稳定引用：`Obsidian project note: Agent/Projects/<project>.md`。
-3. 保存跨项目复用知识入口：框架约定、设计坑、部署坑、调试经验等公共笔记。
+3. 保存跨项目复用知识入口：框架约定、设计坑、部署坑、调试经验等公共笔记；文档目录单独放在 `Agent/Documents/_catalog.md`。
 
-不要把 Obsidian 当成项目源码、运行依赖或全库搜索入口。访问范围默认只限配置好的项目笔记、`Agent/Knowledge/_catalog.md` 和有限关键词命中的公共知识笔记。
+不要把 Obsidian 当成项目源码、运行依赖或全库搜索入口。访问范围默认只限配置好的项目笔记、`Agent/Knowledge/_catalog.md`、有限关键词命中的公共知识笔记，以及用户明确指定或任务明确相关时的 `Agent/Documents/_catalog.md` 和命中文档。
 
 项目笔记规则：
 
@@ -28,7 +28,8 @@ Obsidian 只承担三件事：
 - 优先读取 `Agent/Knowledge/_catalog.md`；它是已沉淀领域的事实来源，不存在或不命中时不要强行扩展搜索。
 - 仅在用户明确要求、catalog 的 `terms` / `aliases` 命中任务关键词，或风险较高且关键词明确时，在 `Agent/Knowledge/` 做有限关键词定向搜索。
 - 只有命中相关笔记后才明确读取并使用。
-- 读取 catalog 命中项时看 `kind` 和 `use_as`：`kind: knowledge` / `use_as: rule` 这类公共经验可以作为规则、检查清单或启发式判断；`kind: document` / `use_as: reference` 这类文档是一等知识库产物，面向人类实践，可作为参考材料、证据、操作记录或实践指南使用，不能把正文里的当前环境值直接当公共经验。
+- 读取 Knowledge catalog 命中项时看 `kind` 和 `use_as`：`kind: knowledge` / `use_as: rule`、`checklist` 或 `heuristic` 这类公共经验可以作为规则、检查清单或启发式判断。
+- `Agent/Documents/_catalog.md` 是文档目录；只有用户明确指定、任务明确涉及文档主题，或执行 `$obdoc` / `$obcurate` 文档流程时才读取。文档可能保留当前环境值，读取后要理解上下文并替换本地参数，不能把正文里的当前环境值直接当公共经验。
 - 不全量自动加载公共知识，不扫描整个 vault。
 
 查阅示例：
@@ -37,6 +38,7 @@ Obsidian 只承担三件事：
 obsidian read path="Agent/Knowledge/_catalog.md"
 obsidian search query="<主题关键词>" limit=5
 obsidian read path="Agent/Knowledge/<实际命中笔记>.md"
+obsidian read path="Agent/Documents/_catalog.md"
 ```
 
 查到并使用公共知识后，在 `.agents/active.md` 的“已使用知识”记录链接。发现跨项目可复用经验时，先写 `.agents/lessons.md`，阶段结束再用 `$oblearn` 提取。

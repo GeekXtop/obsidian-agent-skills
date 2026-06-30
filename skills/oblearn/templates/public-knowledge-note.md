@@ -19,6 +19,9 @@ updated: YYYY-MM-DD
 
 ## 适用场景
 
+- 类型：知识（`kind: knowledge`）
+- 用途：<中文展示用途>（`use_as: <英文 token>`）
+
 ## 固定检查
 
 ## 经验

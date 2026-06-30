@@ -1,6 +1,6 @@
 {
   "name": "obsidian-agent-skills",
-  "version": "0.1.24",
+  "version": "0.1.25",
   "description": "Obsidian-backed 项目记忆、任务收尾、ADR、经验沉淀、文档整理和知识整理 skills",
   "repository": "https://github.com/GeekXtop/obsidian-agent-skills",
   "skills": [
@@ -32,7 +32,7 @@
     {
       "name": "obcurate",
       "path": "skills/obcurate",
-      "description": "整理和维护 Agent/Knowledge 公共知识库、Inbox 和 catalog。"
+      "description": "整理和维护 Agent/Knowledge 公共知识库、Agent/Documents 文档库、Inbox 和 catalog。"
     }
   ]
 }

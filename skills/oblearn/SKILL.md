@@ -123,7 +123,9 @@ git log -5 --oneline
 
 ## 输出目标
 
-路径规则和 `$obdoc` 保持一致：路径不负责区分产物类型，产物类型由 frontmatter 和正文结构区分。用户指定路径优先；已有明确命中的公共知识笔记优先追加；不稳定时建议写入 `Agent/Knowledge/Inbox/` 并设置 `status: draft`；稳定归类、移动、合并或拆分交给 `$obcurate`。
+`oblearn` 只写入 `Agent/Knowledge/`，不写入 `Agent/Documents/`。`Agent/Knowledge/` 保存短经验、规则、检查清单和启发式判断；`Agent/Documents/` 保存 `$obdoc` 生成的人类可读文档。
+
+用户指定路径优先；已有明确命中的公共知识笔记优先追加；不稳定时建议写入 `Agent/Knowledge/Inbox/` 并设置 `status: draft`；稳定归类、移动、合并或拆分交给 `$obcurate`。
 
 优先追加到定向搜索命中的已有 Obsidian 公共知识笔记：
 
@@ -138,8 +140,6 @@ Agent/Knowledge/<主题>.md
 ```text
 Agent/Knowledge/Inbox/<简短主题>.md
 ```
-
-`oblearn` 可以和 `$obdoc` 的文档产物处于同一目录；不要通过目录判断它们的区别。`oblearn` 新建笔记使用 `kind: knowledge` 和 `source_skill: oblearn`，`$obdoc` 文档使用 `kind: document` 和 `source_skill: obdoc`。
 
 `Agent/Knowledge/_catalog.md` 是已沉淀领域的事实来源。它只记录已经存在或本次确认创建的公共知识入口，不记录猜测分类。
 
@@ -156,7 +156,7 @@ Agent/Knowledge/Inbox/<简短主题>.md
     - [[<真实笔记标题>]]
 ```
 
-`kind` 表示命中对象的类型，`use_as` 表示查到后怎么用。`oblearn` 写入的是 `kind: knowledge`；常见 `use_as` 是 `rule`、`checklist` 或 `heuristic`。最小明确更新 catalog 时只使用真实笔记标题、已有 frontmatter、用户确认的别名或本次知识的明确关键词。无法判断时，不登记，只列出维护建议并交给 `$obcurate`。
+`kind` 表示命中对象的类型，`use_as` 表示查到后怎么用。`oblearn` 写入的是 `kind: knowledge`；常见 `use_as` 是 `rule`、`checklist` 或 `heuristic`。机器层使用英文 token，中文展示用于正文、计划和完成说明，例如“类型：知识（`kind: knowledge`）”“用途：检查清单（`use_as: checklist`）”。最小明确更新 catalog 时只使用真实笔记标题、已有 frontmatter、用户确认的别名或本次知识的明确关键词。无法判断时，不登记，只列出维护建议并交给 `$obcurate`。
 
 ## Tags
 

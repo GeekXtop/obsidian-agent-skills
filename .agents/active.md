@@ -2,8 +2,8 @@
 
 ## 当前任务
 
-- 目标：修正 `$obdoc` / `$obcurate` / catalog 使用语义，让文档成为面向人类实践的一等知识库产物，而不是低于短经验条目的参考材料。
-- 状态：已完成。README、`$obdoc`、`$obcurate`、`$obinit` 及模板/reference 已统一：`kind: document` 表示可读、可执行、可复盘、可迁移的实践文档；`use_as` 支持 `guide` / `runbook` / `reference` / `evidence`；敏感但稳定的文档应稳定归类并用 `sensitivity` 控制复用方式，`Inbox/` 不是敏感文档长期归档。`$obcurate` 已补批量整理策略：先分组为稳定归类、保持 Inbox、建议私有化、需要人工判断，再按组确认；高风险例外逐项确认。
+- 目标：将 `$oblearn` / `$obdoc` 的 Obsidian 产物路径硬分流为 Knowledge 与 Documents，并让 `$obcurate` 同时支持两类整理。
+- 状态：已完成。`$oblearn` 只写入 `Agent/Knowledge/` 并维护公共知识 `_catalog.md`；`$obdoc` 只写入 `Agent/Documents/` 并维护文档 `_catalog.md`；`$obcurate` 默认可同时整理两类 catalog / Inbox，也支持只整理 Knowledge 或只整理 Documents；metadata 保留英文 token，模板和整理计划使用中文展示层。
 - 最后更新：2026-07-01
 
 ## 当前状态
@@ -50,6 +50,10 @@
 - 已完成：`skills/obinit/templates/instructions.md` 和 `instructions-index.md` 新增 `项目相关知识` 小节，只回写链接和 `kind` / `use_as`，不复制公共知识正文。
 - 已完成：`skills/obinit/references/init-modes.md` 和 `references/obsidian-sync.md` 同步重复初始化逐步收敛规则。
 - 已完成：将 release 专用 memory 边界推广为“权威状态载体”规则，并同步到 `.agents/instructions.md`、`skills/obinit/SKILL.md`、`skills/obinit/references/memory-bank.md`、`skills/obinit/templates/instructions*.md`、`skills/obclose/SKILL.md` 和 `scripts/validate-skills.mjs`。
+- 已完成：根据用户决策将 `$oblearn` / `$obdoc` 产物路径硬分流：`$oblearn` 只写 `Agent/Knowledge/`，不稳定时进 `Agent/Knowledge/Inbox/`；`$obdoc` 只写 `Agent/Documents/`，不稳定时进 `Agent/Documents/Inbox/`。
+- 已完成：`Agent/Knowledge/_catalog.md` 定位为公共 agent 自动发现入口；`Agent/Documents/_catalog.md` 定位为人类可读文档目录和显式读取入口。
+- 已完成：`$obcurate` 支持同时整理 Knowledge 和 Documents，也可按用户指定只整理一种；批量分组把旧“建议私有化”改为“敏感文档”，用 `sensitivity` 和读取条件控制复用，不引入 `Agent/Private/`。
+- 已完成：模板和规则统一为机器层保留英文 token、展示层中文化，例如“类型：文档（`kind: document`）”“用途：操作手册（`use_as: runbook`）”。
 - 进行中：无。
 - 阻塞：无。
 
@@ -85,6 +89,8 @@
 - 绿灯：补齐通用 memory 边界规则后运行 `npm test`，输出 `All skills are valid.`。
 - 红灯：新增 `$obcurate` 批量整理策略校验后运行 `npm test`，指出缺少 `批量整理`、`先分组`、`按组确认`、`不逐篇确认`、`需要人工判断`、`高风险例外` 和整理计划模板批量分组术语。
 - 绿灯：补齐 `$obcurate` 正文和 `curation-plan.md` 后运行 `npm test`，输出 `All skills are valid.`；`git diff --check` 无输出；旧文案搜索无命中。
+- 红灯：新增 Knowledge/Documents 硬分流、Documents catalog、中文展示层校验后运行 `npm test`，指出 `$oblearn`、`$obdoc`、`$obcurate` 缺少新路径和展示层术语。
+- 绿灯：补齐 `$oblearn`、`$obdoc`、`$obcurate`、`$obinit`、README、模板、命令和 Codex manifest 后运行 `npm test`，输出 `All skills are valid.`；`git diff --check` 无输出。
 
 ## 关键文件
 
@@ -121,9 +127,8 @@
 
 ## 下一步
 
-1. 用户决定是否提交当前 skill 文案、校验脚本和 `.agents/` memory 改动。
-2. 若要在 Claude Code 中立即使用 `0.1.22`，按当前客户端状态需要启用该插件并重启或 `/reload`。
-3. Codex 当前会话不一定热加载新插件；需要新会话或重启后使用 `0.1.22` skill。
+1. 用户决定是否提交当前 Knowledge/Documents 分流改动。
+2. 如需实际整理 vault 中已有 PVE 文档，后续用 `$obcurate` 将其从 `Agent/Knowledge/Inbox/` 迁移到 `Agent/Documents/Network/` 并登记 `Agent/Documents/_catalog.md`。
 
 ## 当前 ADR
 

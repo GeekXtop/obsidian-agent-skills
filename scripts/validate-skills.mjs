@@ -114,11 +114,17 @@ const requiredKnowledgeUseSemanticsTerms = [
   "kind",
   "use_as",
   "knowledge",
-  "document",
   "rule",
-  "reference",
-  "一等知识库产物",
-  "人类实践",
+  "checklist",
+  "heuristic",
+  "公共经验",
+];
+
+const requiredDocumentsCatalogTerms = [
+  "Agent/Documents/",
+  "Agent/Documents/_catalog.md",
+  "文档目录",
+  "用户明确指定",
 ];
 
 const requiredProjectKnowledgeBindingTerms = [
@@ -130,6 +136,22 @@ const requiredProjectKnowledgeBindingTerms = [
   "高置信",
   "只回写链接",
   "只列建议",
+];
+
+const requiredKnowledgeDocumentsSplitTerms = [
+  "Agent/Knowledge/",
+  "Agent/Knowledge/_catalog.md",
+  "Agent/Knowledge/Inbox/",
+  "Agent/Documents/",
+  "Agent/Documents/_catalog.md",
+  "Agent/Documents/Inbox/",
+];
+
+const requiredChineseDisplayEnumTerms = [
+  "英文 token",
+  "中文展示",
+  "类型：",
+  "用途：",
 ];
 
 const requiredAuthoritativeStateCarrierTerms = [
@@ -197,7 +219,11 @@ const requiredObinitConcepts = [
   },
   {
     name: "catalog hit use semantics",
-    terms: ["kind", "use_as", "knowledge", "document", "rule", "reference", "公共经验", "参考材料", "一等知识库产物", "人类实践"],
+    terms: ["kind", "use_as", "knowledge", "rule", "checklist", "heuristic", "公共经验"],
+  },
+  {
+    name: "documents catalog explicit lookup",
+    terms: requiredDocumentsCatalogTerms,
   },
   {
     name: "progressive project knowledge binding",
@@ -246,8 +272,8 @@ const requiredSkillConcepts = {
   ],
   oblearn: [
     {
-      name: "shared document and knowledge target policy",
-      terms: ["用户指定路径优先", "已有明确命中", "不稳定时", "Agent/Knowledge/Inbox/", "$obcurate"],
+      name: "knowledge-only target policy",
+      terms: ["只写入 `Agent/Knowledge/`", "不写入 `Agent/Documents/`", "Agent/Knowledge/Inbox/", "Agent/Knowledge/_catalog.md", "$obcurate"],
     },
     {
       name: "bounded knowledge extraction",
@@ -260,6 +286,10 @@ const requiredSkillConcepts = {
     {
       name: "knowledge catalog source",
       terms: ["Agent/Knowledge/_catalog.md", "事实来源", "terms", "aliases", "kind", "use_as", "不凭空假设"],
+    },
+    {
+      name: "machine token and Chinese display labels",
+      terms: requiredChineseDisplayEnumTerms,
     },
     {
       name: "tags auxiliary metadata",
@@ -285,8 +315,8 @@ const requiredSkillConcepts = {
   ],
   obdoc: [
     {
-      name: "shared document and knowledge target policy",
-      terms: ["用户指定路径优先", "已有明确命中", "不稳定时", "Agent/Knowledge/Inbox/", "$obcurate"],
+      name: "documents-only target policy",
+      terms: ["只写入 `Agent/Documents/`", "不写入 `Agent/Knowledge/`", "Agent/Documents/Inbox/", "Agent/Documents/_catalog.md", "$obcurate"],
     },
     {
       name: "document extraction boundary",
@@ -302,11 +332,15 @@ const requiredSkillConcepts = {
     },
     {
       name: "flexible Obsidian document targets",
-      terms: ["候选路径", "不要固定目录", "用户指定路径", "Agent/Knowledge/Inbox/"],
+      terms: ["候选路径", "不要固定目录", "用户指定路径", "Agent/Documents/Inbox/"],
     },
     {
       name: "document catalog boundary",
-      terms: ["最小明确 catalog 更新", "Agent/Knowledge/_catalog.md", "$obcurate", "guide", "runbook"],
+      terms: ["Agent/Documents/_catalog.md", "不写 `Agent/Knowledge/_catalog.md`", "$obcurate", "guide", "runbook"],
+    },
+    {
+      name: "machine token and Chinese display labels",
+      terms: requiredChineseDisplayEnumTerms,
     },
     sharedObsidianMarkdownWritePolicy,
     {
@@ -320,8 +354,8 @@ const requiredSkillConcepts = {
   ],
   obcurate: [
     {
-      name: "bounded knowledge curation",
-      terms: ["Agent/Knowledge/_catalog.md", "Agent/Knowledge/Inbox/", "有限范围", "整理输入"],
+      name: "bounded knowledge and document curation",
+      terms: [...requiredKnowledgeDocumentsSplitTerms, "有限范围", "整理输入", "只整理 Knowledge", "只整理 Documents"],
     },
     {
       name: "curation confirmation boundary",
@@ -329,15 +363,15 @@ const requiredSkillConcepts = {
     },
     {
       name: "batch curation strategy",
-      terms: ["批量整理", "先分组", "按组确认", "不逐篇确认", "稳定归类", "保持 Inbox", "建议私有化", "需要人工判断", "高风险例外"],
+      terms: ["批量整理", "先分组", "按组确认", "不逐篇确认", "稳定归类", "保持 Inbox", "敏感文档", "需要人工判断", "高风险例外"],
     },
     {
       name: "catalog maintenance",
-      terms: ["事实来源", "terms", "aliases", "kind", "use_as", "notes", "不凭空假设"],
+      terms: ["事实来源", "terms", "aliases", "kind", "use_as", "notes", "不凭空假设", "Agent/Documents/_catalog.md"],
     },
     {
       name: "catalog use semantics",
-      terms: ["查到后怎么用", "公共经验", "参考材料", "一等知识库产物", "人类实践", "rule", "reference"],
+      terms: ["查到后怎么用", "公共经验", "rule", "checklist", "heuristic", "文档目录", "guide", "runbook", "reference", "evidence"],
     },
     {
       name: "knowledge and document metadata",
@@ -345,11 +379,15 @@ const requiredSkillConcepts = {
     },
     {
       name: "document curation boundary",
-      terms: ["kind: document", "source_skill: obdoc", "doc_type", "sensitivity", "catalog 是否保留", "$oblearn", "稳定归类"],
+      terms: ["kind: document", "source_skill: obdoc", "doc_type", "sensitivity", "Documents catalog 是否保留", "$oblearn", "稳定归类"],
+    },
+    {
+      name: "machine token and Chinese display labels",
+      terms: requiredChineseDisplayEnumTerms,
     },
     {
       name: "curation output contract",
-      terms: ["产物是整理计划", "metadata/catalog/wikilink/path 调整", "必要的私有化建议"],
+      terms: ["产物是整理计划", "metadata/catalog/wikilink/path 调整", "sensitivity 建议"],
     },
     {
       name: "document experience handoff",
@@ -782,7 +820,7 @@ if (!existsSync(skillsDir)) {
         }
 
         if (skillName === "obcurate" && template === "curation-plan.md") {
-          for (const term of ["批量分组", "按组确认", "高风险例外", "稳定归类", "保持 Inbox", "建议私有化", "需要人工判断"]) {
+          for (const term of ["批量分组", "按组确认", "高风险例外", "稳定归类", "保持 Inbox", "敏感文档", "需要人工判断"]) {
             if (!content.includes(term)) {
               fail(`${skillName}: template ${template} must include batch curation term: ${term}`);
             }

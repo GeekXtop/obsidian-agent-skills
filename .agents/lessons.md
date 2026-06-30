@@ -44,9 +44,9 @@
 ## 2026-06-30 - obcurate 整理 document 以实践文档为一等产物
 
 - 背景：一次 `$obcurate` 计划把三件事混在一起：整理已有 `kind: document`、从 document 正文抽取新经验、以及判断含内网拓扑的文档是否能作为公共经验传播。后续对 PVE 既有指南复核后，确认实践文档本身就是一等知识库产物。
-- 经验：`$obcurate` 可以整理 `kind: document` / `source_skill: obdoc`，目标是让实践文档稳定归类、可发现、可读、可执行，并处理 metadata/catalog/wikilink/path、`sensitivity`、相关链接和必要的私有化建议。文档里的“可提取知识候选”只作为 `$oblearn` 线索，不在 `$obcurate` 中直接转成短经验知识。
-- 适用场景：维护 `$obcurate`、清理 `Agent/Knowledge/Inbox/`、处理 `source_skill: obdoc` 文档、修正 `_catalog.md` stale link 或含本地事实的公共文档入口。
-- 下次检查：看到 `kind: document` 时先判断本轮范围；稳定但敏感的文档不要长期留在 Inbox，应有稳定路径和明确 `sensitivity`；不要把 `## 可提取知识候选` 直接转成短经验知识。
+- 经验：`$obcurate` 可以整理 `kind: document` / `source_skill: obdoc`，目标是让实践文档稳定归类、可发现、可读、可执行，并处理 metadata/catalog/wikilink/path、`sensitivity` 和相关链接。文档进入 `Agent/Documents/`，敏感但稳定的文档也用 `sensitivity` 和读取条件控制复用，不再引入单独 Private 路径；文档里的“可提取知识候选”只作为 `$oblearn` 线索，不在 `$obcurate` 中直接转成短经验知识。
+- 适用场景：维护 `$obcurate`、清理 `Agent/Documents/Inbox/`、处理 `source_skill: obdoc` 文档、修正 `Agent/Documents/_catalog.md` stale link 或含本地事实的文档入口。
+- 下次检查：看到 `kind: document` 时先判断本轮范围；稳定但敏感的文档不要长期留在 Inbox，应有 `Agent/Documents/` 稳定路径和明确 `sensitivity`；不要把 `## 可提取知识候选` 直接转成短经验知识。
 
 ## 2026-06-30 - catalog 需要表达查到后怎么用
 
