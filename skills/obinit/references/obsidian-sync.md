@@ -12,9 +12,12 @@ Obsidian 只承担三件事：
 
 - 笔记不存在：用 `templates/obsidian-project-note.md` 创建。
 - 笔记存在但内容过期：按新项目、成熟项目或重复运行模式幂等更新。
+- 第一次初始化不强行判断项目类型；项目类型是 `unknown` 时只建立 catalog 查询协议，不预填弱相关知识。
+- 重复初始化时根据 README、package metadata、目录结构、显式 skill/spec/plan、docs 顶层索引和 agent memory 判断项目类型：`unknown` 不回写，`candidate` 只列建议，`confirmed` 才回写高置信相关知识链接。
 - 成熟项目笔记要说明 `AGENTS.md` / `CLAUDE.md` 保留长指南，`.agents/instructions.md` 是索引和 memory 协议。
 - 项目笔记是干净索引，只写真实链接、真实状态和真实记录；省略空章节，不写 `暂无` 或“需要时补充”。
 - `相关知识` 只写实际查阅、已提取或用户明确要求关联的公共知识笔记；没有明确知识入口时省略本节。
+- 项目相关知识只回写链接和简短 `kind` / `use_as`，不复制公共知识正文；不明确时只列建议。
 - `决策` 只写真实 ADR 或长期技术决策；初始化模式和 `$obinit` 接入记录写入 `当前状态` 或 `Agent 记录`，不写入决策。
 - `开放问题`、`常用命令` 等可选章节只有有真实内容时才写入。
 - 完成后必须读回 Obsidian 项目笔记。
@@ -25,6 +28,7 @@ Obsidian 只承担三件事：
 - 优先读取 `Agent/Knowledge/_catalog.md`；它是已沉淀领域的事实来源，不存在或不命中时不要强行扩展搜索。
 - 仅在用户明确要求、catalog 的 `terms` / `aliases` 命中任务关键词，或风险较高且关键词明确时，在 `Agent/Knowledge/` 做有限关键词定向搜索。
 - 只有命中相关笔记后才明确读取并使用。
+- 读取 catalog 命中项时看 `kind` 和 `use_as`：`kind: knowledge` / `use_as: rule` 这类公共经验可以作为规则、检查清单或启发式判断；`kind: document` / `use_as: reference` 这类文档作为参考材料、证据或操作记录，不能把正文直接当公共经验。
 - 不全量自动加载公共知识，不扫描整个 vault。
 
 查阅示例：

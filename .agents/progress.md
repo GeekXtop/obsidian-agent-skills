@@ -2,6 +2,13 @@
 
 本文件只记录阶段性进展摘要，不记录聊天流水。
 
+## 2026-07-01 - memory 权威状态载体边界
+
+- 已完成：将 release 专用 memory 边界推广为通用“权威状态载体”规则，覆盖 git commit、tag、PR、CI/CD、release、artifact、ADR、migration、issue/ticket、runbook。
+- 已完成：`.agents/instructions.md`、`$obinit` 模板/参考和 `$obclose` 统一约定：权威载体已记录的状态不再写短暂中间态；memory 只补下一次 agent 需要接手的载体外信息、阻塞、人工确认点或可复用经验。
+- 已完成：`scripts/validate-skills.mjs` 从 release workflow 校验改为 authoritative state carrier memory boundary 校验。
+- 已验证：`npm test` 通过，输出 `All skills are valid.`。
+
 ## 2026-06-23 - 项目初始化
 
 - 已完成：创建 `.agents/` memory 结构和 `docs/adr/` 入口；保留既有 `AGENTS.md` / `CLAUDE.md` 并追加 memory 指针。
@@ -171,4 +178,56 @@
 - 已验证：先运行 `npm test` 得到缺少 `version:set` / `bump-version.mjs` 的红灯；实现后 `npm test` 通过。
 - 已验证：临时执行 `npm run version:set -- 0.1.23` 后五个版本位置均变为 `0.1.23`，再执行 `npm run version:set -- 0.1.22` 恢复当前版本。
 - 已验证：无效版本参数 `nope` 会输出用法并失败。
+- 备注：本轮未发版，未提交未推送。
+
+## 2026-06-30 - Obsidian Markdown 文件写入和相关链接边界
+
+- 已完成：根据用户反馈，`$oblearn` / `$obdoc` 共享 Obsidian Markdown 写入约定：根据目标 `path` 确定 vault 本地文件系统路径，将完整 Markdown 写入或更新对应 `.md` 文件。
+- 已完成：`$oblearn` / `$obdoc` 明确新建、追加、覆盖、局部更新和 catalog 最小更新都走文件写入路径；`obsidian` CLI 用于查找、读取和写入后读回校验。
+- 已完成：`$obdoc` 明确 `## 相关` 记录与文档主题有真实主题关联的相关链接；没有明确相关资料时保留空小节或省略内容。
+- 已验证：先运行 `npm test` 得到文件写入策略红灯，指出 `$oblearn` / `$obdoc` 缺少 `Obsidian Markdown 写入`、`统一使用 vault 文件`、`文件写入`，并命中旧写入措辞；补齐后 `npm test` 通过，输出 `All skills are valid.`。
+- 备注：本轮未发版，未提交未推送。
+
+## 2026-06-30 - skill 行为规则正向 contract 扫描与 oblearn
+
+- 已完成：扫描 `README.md`、`skills/`、`commands/`、`docs/adr/` 和 agent memory 中与反向行为塑造相关的表述，区分行为 contract 和安全边界。
+- 已完成：`$obdoc` 的 `doc_type/source`、Obsidian 查找、`## 相关`、与 `$oblearn` 分工说明改为正向 contract；`scripts/validate-skills.mjs` 增加 forbidden phrase，防止旧的模板/搜索/替代措辞回归。
+- 已完成：`$oblearn` 的 archive/catalog/Obsidian 查找规则和 `$obcurate` 的整理范围规则改为正向范围描述；安全、隐私、权限和公共知识污染类禁令保留。
+- 已完成：使用 `$oblearn` 新建公共知识 `Agent/Knowledge/Inbox/Skill 行为规则使用正向 contract.md`，并最小更新 `Agent/Knowledge/_catalog.md` 的 `skill-positive-contract` 入口。
+- 已完成：`.agents/lessons.md` 追加“Skill 行为规则优先写正向 contract”项目经验。
+- 已验证：新增校验后先运行 `npm test` 得到目标红灯；改写后 `npm test` 通过，输出 `All skills are valid.`。
+- 已验证：`obsidian read` 成功读回新公共知识笔记和 catalog 入口。
+- 备注：本轮未发版，未提交未推送。
+
+## 2026-06-30 - obcurate 文档整理职责边界
+
+- 已完成：根据用户反馈修正此前 `$obcurate` 计划里的职责混淆，明确该计划是 agent 生成的修订版计划，不是用户计划。
+- 已完成：`skills/obcurate/SKILL.md` 增加职责矩阵，区分 `kind: knowledge` / `source_skill: oblearn` 与 `kind: document` / `source_skill: obdoc` 的处理范围。
+- 已完成：`$obcurate` 明确产物是整理计划、metadata/catalog/wikilink/path 调整和必要的私有化建议；`kind: document` 只整理文档入口、metadata、catalog、路径、链接、`sensitivity` 和可发现性。
+- 已完成：文档正文里的可复用经验候选作为后续 `$oblearn` 任务；含内网拓扑的 document 可以整理 metadata/catalog，但经验提取和脱敏公共化属于 `$oblearn`。
+- 已完成：`scripts/validate-skills.mjs` 增加 `$obcurate` document boundary、职责矩阵、正文经验转交和内网文档 metadata/catalog 处理边界校验。
+- 已验证：新增校验后先运行 `npm test` 得到目标红灯；补齐后 `npm test` 通过，输出 `All skills are valid.`。
+- 备注：本轮未发版，未提交未推送。
+
+## 2026-06-30 - catalog 使用语义和 tags 边界
+
+- 已完成：将 `Agent/Knowledge/_catalog.md` 规则从纯链接索引扩展为发现入口和使用语义入口，新增 `kind` / `use_as` 字段约定。
+- 已完成：`kind: knowledge` / `use_as: rule` 等公共经验可作为规则、检查清单或启发式判断；`kind: document` / `use_as: reference` 等文档只作为参考材料、证据或操作记录。
+- 已完成：`$obinit` 生成的 `.agents/instructions.md` 模板同步 catalog 命中后的使用语义，避免新项目只会查 catalog、不会区分 knowledge 和 document。
+- 已完成：`$oblearn`、`$obdoc`、`$obcurate` 明确 tags 是辅助 metadata，用于 Obsidian UI、Bases、Dataview、人工筛选和低频整理辅助，不作为 agent 发现入口。
+- 已完成：`skills/obcurate/templates/catalog-entry.md` 增加 `kind` / `use_as`；`skills/obdoc/templates/document-note.md` 增加 `tags: []` 和 `use_as`；`skills/oblearn/templates/public-knowledge-note.md` 增加 `use_as`。
+- 已完成：`scripts/validate-skills.mjs` 增加 catalog 使用语义、tags 辅助 metadata、obinit 模板使用语义和 doc tags 字段校验。
+- 已验证：新增校验后先运行 `npm test` 得到目标红灯；补齐后 `npm test` 通过，输出 `All skills are valid.`。
+- 备注：本轮未发版，未提交未推送。
+
+## 2026-06-30 - obinit 项目相关知识渐进回写
+
+- 已完成：根据用户反馈调整跨项目知识发现机制，改为 `$obinit` / 重复 `$obinit` 根据项目类型逐步回写相关知识链接，而不是要求日常任务都主动查知识库。
+- 已完成：`$obinit` 明确第一次初始化只建立规则入口、memory、Obsidian 项目笔记和 catalog 查询协议；项目类型不明确时保持 `unknown`，不预填弱相关知识。
+- 已完成：重复初始化时根据 README、package metadata、目录结构、显式 skill/spec/plan、docs 顶层索引、`.agents/active.md` 和 `.agents/progress.md` 判断项目类型和主要任务域。
+- 已完成：新增 `unknown` / `candidate` / `confirmed` 三档：`unknown` 只保留协议，`candidate` 只列建议，`confirmed` 才查 catalog 并回写高置信相关知识链接。
+- 已完成：`skills/obinit/templates/instructions.md` 和 `instructions-index.md` 新增 `项目相关知识` 小节；只回写链接和 `kind` / `use_as`，不复制公共知识正文。
+- 已完成：`skills/obinit/references/init-modes.md` 和 `references/obsidian-sync.md` 同步重复初始化逐步收敛规则。
+- 已完成：`scripts/validate-skills.mjs` 增加 `$obinit` 项目相关知识回写、模板渐进绑定协议校验。
+- 已验证：新增校验后先运行 `npm test` 得到目标红灯；补齐后 `npm test` 通过，输出 `All skills are valid.`。
 - 备注：本轮未发版，未提交未推送。

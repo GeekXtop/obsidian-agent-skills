@@ -21,3 +21,5 @@ node <skill>/scripts/inspect-project.mjs <project-root>
 不要递归读取 `docs/` 来理解项目。只列出 docs 顶层目录，读取已存在的 `docs/README.md`、`docs/index.md`、`docs/adr/README.md` 等索引文件；`docs/superpowers/specs/` 和 `docs/superpowers/plans/` 只有在 `.agents/active.md` 指向具体文件或用户指定时才读取。
 
 重复运行时必须检查 Obsidian 项目笔记是否过期；过期则按当前模式幂等更新。
+
+项目相关知识在重复运行时逐步收敛：第一次初始化不强行判断项目类型；项目类型为 `unknown` 时只保留查询协议，`candidate` 时只列建议，`confirmed` 时才根据 `Agent/Knowledge/_catalog.md` 回写高置信相关知识链接。只回写链接和 `kind` / `use_as`，不复制公共知识正文。

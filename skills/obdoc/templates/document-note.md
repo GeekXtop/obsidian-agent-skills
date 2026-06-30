@@ -3,9 +3,11 @@ title: <文档标题>
 aliases: []
 kind: document
 source_skill: obdoc
+use_as: <使用方式>
 doc_type: <文档类型>
 source: <输入来源>
 scope: <适用范围>
+tags: []
 sensitivity: sanitized
 status: draft
 created: YYYY-MM-DD

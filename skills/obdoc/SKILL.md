@@ -79,7 +79,13 @@ Agent/Knowledge/Inbox/<主题>.md
 
 `obdoc` 可以和 `$oblearn` 的知识产物处于同一目录；不要通过目录判断它们的区别。`obdoc` 新建文档使用 `kind: document` 和 `source_skill: obdoc`，`$oblearn` 知识笔记使用 `kind: knowledge` 和 `source_skill: oblearn`。
 
-`doc_type` 和 `source` 是自由描述字段，不是固定枚举。`doc_type` 使用用户材料中的真实文档类型或自然语言短语，例如“服务器配置说明”“GUI 迁移教程”“值班检查 runbook”“排障复盘”。`source` 写实际输入来源，可以是一个或多个来源，例如“当前对话 + 本地配置文件”“Codex session + 用户补充说明”。不要为了匹配模板把文档硬塞进固定类别或固定来源。
+`doc_type` 和 `source` 是自由描述字段，不是固定枚举。`doc_type` 使用用户材料中的真实文档类型或自然语言短语，例如“服务器配置说明”“GUI 迁移教程”“值班检查 runbook”“排障复盘”。`source` 写实际输入来源，可以是一个或多个来源，例如“当前对话 + 本地配置文件”“Codex session + 用户补充说明”。字段值由材料事实决定。
+
+## Tags
+
+`tags` 是辅助 metadata，用于 Obsidian UI、Bases、Dataview、人工筛选和低频整理辅助，不作为 agent 发现入口。agent 发现文档以 `Agent/Knowledge/_catalog.md` 的 `terms` / `aliases` / `kind` / `use_as` 为准。
+
+文档模板保留 `tags: []` 槽位。只有存在稳定用途时才填写粗粒度 tag，例如 `agent/document`、`ops/runbook` 或 `network/migration`。不要用 tags 替代 `kind: document`、`source_skill: obdoc`、`doc_type`、`sensitivity` 或 catalog 入口。
 
 ## Obsidian 查找
 
@@ -91,13 +97,19 @@ obsidian search query="<主题关键词>" limit=5
 obsidian read path="<明确命中的文档路径>"
 ```
 
-搜索词必须来自用户材料中的平台、技术栈、服务名、错误信息、命令名或文档主题。不要为了找灵感全库扫描。
+搜索词必须来自用户材料中的平台、技术栈、服务名、错误信息、命令名或文档主题。搜索范围保持为有限关键词定向搜索。
 
 如果命中已有文档：
 
 - 用户要求“更新/补充”时，追加或局部修订。
 - 用户要求“新整理一篇”时，可以新建草稿并在“相关”中链接已有文档。
 - 命中不明确时，列出候选并等待用户确认。
+
+## Obsidian 写入
+
+Obsidian Markdown 写入统一使用 vault 文件：根据目标 `path` 确定 vault 本地文件系统路径，将生成后的完整 Markdown 写入或更新对应 `.md` 文件。新建、覆盖和局部更新都走文件写入路径。
+
+`obsidian` CLI 用于查找、读取和写入后读回校验。无法确定目标 vault 的本地文件系统路径时，先说明需要目标 vault 路径或让用户确认可写位置，再执行文件写入。
 
 ## 文档生成流程
 
@@ -124,6 +136,7 @@ obsidian read path="<明确命中的文档路径>"
 - 验证方法可复现，包含成功判断。
 - 风险和回滚不空泛。
 - 来源摘要足以追溯结论，但不暴露完整聊天原文。
+- `## 相关` 记录与文档主题有真实主题关联的相关链接；没有明确相关资料时保留空小节或省略内容。
 
 不要写入：
 
@@ -136,11 +149,11 @@ obsidian read path="<明确命中的文档路径>"
 
 `obdoc` 产出文档，`$oblearn` 产出短经验条目。
 
-同一份材料可以先用 `obdoc` 写教程或配置文档，再用 `$oblearn` 提取少量跨场景经验。不要在 `obdoc` 中替代 `$oblearn` 写经验条目；`obdoc` 只为本次实际创建或更新的文档做最小明确 catalog 更新。
+同一份材料可以先用 `obdoc` 写教程或配置文档，再用 `$oblearn` 提取少量跨场景经验。经验条目由 `$oblearn` 处理；`obdoc` 只为本次实际创建或更新的文档做最小明确 catalog 更新。
 
 ## Catalog 最小更新
 
-`obdoc` 只有在文档实际写入 `Agent/Knowledge/` 且标题、路径、关键词和脱敏状态明确时，才更新 `Agent/Knowledge/_catalog.md`。最小更新只允许为本次文档新增一个入口，或为已存在的匹配入口追加少量明确 `terms`、`aliases` 或 `notes`。
+`obdoc` 只有在文档实际写入 `Agent/Knowledge/` 且标题、路径、关键词和脱敏状态明确时，才更新 `Agent/Knowledge/_catalog.md`。最小更新只允许为本次文档新增一个入口，或为已存在的匹配入口追加少量明确 `terms`、`aliases`、`kind`、`use_as` 或 `notes`。文档入口使用 `kind: document`，`use_as` 通常是 `reference`、`runbook` 或 `evidence`，表示它是参考材料而不是公共经验规则。
 
 不要在 `obdoc` 中移动、重命名、合并、拆分、删除 catalog 入口，也不要为项目内 `docs/` 文档登记公共知识 catalog。结构性 catalog 维护交给 `$obcurate`。
 

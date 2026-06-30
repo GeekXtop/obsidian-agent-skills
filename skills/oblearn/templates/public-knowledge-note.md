@@ -3,6 +3,7 @@ title: <知识标题>
 aliases: []
 kind: knowledge
 source_skill: oblearn
+use_as: <使用方式>
 domain: <主领域或留空>
 platform: []
 topic: []

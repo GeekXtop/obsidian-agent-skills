@@ -37,6 +37,7 @@ Obsidian 项目笔记：`Agent/Projects/obsidian-agent-skills.md`。
 - 完成实质代码/文档改动、阶段性验证或复杂任务暂停时，按 `$obclose` 收尾。
 - 有明确里程碑时更新 `.agents/progress.md`。
 - 只有可复用经验才更新 `.agents/lessons.md`。
+- 当状态已由权威状态载体记录时（git commit、tag、PR、CI/CD、release、artifact、ADR、migration、issue/ticket、runbook），`.agents/active.md` / `.agents/progress.md` 只记录下一次 agent 需要接手的未完成事项、不在权威载体中的决策背景、阻塞或人工确认点；不记录短暂中间态，已完成状态在最终回复说明。
 - `.agents/archive/` 保存过长 `progress.md` 的历史归档，应提交。
 - 长期项目决策写入 `docs/adr/`。
 - 如已有 Superpowers spec/plan，在 `.agents/active.md` 链接当前文件，不复制全文。

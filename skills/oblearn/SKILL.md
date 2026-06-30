@@ -53,7 +53,7 @@ docs/superpowers/plans/
 docs/adr/
 ```
 
-`.agents/archive/` 只在以下情况读取相关文件：`.agents/active.md`、`.agents/progress.md` 或 `.agents/lessons.md` 明确指向归档；用户要求复盘长期项目；或当前候选知识需要旧阶段证据。不要为了找灵感全量扫描 archive。
+`.agents/archive/` 读取范围由明确证据触发：`.agents/active.md`、`.agents/progress.md` 或 `.agents/lessons.md` 指向归档；用户要求复盘长期项目；或当前候选知识需要旧阶段证据。
 
 如果是 git 项目，可以读取最近变更摘要：
 
@@ -150,11 +150,25 @@ Agent/Knowledge/Inbox/<简短主题>.md
 
 - term: <关键词>
   aliases: []
+  kind: knowledge
+  use_as: rule
   notes:
     - [[<真实笔记标题>]]
 ```
 
-最小明确更新 catalog 时只使用真实笔记标题、已有 frontmatter、用户确认的别名或本次知识的明确关键词。无法判断时，不登记，只列出维护建议并交给 `$obcurate`。
+`kind` 表示命中对象的类型，`use_as` 表示查到后怎么用。`oblearn` 写入的是 `kind: knowledge`；常见 `use_as` 是 `rule`、`checklist` 或 `heuristic`。最小明确更新 catalog 时只使用真实笔记标题、已有 frontmatter、用户确认的别名或本次知识的明确关键词。无法判断时，不登记，只列出维护建议并交给 `$obcurate`。
+
+## Tags
+
+`tags` 是辅助 metadata，用于 Obsidian UI、Bases、Dataview、人工筛选和低频整理辅助，不作为 agent 发现入口。agent 发现公共知识以 `Agent/Knowledge/_catalog.md` 的 `terms` / `aliases` / `kind` / `use_as` 为准。
+
+新建公共知识笔记可以使用粗粒度 tag，例如 `agent/knowledge` 或 `skill/design`。不要用 tags 替代 `kind: knowledge`、`source_skill: oblearn`、catalog 入口或脱敏判断。
+
+## Obsidian 写入
+
+Obsidian Markdown 写入统一使用 vault 文件：根据目标 `path` 确定 vault 本地文件系统路径，将公共知识笔记、`Agent/Knowledge/_catalog.md` 或项目 Obsidian 笔记写入或更新为对应 `.md` 文件。新建、追加、局部更新和 catalog 最小更新都走文件写入路径。
+
+`obsidian` CLI 用于查找、读取和写入后读回校验。无法确定目标 vault 的本地文件系统路径时，先说明需要目标 vault 路径或让用户确认可写位置，再执行文件写入。
 
 ## 工作流
 
@@ -198,9 +212,9 @@ obsidian search query="<主题关键词>" limit=5
 obsidian read path="Agent/Knowledge/<实际命中笔记>.md"
 ```
 
-如果 `Agent/Knowledge/_catalog.md` 不存在，不要为了查找而创建空 catalog；只有本次实际写入公共知识且有明确关键词时再建议创建或更新。
+`Agent/Knowledge/_catalog.md` 只在本次实际写入公共知识且有明确关键词时建议创建或更新。
 
-不要使用全 vault 扫描来“找灵感”。搜索词应来自候选知识本身的技术栈、错误信息、平台名、命令名或用户确认的主题；搜索没有命中时，按新知识处理。
+Obsidian 查找使用关键词定向搜索。搜索词应来自候选知识本身的技术栈、错误信息、平台名、命令名或用户确认的主题；搜索没有命中时，按新知识处理。
 
 ## 公共知识条目格式
 
@@ -233,7 +247,7 @@ obsidian read path="Agent/Knowledge/<实际命中笔记>.md"
 最小更新只允许：
 
 - 为本次实际写入或更新的真实笔记新增一个入口。
-- 为已存在的匹配入口追加少量明确 `terms`、`aliases` 或 `notes`。
+- 为已存在的匹配入口追加少量明确 `terms`、`aliases`、`kind`、`use_as` 或 `notes`。
 - 保留 catalog 既有结构，不重排、不移动、不删除、不批量改名。
 
 不要更新 catalog 的情况：

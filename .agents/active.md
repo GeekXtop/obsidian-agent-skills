@@ -2,9 +2,9 @@
 
 ## 当前任务
 
-- 目标：新增统一版本号同步脚本，避免发版时手工修改多个 manifest。
-- 状态：已完成。新增 `scripts/bump-version.mjs` 和 `npm run version:set -- <version>`；README 和校验脚本已同步；未提交、未推送。
-- 最后更新：2026-06-30
+- 目标：把 release 专用 memory 边界改成通用“权威状态载体”规则。
+- 状态：已完成。`.agents/instructions.md`、`$obinit` 模板/参考、`$obclose` 和 validator 已统一为通用规则：git commit、tag、PR、CI/CD、release、artifact、ADR、migration、issue/ticket、runbook 已承载状态时，memory 只记录下一次 agent 需要接手的载体外信息。
+- 最后更新：2026-07-01
 
 ## 当前状态
 
@@ -29,6 +29,24 @@
 - 已完成：新增 `scripts/bump-version.mjs`，统一更新 `package.json`、`skills.json`、`.claude-plugin/plugin.json`、`.claude-plugin/marketplace.json` 和 `.codex-plugin/plugin.json` 的版本字段。
 - 已完成：`package.json` 增加 `version:set` 脚本；README 开发章节增加 `npm run version:set -- 0.1.23` 用法。
 - 已完成：`scripts/validate-skills.mjs` 要求版本同步脚本和 README 说明存在，避免后续回退到手工多文件改版本。
+- 已完成：根据用户反馈，`$oblearn` / `$obdoc` 共享 Obsidian Markdown 写入约定：统一使用 vault 文件；新建、追加、覆盖、局部更新和 catalog 最小更新都走文件写入路径，`obsidian` CLI 用于查找、读取和写入后读回校验。
+- 已完成：`$obdoc` 明确 `## 相关` 记录与文档主题有真实主题关联的相关链接；没有明确相关资料时保留空小节或省略内容。
+- 已完成：扫描 `README.md`、`skills/`、`commands/`、`docs/adr/` 和 agent memory 中相关非正向表述；将 `obdoc` 的模板/搜索/相关链接/经验分工规则改为正向 contract。
+- 已完成：将 `oblearn` 的 archive/catalog/Obsidian 查找规则和 `obcurate` 的整理范围规则改为正向范围描述；保留 secret、隐私、权限、全库扫描等安全边界类禁令。
+- 已完成：使用 `$oblearn` 提取公共知识 `[[Skill 行为规则使用正向 contract]]`，并对 `Agent/Knowledge/_catalog.md` 增加 `skill-positive-contract` 最小入口。
+- 已完成：`$obcurate` 明确自身产物是整理计划、metadata/catalog/wikilink/path 调整和必要的私有化建议。
+- 已完成：`$obcurate` 新增 knowledge/document 职责矩阵；`kind: document` / `source_skill: obdoc` 可以整理，但只处理文档入口、metadata、catalog、路径、链接、脱敏状态和可发现性。
+- 已完成：`$obcurate` 明确文档正文里的可复用经验候选作为后续 `$oblearn` 任务，不在 `$obcurate` 中直接晋升为公共知识。
+- 已完成：`scripts/validate-skills.mjs` 增加 `$obcurate` 产物边界、document 经验转交、职责矩阵、内网拓扑文档 metadata/catalog 整理边界校验。
+- 已完成：`Agent/Knowledge/_catalog.md` 规则增加 `kind` 和 `use_as`；`kind: knowledge` / `use_as: rule` 等公共经验可作为规则或检查清单，`kind: document` / `use_as: reference` 等文档只作为参考材料、证据或操作记录。
+- 已完成：`$obinit` 生成的 `.agents/instructions.md` 模板同步 catalog 命中后的使用语义，避免新项目只知道查 catalog、不知道如何区分 knowledge 和 document。
+- 已完成：`$oblearn` / `$obdoc` / `$obcurate` 明确 tags 是辅助 metadata，用于 Obsidian UI、Bases、Dataview、人工筛选和低频整理辅助，不作为 agent 发现入口。
+- 已完成：`skills/obdoc/templates/document-note.md` 增加 `tags: []` 和 `use_as`，`skills/oblearn/templates/public-knowledge-note.md` 增加 `use_as`，`skills/obcurate/templates/catalog-entry.md` 增加 `kind` / `use_as`。
+- 已完成：`$obinit` 新增项目相关知识回写规则：第一次初始化不预填弱相关知识，重复初始化根据 README、package metadata、目录结构、显式 skill/spec/plan、docs 顶层索引和 agent memory 判断项目类型。
+- 已完成：`$obinit` 使用 `unknown` / `candidate` / `confirmed` 三档处理项目相关知识：`unknown` 只保留协议，`candidate` 只列建议，`confirmed` 才查 catalog 并回写高置信链接。
+- 已完成：`skills/obinit/templates/instructions.md` 和 `instructions-index.md` 新增 `项目相关知识` 小节，只回写链接和 `kind` / `use_as`，不复制公共知识正文。
+- 已完成：`skills/obinit/references/init-modes.md` 和 `references/obsidian-sync.md` 同步重复初始化逐步收敛规则。
+- 已完成：将 release 专用 memory 边界推广为“权威状态载体”规则，并同步到 `.agents/instructions.md`、`skills/obinit/SKILL.md`、`skills/obinit/references/memory-bank.md`、`skills/obinit/templates/instructions*.md`、`skills/obclose/SKILL.md` 和 `scripts/validate-skills.mjs`。
 - 进行中：无。
 - 阻塞：无。
 
@@ -49,6 +67,19 @@
 - 绿灯：实现脚本、npm 命令和 README 后运行 `npm test`，输出 `All skills are valid.`。
 - 已验证：`npm run version:set -- 0.1.23` 能同步更新五个版本位置，再运行 `npm run version:set -- 0.1.22` 能恢复当前版本。
 - 已验证：`node scripts/bump-version.mjs nope` 对无效版本输出用法并非 0 退出。
+- 红灯：将 `scripts/validate-skills.mjs` 调整为要求 `oblearn` / `obdoc` 共享正向文件写入策略并禁止旧写入措辞后，运行 `npm test` 失败，指出缺少 `Obsidian Markdown 写入`、`统一使用 vault 文件`、`文件写入`，并命中旧措辞。
+- 绿灯：补齐 `skills/obdoc/SKILL.md` 正向规则后运行 `npm test`，输出 `All skills are valid.`。
+- 红灯：新增 `obdoc` 行为塑造旧措辞校验后运行 `npm test`，命中 `不要为了匹配模板`、`不要为了找灵感`、`不要为了填模板`、`不要在 obdoc 中替代`。
+- 绿灯：改写 `obdoc` 行为规则、`oblearn` 查找范围和 `obcurate` 整理输入后运行 `npm test`，输出 `All skills are valid.`。
+- 已验证：`obsidian read path="Agent/Knowledge/Inbox/Skill 行为规则使用正向 contract.md"` 成功读回新公共知识；`Agent/Knowledge/_catalog.md` 包含 `skill-positive-contract` 入口。
+- 红灯：新增 `$obcurate` document boundary 校验后运行 `npm test`，指出缺少 `kind: document`、`source_skill: obdoc`、`doc_type`、`sensitivity`、`catalog 是否保留`、`$oblearn` 等边界术语。
+- 绿灯：补齐 `$obcurate` 文档整理边界、职责矩阵和正文经验转交规则后运行 `npm test`，输出 `All skills are valid.`。
+- 红灯：新增 catalog `kind/use_as`、tags 辅助 metadata、obinit 查询使用语义校验后运行 `npm test`，指出 `$obcurate`、`$obdoc`、`$obinit`、`$oblearn` 缺少对应术语和模板字段。
+- 绿灯：补齐 catalog 使用语义、tags 边界、模板字段和 obinit 生成规则后运行 `npm test`，输出 `All skills are valid.`。
+- 红灯：新增 `$obinit` 项目相关知识回写校验后运行 `npm test`，指出缺少 `项目相关知识回写`、`第一次初始化`、`重复初始化`、`unknown`、`candidate`、`confirmed`、`高置信`、`只回写链接`、`只列建议`。
+- 绿灯：补齐 `$obinit` 主规则、模板和 references 后运行 `npm test`，输出 `All skills are valid.`。
+- 红灯：将 validator 改为要求通用“权威状态载体”术语后运行 `npm test`，指出 `$obclose`、`$obinit` 和 obinit templates 仍缺少通用边界术语。
+- 绿灯：补齐通用 memory 边界规则后运行 `npm test`，输出 `All skills are valid.`。
 
 ## 关键文件
 
@@ -66,10 +97,25 @@
 - `scripts/validate-skills.mjs`：新增 `obdoc` 存在性、关键概念、发现层、README 前提、项目描述、`doc_type` / `source` 自由字段、模板禁用 `<a|b>` 枚举占位、catalog aliases 默认空列表和 catalog 最小更新边界校验。
 - `scripts/bump-version.mjs`：统一同步 release 版本号。
 - `package.json`：新增 `version:set` 命令。
+- `skills/obdoc/SKILL.md`：新增 Obsidian 写入规则和相关链接质量边界。
+- `scripts/validate-skills.mjs`：当前工作区已有对应校验项。
+- `skills/oblearn/SKILL.md`：archive/catalog/Obsidian 查找规则改为正向范围描述。
+- `skills/obcurate/SKILL.md`：整理输入范围改为正向描述，并新增 document 整理职责矩阵和正文经验转交 `$oblearn` 规则。
+- `skills/obinit/SKILL.md`、`skills/obinit/templates/instructions.md`、`skills/obinit/templates/instructions-index.md`、`skills/obinit/references/obsidian-sync.md`：新增 catalog 命中后的 `kind` / `use_as` 使用语义。
+- `skills/obcurate/templates/catalog-entry.md`：catalog entry 模板新增 `kind` 和 `use_as`。
+- `skills/obdoc/templates/document-note.md`：文档模板新增 `tags: []` 和 `use_as`。
+- `skills/oblearn/templates/public-knowledge-note.md`：公共知识模板新增 `use_as`。
+- `skills/obinit/references/init-modes.md`：重复初始化时项目相关知识逐步收敛。
+- `skills/obinit/templates/instructions.md`、`skills/obinit/templates/instructions-index.md`：新增 `项目相关知识` 协议小节。
+- `skills/obclose/SKILL.md`：新增“权威状态载体边界”，定义已有 git commit、tag、PR、CI/CD、release、artifact、ADR、migration、issue/ticket、runbook 承载状态时的 memory 写入范围。
+- `skills/obinit/SKILL.md`、`skills/obinit/references/memory-bank.md`、`skills/obinit/templates/instructions.md`、`skills/obinit/templates/instructions-index.md`：同步新项目和重复初始化继承的通用 memory 边界。
+- `scripts/validate-skills.mjs`：将 release workflow memory boundary 校验替换为 authoritative state carrier memory boundary 校验。
+- `Agent/Knowledge/Inbox/Skill 行为规则使用正向 contract.md`：本轮新增公共知识笔记。
+- `Agent/Knowledge/_catalog.md`：新增 `skill-positive-contract` 最小入口。
 
 ## 下一步
 
-1. 用户决定是否提交当前版本同步脚本改动。
+1. 用户决定是否提交当前 skill 文案、校验脚本和 `.agents/` memory 改动。
 2. 若要在 Claude Code 中立即使用 `0.1.22`，按当前客户端状态需要启用该插件并重启或 `/reload`。
 3. Codex 当前会话不一定热加载新插件；需要新会话或重启后使用 `0.1.22` skill。
 
@@ -83,7 +129,8 @@
 
 ## 已提取知识
 
-- 本轮未提取公共知识。
+- [[Skill 行为规则使用正向 contract]]：写 skill 行为规则时优先使用正向 contract；安全、隐私、权限类边界保留明确禁令。
+- 项目经验：`$obcurate` 整理 `kind: document` 时只处理 metadata/catalog/path/link/sensitivity/可发现性；从文档正文提炼经验必须转为 `$oblearn`。
 
 ## Obsidian
 

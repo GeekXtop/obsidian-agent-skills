@@ -166,9 +166,11 @@ $obcurate
 - 成熟项目或 fork：保留已有 `AGENTS.md` / `CLAUDE.md`，只追加中文入口提示；`.agents/instructions.md` 使用索引型结构，避免重复复制长规则。
 - 重复运行：只补缺失文件、链接和入口提示，不覆盖、不重复追加、不重置状态。
 
+首次 `$obinit` 不强行判断尚未成型的项目类型，也不预填弱相关公共知识。重复 `$obinit` 时会根据 README、package metadata、目录结构、显式 skill/spec/plan、docs 顶层索引和 agent memory 重新判断项目类型；`unknown` 只保留查询协议，`candidate` 只列建议，`confirmed` 才回写高置信相关知识链接。回写只写链接和 `kind` / `use_as`，不复制公共知识正文。
+
 `.agents/active.md`、`.agents/progress.md`、`.agents/lessons.md` 等项目 memory 文件不会后台自动同步。需要 agent 在任务开始、阶段结束或会话收尾时主动回写；完成实质代码/文档改动、阶段性验证或复杂任务暂停时，agent 应按 `$obclose` 收尾。`$obclose` 还会检查 `progress` / `lessons` 是否过长或重复，必要时轻量合并、压缩或把旧进展归档到 `.agents/archive/`。
 
-`Agent/Knowledge/` 中的跨项目公共知识不会被全量自动加载。接入项目后，agent 不应凭空假设哪些领域已经沉淀；只有用户明确要求、`Agent/Knowledge/_catalog.md` 命中任务关键词，或风险较高且关键词明确时，才做有限关键词定向搜索。命中相关笔记后再明确读取并记录到当前项目的“已使用知识”或 Obsidian 项目笔记“相关知识”。
+`Agent/Knowledge/` 中的跨项目公共知识不会被全量自动加载。接入项目后，agent 不应凭空假设哪些领域已经沉淀；只有用户明确要求、`Agent/Knowledge/_catalog.md` 命中任务关键词，或风险较高且关键词明确时，才做有限关键词定向搜索。命中后读取 catalog 的 `kind` / `use_as`：`knowledge` 可作为公共经验、规则或检查清单使用，`document` 只作为参考材料、证据或操作记录。命中相关笔记后再明确读取并记录到当前项目的“已使用知识”或 Obsidian 项目笔记“相关知识”。
 
 `$oblearn` 负责把当前项目经验提取为跨项目公共知识；项目内经验先由 `$obclose` 写入 `.agents/lessons.md`。它也支持非项目临时会话：当当前目录没有项目 memory，或用户明确要求从当前对话、粘贴 transcript、临时任务摘要、Codex session id 中提取经验时，不要求先 `$obinit`，不创建 `.agents/`，只把脱敏后的可复用经验写入或建议写入 `Agent/Knowledge/Inbox/`。Codex session id 只用于在本机 Codex 会话存储中精确定位对应 JSONL，不使用 `codex resume` 读取，也不扩大扫描无关历史。不稳定归类的新知识可建议写入 Inbox；写入目标和关键词明确时，允许对 catalog 做最小明确更新。
 
@@ -176,7 +178,7 @@ $obcurate
 
 `$oblearn` 和 `$obdoc` 使用统一路径规则：用户指定路径优先，已有明确命中的公共知识笔记或文档优先更新；不稳定时建议写入 `Agent/Knowledge/Inbox/`；稳定归类、移动、合并、拆分和批量 catalog 维护交给 `$obcurate`。两者可以处于同一文件夹，使用 frontmatter 和正文结构区分：`kind: knowledge` / `source_skill: oblearn` 表示短经验知识，`kind: document` / `source_skill: obdoc` 表示可阅读或可执行文档。
 
-`$oblearn` 和 `$obdoc` 可以为本次实际写入或更新的明确产物最小更新 `_catalog.md`，例如新增一个真实入口或追加少量明确 `terms` / `aliases` / `notes`。`$obcurate` 负责低频结构性整理公共知识库，例如清理 Inbox、移动或重命名主题、合并或拆分主题、删除过期入口、批量维护 `_catalog.md`、修正 aliases/tags/wikilink。
+`$oblearn` 和 `$obdoc` 可以为本次实际写入或更新的明确产物最小更新 `_catalog.md`，例如新增一个真实入口或追加少量明确 `terms` / `aliases` / `kind` / `use_as` / `notes`。`$obcurate` 负责低频结构性整理公共知识库，例如清理 Inbox、移动或重命名主题、合并或拆分主题、删除过期入口、批量维护 `_catalog.md`、修正 aliases/tags/wikilink。
 
 模板文件位于各 skill 的 `templates/` 目录。`SKILL.md` 定义行为和安全边界，模板定义写入项目或 Obsidian 的输出格式。
 

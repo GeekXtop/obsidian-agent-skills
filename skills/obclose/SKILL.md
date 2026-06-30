@@ -23,6 +23,7 @@ description: 在任务、阶段或会话收尾时更新项目内 agent memory。
 - 只是回答概念问题、解释代码或做轻量查询。
 - 没有改变项目状态，也没有产生需要下次恢复的上下文。
 - 用户明确说不要更新 memory。
+- 当前状态已由权威状态载体记录，且没有下一次 agent 需要接手的未完成事项。
 
 ## 默认行为
 
@@ -42,6 +43,14 @@ description: 在任务、阶段或会话收尾时更新项目内 agent memory。
 - 新建或追加的 memory 内容默认遵循用户或项目既有语言偏好；当前模板使用简体中文。技术标识符、路径、命令、包名和英文专有名词保持原样。
 
 如果项目还没有 `.agents/` 或 `.agents/instructions.md`，提示先运行 `$obinit`，不要自行创建完整初始化结构。
+
+## 权威状态载体边界
+
+权威状态载体包括 git commit、tag、PR、CI/CD、release、artifact、ADR、migration、issue/ticket、runbook。它们已经记录了可恢复状态时，`obclose` 不为短暂中间态单独追加 `.agents/progress.md`，也不为已完成状态再单独追加第二次 memory 提交。
+
+需要记录的 memory 只覆盖权威状态载体外的信息：下一次 agent 需要接手的未完成事项、不在载体中的决策背景、阻塞、人工确认点或可复用经验。已由权威状态载体记录的完成状态，只在最终回复说明载体位置和验证结果，除非用户明确要求再更新 memory。
+
+`.agents/active.md` 只记录会影响下一次继续工作的真实阻塞或未完成事项；不记录“下一步 commit/tag/push”“等待 CI 完成后写一条状态”“部署完成后再补 progress”这类即将由权威状态载体承载的短暂中间态。
 
 ## 工作流
 

@@ -19,6 +19,7 @@ docs/
 - 任务开始、阶段完成、会话结束时更新 `.agents/active.md`；完成实质任务或复杂任务暂停时按 `$obclose` 收尾。
 - 完成重要里程碑时追加 `.agents/progress.md`。
 - 只有可复用经验才写入 `.agents/lessons.md`。
+- 当状态已由权威状态载体记录时（git commit、tag、PR、CI/CD、release、artifact、ADR、migration、issue/ticket、runbook），`.agents/active.md` / `.agents/progress.md` 只记录下一次 agent 需要接手的未完成事项、不在权威载体中的决策背景、阻塞或人工确认点；不记录短暂中间态，已完成状态在最终回复说明。
 - `.agents/archive/` 保存过长 `progress.md` 的历史归档；归档是项目 memory 的一部分，应提交，不要加入 `.gitignore`。
 - 长期设计决策抽成 `docs/adr/`。
 - Superpowers 生成的 spec/plan 保留原文件，`.agents/active.md` 只链接当前使用的 spec/plan；obinit 不创建、不改写、不递归读取 `docs/superpowers/specs/` 或 `docs/superpowers/plans/`，只有 `.agents/active.md` 指向具体文件或用户指定时才读取。

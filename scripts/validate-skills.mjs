@@ -110,6 +110,60 @@ const requiredProjectDescriptionTerms = ["文档整理"];
 
 const requiredKnowledgeLookupTerms = ["Agent/Knowledge/", "Agent/Knowledge/_catalog.md", "关键词定向搜索", "明确读取"];
 
+const requiredKnowledgeUseSemanticsTerms = [
+  "kind",
+  "use_as",
+  "knowledge",
+  "document",
+  "rule",
+  "reference",
+];
+
+const requiredProjectKnowledgeBindingTerms = [
+  "项目相关知识",
+  "项目类型",
+  "unknown",
+  "candidate",
+  "confirmed",
+  "高置信",
+  "只回写链接",
+  "只列建议",
+];
+
+const requiredAuthoritativeStateCarrierTerms = [
+  "权威状态载体",
+  "git commit",
+  "tag",
+  "PR",
+  "CI/CD",
+  "release",
+  "artifact",
+  "ADR",
+  "migration",
+  "issue/ticket",
+  "runbook",
+  "短暂中间态",
+  "最终回复说明",
+];
+
+const forbiddenObdocWritePolicyPhrases = [
+  "长文写入",
+  "不把整篇 Markdown",
+  "分段 append",
+];
+
+const forbiddenObdocBehaviorShapingPhrases = [
+  "不要为了匹配模板",
+  "不要为了找灵感",
+  "不要为了填模板",
+  "不要在 `obdoc` 中替代",
+];
+
+const sharedObsidianMarkdownWritePolicy = {
+  name: "shared Obsidian Markdown file write policy",
+  terms: ["Obsidian Markdown 写入", "统一使用 vault 文件", "文件写入", "本地文件系统路径", "写入后读回"],
+};
+
 const requiredObinitConcepts = [
   {
     name: "init mode selection",
@@ -138,6 +192,18 @@ const requiredObinitConcepts = [
   {
     name: "on-demand public knowledge lookup",
     terms: ["任务开始", "遇到相关问题", "Agent/Knowledge/", "Agent/Knowledge/_catalog.md", "关键词定向搜索", "明确读取", "不凭空假设"],
+  },
+  {
+    name: "catalog hit use semantics",
+    terms: ["kind", "use_as", "knowledge", "document", "rule", "reference", "公共经验", "参考材料"],
+  },
+  {
+    name: "progressive project knowledge binding",
+    terms: ["项目相关知识回写", "第一次初始化", "重复初始化", "项目类型", "unknown", "candidate", "confirmed", "高置信", "只回写链接", "只列建议"],
+  },
+  {
+    name: "authoritative state carrier memory boundary",
+    terms: requiredAuthoritativeStateCarrierTerms,
   },
   {
     name: "bounded docs discovery",
@@ -191,7 +257,11 @@ const requiredSkillConcepts = {
     },
     {
       name: "knowledge catalog source",
-      terms: ["Agent/Knowledge/_catalog.md", "事实来源", "terms", "aliases", "不凭空假设"],
+      terms: ["Agent/Knowledge/_catalog.md", "事实来源", "terms", "aliases", "kind", "use_as", "不凭空假设"],
+    },
+    {
+      name: "tags auxiliary metadata",
+      terms: ["tags", "辅助 metadata", "Obsidian UI", "人工筛选", "不作为 agent 发现入口"],
     },
     {
       name: "catalog maintenance boundary",
@@ -209,6 +279,7 @@ const requiredSkillConcepts = {
       name: "existing public knowledge maintenance",
       terms: ["已有公共知识维护", "最小修改", "aliases", "修正 wikilink", "可发现性"],
     },
+    sharedObsidianMarkdownWritePolicy,
   ],
   obdoc: [
     {
@@ -235,11 +306,20 @@ const requiredSkillConcepts = {
       name: "document catalog boundary",
       terms: ["最小明确 catalog 更新", "Agent/Knowledge/_catalog.md", "$obcurate"],
     },
+    sharedObsidianMarkdownWritePolicy,
+    {
+      name: "related links quality boundary",
+      terms: ["相关链接", "真实主题关联", "空小节或省略内容"],
+    },
+    {
+      name: "tags auxiliary metadata",
+      terms: ["tags", "辅助 metadata", "Obsidian UI", "人工筛选", "不作为 agent 发现入口"],
+    },
   ],
   obcurate: [
     {
       name: "bounded knowledge curation",
-      terms: ["Agent/Knowledge/_catalog.md", "Agent/Knowledge/Inbox/", "有限范围", "不扫描整个 vault"],
+      terms: ["Agent/Knowledge/_catalog.md", "Agent/Knowledge/Inbox/", "有限范围", "整理输入"],
     },
     {
       name: "curation confirmation boundary",
@@ -247,11 +327,43 @@ const requiredSkillConcepts = {
     },
     {
       name: "catalog maintenance",
-      terms: ["事实来源", "terms", "aliases", "notes", "不凭空假设"],
+      terms: ["事实来源", "terms", "aliases", "kind", "use_as", "notes", "不凭空假设"],
+    },
+    {
+      name: "catalog use semantics",
+      terms: ["查到后怎么用", "公共经验", "参考材料", "rule", "reference"],
     },
     {
       name: "knowledge and document metadata",
       terms: ["kind", "source_skill", "doc_type", "knowledge", "document"],
+    },
+    {
+      name: "document curation boundary",
+      terms: ["kind: document", "source_skill: obdoc", "doc_type", "sensitivity", "catalog 是否保留", "$oblearn"],
+    },
+    {
+      name: "curation output contract",
+      terms: ["产物是整理计划", "metadata/catalog/wikilink/path 调整", "必要的私有化建议"],
+    },
+    {
+      name: "document experience handoff",
+      terms: ["文档正文里的可复用经验候选", "用户明确要求从文档提炼", "单独 `$oblearn` 任务", "后续 `$oblearn` 任务"],
+    },
+    {
+      name: "knowledge/document responsibility matrix",
+      terms: ["输入对象", "`$obcurate` 处理", "转交条件"],
+    },
+    {
+      name: "no direct document promotion",
+      terms: ["`## 可提取知识候选`", "不在 `$obcurate` 中直接晋升为公共知识"],
+    },
+    {
+      name: "internal document metadata handling",
+      terms: ["含内网拓扑", "仍可整理 metadata/catalog", "经验提取和脱敏公共化属于 `$oblearn`"],
+    },
+    {
+      name: "scope-specific skip reasons",
+      terms: ["用户点名范围", "本轮范围", "暂不处理", "整理 metadata/catalog"],
     },
     {
       name: "privacy-preserving curation",
@@ -262,6 +374,10 @@ const requiredSkillConcepts = {
     {
       name: "close-only safety boundary",
       terms: ["不修改源码、依赖、构建配置或 git 配置", "不自动提交、不自动推送、不自动创建 release", "git status --short"],
+    },
+    {
+      name: "authoritative state carrier memory boundary",
+      terms: [...requiredAuthoritativeStateCarrierTerms, "单独追加"],
     },
     {
       name: "memory preservation",
@@ -507,6 +623,15 @@ if (!existsSync(skillsDir)) {
 
     assertRequiredConcepts(skillName, markdown, requiredSkillConcepts[skillName] ?? []);
 
+    if (skillName === "obdoc") {
+      assertNoPhrases(`${skillName}: SKILL.md`, markdown, forbiddenObdocWritePolicyPhrases, (phrase) => {
+        return `must describe Obsidian writes with the positive file-write policy, not old phrasing: ${phrase}`;
+      });
+      assertNoPhrases(`${skillName}: SKILL.md`, markdown, forbiddenObdocBehaviorShapingPhrases, (phrase) => {
+        return `must use positive behavior contracts instead of negative template/search phrasing: ${phrase}`;
+      });
+    }
+
     const openAiAgentPath = join(skillsDir, skillName, "agents", "openai.yaml");
     if (!existsSync(openAiAgentPath)) {
       fail(`${skillName}: missing agents/openai.yaml`);
@@ -593,6 +718,21 @@ if (!existsSync(skillsDir)) {
           if (missing.length > 0) {
             fail(`${skillName}: template ${template} must include on-demand public knowledge lookup terms: ${missing.join(", ")}`);
           }
+
+          const missingUseSemantics = requiredKnowledgeUseSemanticsTerms.filter((term) => !content.includes(term));
+          if (missingUseSemantics.length > 0) {
+            fail(`${skillName}: template ${template} must include public knowledge use semantics terms: ${missingUseSemantics.join(", ")}`);
+          }
+
+          const missingProjectKnowledgeBinding = requiredProjectKnowledgeBindingTerms.filter((term) => !content.includes(term));
+          if (missingProjectKnowledgeBinding.length > 0) {
+            fail(`${skillName}: template ${template} must include progressive project knowledge binding terms: ${missingProjectKnowledgeBinding.join(", ")}`);
+          }
+
+          const missingAuthoritativeStateCarrier = requiredAuthoritativeStateCarrierTerms.filter((term) => !content.includes(term));
+          if (missingAuthoritativeStateCarrier.length > 0) {
+            fail(`${skillName}: template ${template} must include authoritative state carrier memory boundary terms: ${missingAuthoritativeStateCarrier.join(", ")}`);
+          }
         }
 
         if (skillName === "oblearn" && template === "public-knowledge-note.md") {
@@ -612,7 +752,7 @@ if (!existsSync(skillsDir)) {
         }
 
         if (skillName === "obdoc" && template === "document-note.md") {
-          for (const term of ["kind: document", "source_skill: obdoc", "doc_type:", "source:"]) {
+          for (const term of ["kind: document", "source_skill: obdoc", "doc_type:", "source:", "tags:"]) {
             if (!content.includes(term)) {
               fail(`${skillName}: template ${template} must include ${term}`);
             }
@@ -622,6 +762,12 @@ if (!existsSync(skillsDir)) {
         if (skillName === "obcurate" && template === "catalog-entry.md") {
           if (!content.includes("aliases: []")) {
             fail(`${skillName}: template ${template} must default catalog aliases to an empty list`);
+          }
+
+          for (const term of ["kind:", "use_as:"]) {
+            if (!content.includes(term)) {
+              fail(`${skillName}: template ${template} must include ${term}`);
+            }
           }
 
           if (content.includes("aliases: [<别名>]")) {
