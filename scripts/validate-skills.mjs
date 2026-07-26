@@ -406,6 +406,10 @@ const requiredSkillConcepts = {
       terms: ["含内网拓扑", "仍可整理 metadata/catalog", "经验提取和脱敏公共化属于 `$oblearn`", "不是敏感文档长期归档"],
     },
     {
+      name: "documents catalog display heading policy",
+      terms: ["展示分组名", "不要直接复制示例分组名", "根据用户或项目既有语言偏好", "目标路径目录", "先确保目标目录存在"],
+    },
+    {
       name: "scope-specific skip reasons",
       terms: ["用户点名范围", "本轮范围", "暂不处理", "整理 metadata/catalog"],
     },

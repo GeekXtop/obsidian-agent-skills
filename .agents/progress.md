@@ -2,6 +2,15 @@
 
 本文件只记录阶段性进展摘要，不记录聊天流水。
 
+## 2026-07-01 - obcurate Documents catalog 示例防复制
+
+- 已完成：修正本次 `$obcurate` 结果，`Agent/Documents/_catalog.md` 的分组从 `Network` 改为 `网络 / Network`，目标文档 frontmatter 增加 `use_as: runbook` 和 `topic: [network, pve, immortalwrt, subnet-migration]`。
+- 已完成：`skills/obcurate/SKILL.md` 将 Documents catalog 示例从固定 `## Network` 改为占位结构，明确展示分组名按用户或项目语言偏好、vault 既有风格和文档 topic 命名，不直接复制示例分组名。
+- 已完成：`$obcurate` document 检查项纳入 `use_as` / `topic`，移动步骤补充“确认目标路径目录并先确保目标目录存在”。
+- 已完成：`scripts/validate-skills.mjs` 增加 `$obcurate` Documents catalog 展示分组策略校验，防止示例重新退化为可复制默认值。
+- 已验证：新增校验后先运行 `npm test` 得到目标红灯；补齐 skill 文案后 `npm test` 通过，输出 `All skills are valid.`；Obsidian 读回 catalog、`use_as`、`topic` 和 catalog link 均正常。
+- 备注：本轮未改版本号，未提交未推送。
+
 ## 2026-07-01 - Knowledge 与 Documents 硬分流
 
 - 已完成：将 `$oblearn` 固定为只写 `Agent/Knowledge/`，不稳定时进 `Agent/Knowledge/Inbox/`，并只维护 `Agent/Knowledge/_catalog.md`。

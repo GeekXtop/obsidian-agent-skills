@@ -32,7 +32,7 @@ description: 整理和维护 Obsidian 公共知识库 `Agent/Knowledge/` 与文�
 
 整理 `kind: document` 时检查：
 
-- `kind: document`、`source_skill: obdoc`、`doc_type`、`sensitivity`、`status` 是否能说明文档类型和可公开程度。
+- `kind: document`、`source_skill: obdoc`、`use_as`、`doc_type`、`topic`、`sensitivity`、`status` 是否能说明文档类型、用途、主题和可公开程度。
 - 标题、aliases、tags、topic、wikilink、路径和 Inbox 状态是否准确。
 - Documents catalog 是否保留：该文档是否应该作为人类可读文档目录入口登记；含内网拓扑、本地事实或 `sensitivity` 不适合公开复用时，仍可稳定归类并登记到 `Agent/Documents/_catalog.md`，但不登记 `Agent/Knowledge/_catalog.md`。
 - `## 相关` 是否只链接真实主题相关文档。
@@ -107,7 +107,7 @@ obsidian read path="Agent/Documents/<命中文档>.md"
 4. 生成整理计划，先按批量整理分组：稳定归类、保持 Inbox、敏感文档、需要人工判断；再在每组内按动作标明保留、移动、重命名、合并、拆分、修正 metadata、更新 catalog、暂不处理。
 5. 对每个 `kind: document` 计划项标明处理类型：整理 metadata/catalog、保留为文档入口、补充 `sensitivity`，或因不属于本轮范围而暂不处理。
 6. 等待用户按组确认结构性修改；“需要人工判断”和高风险例外必须逐项确认。
-7. 执行确认过的修改；每次修改保持最小范围。
+7. 执行确认过的修改；每次修改保持最小范围。移动前检查路径冲突，确认目标路径目录，并先确保目标目录存在。
 8. 读回被修改的笔记和对应 `_catalog.md`，确认 wikilink、aliases、terms、notes 一致。
 9. 汇报修改过的文件、跳过的建议和需要用户判断的剩余项。
 
@@ -141,12 +141,12 @@ obsidian read path="Agent/Documents/<命中文档>.md"
 - 合并或重命名笔记时，保留旧标题或旧关键词为 `aliases`，避免旧搜索词失效。
 - 删除 stale link 前先确认目标笔记确实不存在或已经被合并。
 
-Documents catalog 可使用更人类友好的 Markdown 目录：
+Documents catalog 可使用更人类友好的 Markdown 目录。展示分组名是人类阅读层，不是固定分类枚举；根据用户或项目既有语言偏好、vault 既有目录风格和文档实际 topic 命名。不要直接复制示例分组名，示例只说明结构。目标路径目录可以使用稳定英文 token 或 vault 既有目录名，展示分组名可以中文优先并保留英文对照。
 
 ```md
-## Network
+## <展示分组名，例如：网络 / Network>
 
-- [[PVE ImmortalWrt 受管子网迁移到 192.168.100]]
+- [[<目标路径目录>/<真实文档标题>|<真实文档标题>]]
   - 类型：文档（`kind: document`）
   - 用途：操作手册（`use_as: runbook`）
   - 敏感度：内部网络细节（`sensitivity: internal-network-details`）

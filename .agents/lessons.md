@@ -68,3 +68,10 @@
 - 经验：当状态已由权威状态载体记录时，memory 只记录下一次 agent 需要接手的载体外信息：未完成事项、载体中没有的决策背景、阻塞、人工确认点或可复用经验。已由载体记录的完成状态放在最终回复说明，不为短暂中间态额外写 memory。
 - 适用场景：维护 `$obclose`、`$obinit` 模板、发版流程、PR/CI/deployment 收尾、ADR/migration/issue/runbook 驱动的任务。
 - 下次检查：`skills/obclose/SKILL.md` 是否仍有“权威状态载体边界”；`skills/obinit/templates/instructions*.md` 是否让新项目继承该规则；`scripts/validate-skills.mjs` 是否校验 `authoritative state carrier memory boundary`。
+
+## 2026-07-01 - skill 示例不要把具体值写成默认值
+
+- 背景：`$obcurate` 的 Documents catalog 示例使用固定 `## Network`，实际整理时 agent 容易直接复制该分组名，和项目中文展示偏好不一致。
+- 经验：skill 示例如果用于说明结构，应优先使用占位符和“如何选择”的规则；只有真实必须保留的 token 才写成具体值。展示分组名、路径目录、标题、别名等上下文相关值要说明来源，例如用户或项目语言偏好、vault 既有风格、frontmatter、topic 或用户确认。
+- 适用场景：维护 `SKILL.md`、模板、catalog 示例、frontmatter 示例和 validator 校验。
+- 下次检查：示例里的具体词是否会被 agent 当默认值复制；必要时改成 `<占位>` + 一个简短例子，并在 `scripts/validate-skills.mjs` 中校验防回归。

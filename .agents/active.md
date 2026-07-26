@@ -2,8 +2,8 @@
 
 ## 当前任务
 
-- 目标：将 `$oblearn` / `$obdoc` 的 Obsidian 产物路径硬分流为 Knowledge 与 Documents，并让 `$obcurate` 同时支持两类整理。
-- 状态：已完成。`$oblearn` 只写入 `Agent/Knowledge/` 并维护公共知识 `_catalog.md`；`$obdoc` 只写入 `Agent/Documents/` 并维护文档 `_catalog.md`；`$obcurate` 默认可同时整理两类 catalog / Inbox，也支持只整理 Knowledge 或只整理 Documents；metadata 保留英文 token，模板和整理计划使用中文展示层。
+- 目标：修正本次 `$obcurate` 产物中的 Documents catalog 展示分组、document metadata，并改进 `$obcurate` 示例避免 agent 直接复制示例分类名。
+- 状态：已完成。Vault 中 `Agent/Documents/_catalog.md` 分组改为 `网络 / Network`；目标文档 frontmatter 增加 `use_as: runbook`、`topic: [network, pve, immortalwrt, subnet-migration]` 并更新日期；`skills/obcurate/SKILL.md` 明确展示分组名按用户或项目语言偏好和 vault 风格命名、移动前先确保目标目录存在；`scripts/validate-skills.mjs` 增加对应校验。
 - 最后更新：2026-07-01
 
 ## 当前状态
@@ -54,6 +54,8 @@
 - 已完成：`Agent/Knowledge/_catalog.md` 定位为公共 agent 自动发现入口；`Agent/Documents/_catalog.md` 定位为人类可读文档目录和显式读取入口。
 - 已完成：`$obcurate` 支持同时整理 Knowledge 和 Documents，也可按用户指定只整理一种；批量分组把旧“建议私有化”改为“敏感文档”，用 `sensitivity` 和读取条件控制复用，不引入 `Agent/Private/`。
 - 已完成：模板和规则统一为机器层保留英文 token、展示层中文化，例如“类型：文档（`kind: document`）”“用途：操作手册（`use_as: runbook`）”。
+- 已完成：`$obcurate` Documents catalog 示例改为占位结构，明确不要直接复制示例分组名；分组展示名按语言偏好、vault 既有风格和文档 topic 决定，路径目录可保持稳定英文 token。
+- 已完成：`$obcurate` document 检查项纳入 `use_as` 和 `topic`，并要求移动前检查目标路径目录、先确保目标目录存在。
 - 进行中：无。
 - 阻塞：无。
 
@@ -91,6 +93,8 @@
 - 绿灯：补齐 `$obcurate` 正文和 `curation-plan.md` 后运行 `npm test`，输出 `All skills are valid.`；`git diff --check` 无输出；旧文案搜索无命中。
 - 红灯：新增 Knowledge/Documents 硬分流、Documents catalog、中文展示层校验后运行 `npm test`，指出 `$oblearn`、`$obdoc`、`$obcurate` 缺少新路径和展示层术语。
 - 绿灯：补齐 `$oblearn`、`$obdoc`、`$obcurate`、`$obinit`、README、模板、命令和 Codex manifest 后运行 `npm test`，输出 `All skills are valid.`；`git diff --check` 无输出。
+- 红灯：新增 `$obcurate` Documents catalog 展示分组策略校验后运行 `npm test`，指出缺少“展示分组名 / 不要直接复制示例分组名 / 根据用户或项目既有语言偏好 / 目标路径目录 / 先确保目标目录存在”。
+- 绿灯：补齐 `$obcurate` 示例和移动前目录规则后运行 `npm test`，输出 `All skills are valid.`；Obsidian 读回 catalog、`use_as`、`topic` 和 catalog link 均正常。
 
 ## 关键文件
 
@@ -115,20 +119,21 @@
 - `skills/obcurate/templates/curation-plan.md`：新增批量分组和高风险例外区块。
 - `skills/obinit/SKILL.md`、`skills/obinit/templates/instructions.md`、`skills/obinit/templates/instructions-index.md`、`skills/obinit/references/obsidian-sync.md`：新增 catalog 命中后的 `kind` / `use_as` 使用语义。
 - `skills/obcurate/templates/catalog-entry.md`：catalog entry 模板新增 `kind` 和 `use_as`。
+- `skills/obcurate/SKILL.md`：Documents catalog 示例改为占位结构，新增展示分组名和目标路径目录规则。
 - `skills/obdoc/templates/document-note.md`：文档模板新增 `tags: []` 和 `use_as`。
 - `skills/oblearn/templates/public-knowledge-note.md`：公共知识模板新增 `use_as`。
 - `skills/obinit/references/init-modes.md`：重复初始化时项目相关知识逐步收敛。
 - `skills/obinit/templates/instructions.md`、`skills/obinit/templates/instructions-index.md`：新增 `项目相关知识` 协议小节。
 - `skills/obclose/SKILL.md`：新增“权威状态载体边界”，定义已有 git commit、tag、PR、CI/CD、release、artifact、ADR、migration、issue/ticket、runbook 承载状态时的 memory 写入范围。
 - `skills/obinit/SKILL.md`、`skills/obinit/references/memory-bank.md`、`skills/obinit/templates/instructions.md`、`skills/obinit/templates/instructions-index.md`：同步新项目和重复初始化继承的通用 memory 边界。
-- `scripts/validate-skills.mjs`：将 release workflow memory boundary 校验替换为 authoritative state carrier memory boundary 校验。
+- `scripts/validate-skills.mjs`：将 release workflow memory boundary 校验替换为 authoritative state carrier memory boundary 校验；新增 `$obcurate` Documents catalog 展示分组策略校验。
 - `Agent/Knowledge/Inbox/Skill 行为规则使用正向 contract.md`：本轮新增公共知识笔记。
 - `Agent/Knowledge/_catalog.md`：新增 `skill-positive-contract` 最小入口。
 
 ## 下一步
 
-1. 用户决定是否提交当前 Knowledge/Documents 分流改动。
-2. 如需实际整理 vault 中已有 PVE 文档，后续用 `$obcurate` 将其从 `Agent/Knowledge/Inbox/` 迁移到 `Agent/Documents/Network/` 并登记 `Agent/Documents/_catalog.md`。
+1. 用户决定是否提交当前 `$obcurate` 示例和 validator 改动。
+2. 如需发布本次修正，后续按既有 release 流程 bump 版本、运行 `npm test`、提交并发插件 tag。
 
 ## 当前 ADR
 
