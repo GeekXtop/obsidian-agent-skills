@@ -2,6 +2,19 @@
 
 本文件只记录阶段性进展摘要，不记录聊天流水。
 
+## 2026-07-27 - 经验验证生命周期落地
+
+- 已完成：按 `docs/superpowers/plans/2026-07-27-experience-verification-lifecycle.md`（spec：`docs/superpowers/specs/2026-07-27-experience-verification-lifecycle-design.md`）完成 Task 1-5，给 lessons 和公共知识补齐“验证方式：/最后验证：/状态：”经验生命周期字段。
+- 已完成：lessons 模板字段升级，`下次检查` → `验证方式：`/`最后验证：`/`状态：`（`skills/obclose/templates/lesson-entry.md`、`skills/obinit/templates/lessons.md`，提交 `0b210fc`）。
+- 已完成：`$obclose` 新增 `## 经验验证` 节，收尾时只验本次相关 lessons 条目、按证据强度分级标注（待复核 `needs-review` / 已退役 `deprecated`）、回写本次使用过公共知识的 `last_verified`（提交 `75edbae`）。
+- 已完成：`$obinit` 生成物（`instructions.md`、`instructions-index.md`、`memory-bank.md`、`obsidian-sync.md`）加入“使用中证伪”协议，根 `.agents/instructions.md` 同步；`skills/obinit/SKILL.md` 因 2000-wordsish 上限本轮未改（提交 `72684af`）。
+- 已完成：`$oblearn` 新增 `## 知识生命周期` 节和模板 frontmatter `last_verified`，明确不重新提取已退役同结论的知识（提交 `cac3167`）。
+- 已完成：`$obcurate` 新增 `## 经验复查与退役` 节和复查候选分组（180 天建议阈值，时间流逝本身不是证伪证据）（提交 `83d1e8f`）。
+- 已完成：`scripts/validate-skills.mjs` 对以上全部新增防回归校验；每个任务均遵循 validator-first TDD（RED → 内容 → GREEN），逐任务证据见 `.superpowers/sdd/2026-07-27-experience-verification-lifecycle/task-{1..5}-report.md`。
+- 已验证：Task 6 终检 `npm test` 输出 `All skills are valid.`；`grep -rn "下次检查" skills/` 只命中 `skills/obclose/SKILL.md:131` 兼容规则一处，无需修复；`git diff --check` 无输出；`git log --oneline -8` 确认六个实现提交（`0b210fc`/`75edbae`/`72684af`/`cac3167`/`83d1e8f`）与 Task 0 提交 `aa07af5` 均存在。
+- 已验证：收尾时对本轮改动触及的 5 条既有 lessons 条目做增量验证（均 grep 复核通过，无证伪证据），回写“最后验证：2026-07-27”；未触及条目保持原 `下次检查` 字段，未批量迁移。
+- 备注：本轮未改版本号，未推送（本地 `main` 领先 `origin/main`）；下一步等用户决定是否发版。任务详情见 `.superpowers/sdd/2026-07-27-experience-verification-lifecycle/`（含 task-0..6 brief/report）。
+
 ## 2026-07-01 - obcurate Documents catalog 示例防复制
 
 - 已完成：修正本次 `$obcurate` 结果，`Agent/Documents/_catalog.md` 的分组从 `Network` 改为 `网络 / Network`，目标文档 frontmatter 增加 `use_as: runbook` 和 `topic: [network, pve, immortalwrt, subnet-migration]`。
