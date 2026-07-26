@@ -446,6 +446,14 @@ const requiredSkillConcepts = {
       name: "memory preservation",
       terms: ["保留原结构", "不要整体重写", "只有发现可复用经验时才更新 `.agents/lessons.md`"],
     },
+    {
+      name: "incremental lesson verification",
+      terms: ["增量验证", "只验证与本次任务相关", "验证方式", "最后验证", "已使用知识", "last_verified", "不批量迁移"],
+    },
+    {
+      name: "evidence-graded deprecation",
+      terms: requiredEvidenceGradedStatusTerms,
+    },
   ],
 };
 
