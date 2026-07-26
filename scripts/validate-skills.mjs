@@ -170,6 +170,21 @@ const requiredAuthoritativeStateCarrierTerms = [
   "最终回复说明",
 ];
 
+const requiredEvidenceGradedStatusTerms = [
+  "按证据强度分级",
+  "直接证伪证据",
+  "needs-review",
+  "deprecated",
+  "待复核",
+  "已退役",
+];
+
+const requiredLessonVerificationFieldTerms = ["验证方式：", "最后验证：", "状态："];
+
+const forbiddenLessonLegacyFieldTerms = ["下次检查"];
+
+const requiredUsageFalsificationTerms = ["使用中证伪", "直接证伪证据", "needs-review", "deprecated", "最后验证"];
+
 const forbiddenObdocWritePolicyPhrases = [
   "长文写入",
   "不把整篇 Markdown",
@@ -781,6 +796,17 @@ if (!existsSync(skillsDir)) {
           if (missingAuthoritativeStateCarrier.length > 0) {
             fail(`${skillName}: template ${template} must include authoritative state carrier memory boundary terms: ${missingAuthoritativeStateCarrier.join(", ")}`);
           }
+        }
+
+        if ((skillName === "obclose" && template === "lesson-entry.md") || (skillName === "obinit" && template === "lessons.md")) {
+          for (const term of requiredLessonVerificationFieldTerms) {
+            if (!content.includes(term)) {
+              fail(`${skillName}: template ${template} must include lesson verification field: ${term}`);
+            }
+          }
+          assertNoPhrases(`${skillName}: template ${template}`, content, forbiddenLessonLegacyFieldTerms, (phrase) => {
+            return `must use 验证方式/最后验证/状态 fields instead of legacy field: ${phrase}`;
+          });
         }
 
         if (skillName === "oblearn" && template === "public-knowledge-note.md") {
