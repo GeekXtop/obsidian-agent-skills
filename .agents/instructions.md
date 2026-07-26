@@ -37,7 +37,7 @@ Obsidian 项目笔记：`Agent/Projects/obsidian-agent-skills.md`。
 - 完成实质代码/文档改动、阶段性验证或复杂任务暂停时，按 `$obclose` 收尾。
 - 有明确里程碑时更新 `.agents/progress.md`。
 - 只有可复用经验才更新 `.agents/lessons.md`。
-- 使用 lessons 经验或公共知识时发现与当前证据矛盾，按证据强度分级执行使用中证伪：有直接证伪证据（检查实际执行且失败、引用对象已不存在）就地标已退役（`deprecated`）并附证据；仅怀疑、无直接证据时标待复核（`needs-review`）并附理由；正常使用不强制回写，由 `$obclose` 收尾时统一更新 `最后验证` / `last_verified`。
+- 使用 lessons 经验或公共知识时发现与当前证据矛盾，按证据强度分级执行使用中证伪：有直接证伪证据（检查实际执行且失败、引用对象已不存在）就地标已退役（`deprecated`）并附证据；仅怀疑、无直接证据时标待复核（`needs-review`）并附理由；正常使用不强制回写，由 `$obclose` 收尾时统一更新 `最后验证` / `last_verified`。`.agents/lessons.md` 中 `状态` 为已退役（`deprecated`）或待复核（`needs-review`）的条目不作为有效经验使用，已退役条目只作为反例背景。
 - 当状态已由权威状态载体记录时（git commit、tag、PR、CI/CD、release、artifact、ADR、migration、issue/ticket、runbook），`.agents/active.md` / `.agents/progress.md` 只记录下一次 agent 需要接手的未完成事项、不在权威载体中的决策背景、阻塞或人工确认点；不记录短暂中间态，已完成状态在最终回复说明。
 - `.agents/archive/` 保存过长 `progress.md` 的历史归档，应提交。
 - 长期项目决策写入 `docs/adr/`。

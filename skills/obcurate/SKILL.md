@@ -106,7 +106,7 @@ obsidian read path="Agent/Documents/<命中文档>.md"
 复查候选有三类：待复核（`needs-review`）笔记、已退役（`deprecated`）待删除笔记、长期未验证笔记（`last_verified` 距今超过阈值；建议默认 180 天，可按用户偏好调整）。
 
 - `needs-review` 逐项给用户裁决：恢复 `active`、标 `deprecated` 或修正内容。
-- `deprecated` 笔记可列入删除建议组，按组确认后删除；确认删除时同步清理 `Agent/Knowledge/_catalog.md` 对应入口和 `notes` 链接。
+- `deprecated` 笔记可列入删除建议组，逐项确认后删除；确认删除时同步清理 `Agent/Knowledge/_catalog.md` 对应入口和 `notes` 链接。
 - 未删除的 `deprecated` 笔记默认从 catalog `terms` 移除入口或在 `notes` 标注已退役，防止被自动发现命中；保留正文和 `## 退役` 小节作为反例背景。
 - 长期未验证但无矛盾证据的笔记只列“待验证”建议，不自动降级；时间流逝本身不是证伪证据。
 - 项目内 `.agents/lessons.md` 的验证和退役标注属于 `$obclose`；其已退役条目的删除遵循 `$obclose` 的确认后维护规则，不在本 skill 默认范围。

@@ -8,7 +8,7 @@
 
 ## 当前状态
 
-- 已完成：六个实现提交 `0b210fc`（lesson 模板字段升级）→ `75edbae`（obclose 增量验证）→ `72684af`（obinit 使用中证伪协议）→ `cac3167`（oblearn 知识生命周期）→ `83d1e8f`（obcurate 复查与退役 GC），加上 `aa07af5`（进入本计划前的上一任务收尾提交）。逐任务实现细节见 `.superpowers/sdd/2026-07-27-experience-verification-lifecycle/task-{0..6}-report.md`，不在此重复。
+- 已完成：六个实现提交 `0b210fc`（lesson 模板字段升级）→ `75edbae`（obclose 增量验证）→ `72684af`（obinit 使用中证伪协议）→ `cac3167`（oblearn 知识生命周期）→ `83d1e8f`（obcurate 复查与退役 GC），加上 `aa07af5`（进入本计划前的上一任务收尾提交）。过程记录在本机 `.superpowers/sdd/2026-07-27-experience-verification-lifecycle/`（git-ignored，仅本机可见）；git 内证据为上述六个实现提交、spec 和 plan。
 - 进行中：无。
 - 阻塞：无。
 
@@ -31,7 +31,7 @@
 
 - Plan：`docs/superpowers/plans/2026-07-27-experience-verification-lifecycle.md`
 - Spec：`docs/superpowers/specs/2026-07-27-experience-verification-lifecycle-design.md`
-- Task briefs/reports：`.superpowers/sdd/2026-07-27-experience-verification-lifecycle/`（`task-0-brief.md` ~ `task-6-brief.md` 及对应 `-report.md`）
+- Task briefs/reports：本机 `.superpowers/sdd/2026-07-27-experience-verification-lifecycle/`（`task-0-brief.md` ~ `task-6-brief.md` 及对应 `-report.md`，git-ignored，仅本机可见）
 - `skills/obclose/templates/lesson-entry.md`、`skills/obinit/templates/lessons.md`：lessons 新字段模板。
 - `skills/obclose/SKILL.md`：`## 经验验证` 节 + 增量验证工作流步骤。
 - `skills/obinit/templates/instructions.md`、`instructions-index.md`、`references/memory-bank.md`、`references/obsidian-sync.md`、`.agents/instructions.md`：使用中证伪协议。

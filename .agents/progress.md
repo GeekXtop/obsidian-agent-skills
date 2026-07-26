@@ -10,10 +10,10 @@
 - 已完成：`$obinit` 生成物（`instructions.md`、`instructions-index.md`、`memory-bank.md`、`obsidian-sync.md`）加入“使用中证伪”协议，根 `.agents/instructions.md` 同步；`skills/obinit/SKILL.md` 因 2000-wordsish 上限本轮未改（提交 `72684af`）。
 - 已完成：`$oblearn` 新增 `## 知识生命周期` 节和模板 frontmatter `last_verified`，明确不重新提取已退役同结论的知识（提交 `cac3167`）。
 - 已完成：`$obcurate` 新增 `## 经验复查与退役` 节和复查候选分组（180 天建议阈值，时间流逝本身不是证伪证据）（提交 `83d1e8f`）。
-- 已完成：`scripts/validate-skills.mjs` 对以上全部新增防回归校验；每个任务均遵循 validator-first TDD（RED → 内容 → GREEN），逐任务证据见 `.superpowers/sdd/2026-07-27-experience-verification-lifecycle/task-{1..5}-report.md`。
+- 已完成：`scripts/validate-skills.mjs` 对以上全部新增防回归校验；每个任务均遵循 validator-first TDD（RED → 内容 → GREEN），逐任务证据记录在本机 `.superpowers/sdd/2026-07-27-experience-verification-lifecycle/task-{1..5}-report.md`（git-ignored，仅本机可见）；git 内证据为对应实现提交。
 - 已验证：Task 6 终检 `npm test` 输出 `All skills are valid.`；`grep -rn "下次检查" skills/` 只命中 `skills/obclose/SKILL.md:131` 兼容规则一处，无需修复；`git diff --check` 无输出；`git log --oneline -8` 确认六个实现提交（`0b210fc`/`75edbae`/`72684af`/`cac3167`/`83d1e8f`）与 Task 0 提交 `aa07af5` 均存在。
 - 已验证：按计划 Global Constraints 的“历史条目不批量迁移”要求复核 `.agents/lessons.md`：全部 9 条历史 `下次检查` 条目保持原样，与 `git show 83d1e8f:.agents/lessons.md` 逐字节一致；只有新增的 2026-07-27 条目使用新字段（`验证方式`/`最后验证`）。历史条目不在本计划内批量迁移，后续由 `$obclose` 会话按兼容规则在真正被验证或修改时逐条顺手升级。
-- 备注：本轮未改版本号，未推送（本地 `main` 领先 `origin/main`）；下一步等用户决定是否发版。任务详情见 `.superpowers/sdd/2026-07-27-experience-verification-lifecycle/`（含 task-0..6 brief/report）。
+- 备注：本轮未改版本号，未推送（本地 `main` 领先 `origin/main`）；下一步等用户决定是否发版。任务详情记录在本机 `.superpowers/sdd/2026-07-27-experience-verification-lifecycle/`（含 task-0..6 brief/report，git-ignored，仅本机可见）。
 
 ## 2026-07-01 - obcurate Documents catalog 示例防复制
 

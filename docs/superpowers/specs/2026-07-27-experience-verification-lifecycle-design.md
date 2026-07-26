@@ -27,7 +27,7 @@
 active(默认,无标注;验证通过只更新"最后验证"日期,仍是 active)
   → needs-review(AI 怀疑过时但无直接证据;等人裁决,可恢复 active)
   → deprecated(有直接证伪证据,或人工裁决;召回时跳过)
-  → 删除(仅 $obcurate 批量执行,需用户确认)
+  → 删除(Obsidian 公共知识删除归 $obcurate 批量执行,需用户确认;lessons 条目删除遵循 $obclose 确认后维护)
 ```
 
 规则:
@@ -36,7 +36,7 @@ active(默认,无标注;验证通过只更新"最后验证"日期,仍是 active)
 - `verified` 通过在条目上更新"最后验证"日期表达,不引入独立状态词。
 - `needs-review` → `deprecated` 或回到 `active`,由人裁决(通常在 `$obcurate` 批次中)。
 - `deprecated` 条目保留原文,追加一行退役原因、证据和日期;召回时跳过,不作为经验使用,但可作为"此路不通"的反例被读到。
-- 删除是结构性操作,归 `$obcurate`,需用户确认——与既有"默认不删除内容"规则一致。
+- 删除是结构性操作,需用户确认:Obsidian 公共知识删除归 `$obcurate`,`.agents/lessons.md` 条目删除遵循 `$obclose` 确认后维护——与既有"默认不删除内容"规则一致。
 
 ## 载体格式
 
@@ -96,7 +96,7 @@ lesson-entry 模板从"下次检查"升级为可执行的验证契约:
 
 - 复查候选:`needs-review` 条目、`deprecated` 待删除条目、长期未验证条目(`last_verified`/`最后验证` 超过阈值,建议默认 180 天,作为建议值写入 skill 而非硬编码)。
 - `needs-review` 逐项给人裁决:恢复 active、标 deprecated、或修正内容。
-- `deprecated` 条目在复查时即可列入删除建议组(不设额外保留期,是否删除本就由人按组裁决);确认删除后同时清理 catalog 入口。
+- `deprecated` 条目在复查时即可列入删除建议组(不设额外保留期,逐项确认后删除);确认删除后同时清理 catalog 入口。
 - 长期未验证但无矛盾证据的条目:列为"待验证"建议,不自动降级——时间流逝本身不是证伪证据。
 
 ## 校验(validate-skills.mjs)
