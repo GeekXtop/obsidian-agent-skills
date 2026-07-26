@@ -436,6 +436,10 @@ const requiredSkillConcepts = {
       name: "privacy-preserving curation",
       terms: ["不写 secret", "本地事实", "脱敏"],
     },
+    {
+      name: "experience review and retirement",
+      terms: ["复查候选", "needs-review", "deprecated", "长期未验证", "180 天", "逐项", "删除建议", "清理", "时间流逝本身不是证伪证据", "待验证"],
+    },
   ],
   obclose: [
     {
@@ -882,7 +886,7 @@ if (!existsSync(skillsDir)) {
         }
 
         if (skillName === "obcurate" && template === "curation-plan.md") {
-          for (const term of ["批量分组", "按组确认", "高风险例外", "稳定归类", "保持 Inbox", "敏感文档", "需要人工判断"]) {
+          for (const term of ["批量分组", "按组确认", "高风险例外", "稳定归类", "保持 Inbox", "敏感文档", "需要人工判断", "复查候选", "needs-review", "deprecated", "长期未验证", "逐项确认"]) {
             if (!content.includes(term)) {
               fail(`${skillName}: template ${template} must include batch curation term: ${term}`);
             }

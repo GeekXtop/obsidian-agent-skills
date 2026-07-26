@@ -15,6 +15,7 @@ description: 整理和维护 Obsidian 公共知识库 `Agent/Knowledge/` 与文�
 - 清理 `Agent/Documents/Inbox/`，把文档、runbook、guide、reference、evidence 和 troubleshooting 按文档主题稳定归类。
 - 修正公共知识笔记和文档的 `title`、`aliases`、tags、`platform`、`topic`、`kind`、`source_skill`、`doc_type`、wikilink 和脱敏状态。
 - 合并重复主题，拆分过长或适用范围混杂的笔记。
+- 复查经验生命周期：批量复核待复核（`needs-review`）笔记、提出已退役（`deprecated`）删除建议、提示长期未验证条目。
 - 按路径和 metadata 区分短经验知识与面向人类实践的可阅读、可执行文档：`Agent/Knowledge/` 对应 `kind: knowledge` / `source_skill: oblearn`，`Agent/Documents/` 对应 `kind: document` / `source_skill: obdoc`。
 - 产物是整理计划、metadata/catalog/wikilink/path 调整和 sensitivity 建议。
 - 不从当前项目 memory 提取新经验；需要提取时改用 `$oblearn`。
@@ -90,6 +91,7 @@ obsidian read path="Agent/Documents/<命中文档>.md"
 | 稳定归类 | metadata 完整，topic、路径和 catalog 策略清楚，适合移出 Inbox 或纳入稳定主题 | 按组确认 |
 | 保持 Inbox | topic、sensitivity、复用价值或分类仍不稳定 | 按组确认保持现状 |
 | 敏感文档 | 包含本地事实、内网拓扑、账号线索或不适合公共 Knowledge catalog 的文档 | 按组确认保留在 `Agent/Documents/`，补充 `sensitivity` 和读取条件 |
+| 复查候选 | `needs-review` 待裁决、`deprecated` 待删除、长期未验证（超过建议阈值） | `needs-review` 和删除逐项确认；待验证提示按组确认 |
 | 需要人工判断 | 合并、拆分、删除、跨主题迁移、公共范围变化较大，或判断依据不足 | 列出高风险例外，逐项确认 |
 
 执行规则：
@@ -98,6 +100,16 @@ obsidian read path="Agent/Documents/<命中文档>.md"
 - 结构性修改仍需等待用户确认，但确认单位优先是分组；用户也可以只批准某些分组。
 - 对同组条目使用同一处理策略；组内出现路径冲突、敏感信息、catalog 删除、合并目标不清等情况时，把该项移到“需要人工判断”。
 - 用户没有回应批量计划时，不执行移动、重命名、合并、拆分、删除或批量 catalog 更新。
+
+## 经验复查与退役
+
+复查候选有三类：待复核（`needs-review`）笔记、已退役（`deprecated`）待删除笔记、长期未验证笔记（`last_verified` 距今超过阈值；建议默认 180 天，可按用户偏好调整）。
+
+- `needs-review` 逐项给用户裁决：恢复 `active`、标 `deprecated` 或修正内容。
+- `deprecated` 笔记可列入删除建议组，按组确认后删除；确认删除时同步清理 `Agent/Knowledge/_catalog.md` 对应入口和 `notes` 链接。
+- 未删除的 `deprecated` 笔记默认从 catalog `terms` 移除入口或在 `notes` 标注已退役，防止被自动发现命中；保留正文和 `## 退役` 小节作为反例背景。
+- 长期未验证但无矛盾证据的笔记只列“待验证”建议，不自动降级；时间流逝本身不是证伪证据。
+- 项目内 `.agents/lessons.md` 的验证和退役标注属于 `$obclose`；其已退役条目的删除遵循 `$obclose` 的确认后维护规则，不在本 skill 默认范围。
 
 ## 工作流
 

@@ -12,6 +12,7 @@
 | 稳定归类 | <数量> | <1-3 个笔记、文档或 catalog 条目> | <metadata、topic、路径和 catalog 策略清楚> | <移动、修正 metadata、更新 catalog 等> | 按组确认 |
 | 保持 Inbox | <数量> | <1-3 个笔记或 catalog 条目> | <topic、sensitivity、复用价值或分类仍不稳定> | <保持 Inbox 或补充判断依据> | 按组确认 |
 | 敏感文档 | <数量> | <1-3 个文档或 Documents catalog 条目> | <含本地事实、内网拓扑或不适合公共 Knowledge catalog> | <保留在 Agent/Documents/，标注 sensitivity 和读取条件> | 按组确认 |
+| 复查候选 | <数量> | <needs-review、deprecated 待删除或长期未验证笔记> | <status、最后验证与当前证据的差距> | <恢复 active、标 deprecated、删除并清理 catalog、列待验证提示> | needs-review 和删除逐项确认 |
 | 需要人工判断 | <数量> | <逐项列出> | <合并、拆分、删除、跨主题迁移或公共范围变化较大> | <等待用户选择> | 高风险例外逐项确认 |
 
 ## 高风险例外
