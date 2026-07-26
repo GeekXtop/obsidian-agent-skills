@@ -32,24 +32,21 @@
 - 背景：`$obdoc` 生成 Markdown 文档时，如果通过命令参数传输正文，内容里的换行、引号、反斜杠、中文和代码块可能破坏 Obsidian 端 IPC JSON。
 - 经验：面向 Obsidian 的 Markdown 写入统一使用 vault 文件；根据目标 `path` 确定 vault 本地文件系统路径，将完整 Markdown 写入或更新对应 `.md` 文件。CLI 用于查找、读取和写入后读回校验。
 - 适用场景：维护 `$oblearn`、`$obdoc`、调整 Obsidian 写入流程、排查 `SyntaxError ... is not valid JSON` 这类 CLI/IPC 写入错误。
-- 验证方式：`grep -n "Obsidian Markdown 写入\|统一使用 vault 文件\|文件写入\|本地文件系统路径\|写入后读回" skills/oblearn/SKILL.md skills/obdoc/SKILL.md`，并确认 `scripts/validate-skills.mjs` 仍覆盖同批术语。
-- 最后验证：2026-07-27 五个术语在 `skills/oblearn/SKILL.md`、`skills/obdoc/SKILL.md` 中均仍存在；validator 对应 term 数组未被移除（本轮 cac3167 只给 oblearn 新增“知识生命周期”节，未触碰写入规则）。
+- 下次检查：`skills/oblearn/SKILL.md` 和 `skills/obdoc/SKILL.md` 是否仍包含“Obsidian Markdown 写入 / 统一使用 vault 文件 / 文件写入 / 本地文件系统路径 / 写入后读回”；校验脚本是否继续覆盖这些术语并禁止旧写入措辞。
 
 ## 2026-06-30 - Skill 行为规则优先写正向 contract
 
 - 背景：`$obdoc` 写入规则最初用“不要把整篇 Markdown 作为 CLI 参数，也不要分段 append”描述，用户指出这仍围绕错误路径展开，而且范围应覆盖 `$oblearn` / `$obdoc` 的 Obsidian Markdown 写入。
 - 经验：写 skill 行为规则时，先给正向 contract：产物是什么、输入来自哪里、执行路径是什么、验证证据是什么。禁令适合 secret、隐私、权限、全库扫描等安全边界；字段来源、模板填写、写入路径、相关链接等行为形状应优先写成正向步骤或输出约束。
 - 适用场景：维护 `SKILL.md`、命令入口、模板说明、校验脚本和 agent 工作约定。
-- 验证方式：对本轮新增协议文本（`git diff aa07af5..83d1e8f -- skills/ scripts/`）搜索“不要为了”“不把...改成”“不要用...替代”这类反向表述，确认无命中。
-- 最后验证：2026-07-27 Task 1-5（`aa07af5..83d1e8f`）新增的经验验证生命周期协议文本无命中，延续正向 contract 写法。
+- 下次检查：遇到“不要为了...”“不把...改成...”“不要用...替代...”这类表述时，先判断是否为安全边界；如果是行为塑造，改为正向 contract，并在 `scripts/validate-skills.mjs` 中同时检查正向术语和禁止旧措辞回归。
 
 ## 2026-06-30 - obcurate 整理 document 以实践文档为一等产物
 
 - 背景：一次 `$obcurate` 计划把三件事混在一起：整理已有 `kind: document`、从 document 正文抽取新经验、以及判断含内网拓扑的文档是否能作为公共经验传播。后续对 PVE 既有指南复核后，确认实践文档本身就是一等知识库产物。
 - 经验：`$obcurate` 可以整理 `kind: document` / `source_skill: obdoc`，目标是让实践文档稳定归类、可发现、可读、可执行，并处理 metadata/catalog/wikilink/path、`sensitivity` 和相关链接。文档进入 `Agent/Documents/`，敏感但稳定的文档也用 `sensitivity` 和读取条件控制复用，不再引入单独 Private 路径；文档里的“可提取知识候选”只作为 `$oblearn` 线索，不在 `$obcurate` 中直接转成短经验知识。
 - 适用场景：维护 `$obcurate`、清理 `Agent/Documents/Inbox/`、处理 `source_skill: obdoc` 文档、修正 `Agent/Documents/_catalog.md` stale link 或含本地事实的文档入口。
-- 验证方式：`grep -n "可提取知识候选" skills/obcurate/SKILL.md`，确认仍是“只作为 `$oblearn` 线索，不直接转成短经验知识”的表述。
-- 最后验证：2026-07-27 该行仍在 `skills/obcurate/SKILL.md`（本轮 83d1e8f 新增“经验复查与退役”节，未改动此边界）。
+- 下次检查：看到 `kind: document` 时先判断本轮范围；稳定但敏感的文档不要长期留在 Inbox，应有 `Agent/Documents/` 稳定路径和明确 `sensitivity`；不要把 `## 可提取知识候选` 直接转成短经验知识。
 
 ## 2026-06-30 - catalog 需要表达查到后怎么用
 
@@ -63,16 +60,14 @@
 - 背景：首次 `$obinit` 时项目类型可能还没定型；把公共知识发现放到日常每次任务里又太复杂，放进当前项目 `.agents/lessons.md` 也无法跨项目生效。
 - 经验：`$obinit` 应提供跨项目的渐进绑定机制：第一次初始化只建立 catalog 查询协议，不预填弱相关知识；重复初始化时根据项目结构、README、package metadata、docs 顶层索引和 agent memory 判断项目类型，按 `unknown` / `candidate` / `confirmed` 三档处理。只有 `confirmed` 才回写高置信公共知识链接，`candidate` 只列建议。
 - 适用场景：维护 `$obinit`、设计跨项目公共知识发现机制、处理项目从空仓库逐渐成型后的知识入口补全。
-- 验证方式：`grep -n "只回写链接" skills/obinit/templates/instructions.md skills/obinit/templates/instructions-index.md skills/obinit/references/obsidian-sync.md`，并确认 `scripts/validate-skills.mjs` 仍含 `unknown` / `candidate` / `confirmed` 术语。
-- 最后验证：2026-07-27 三个文件均仍有“只回写链接和简短 `kind` / `use_as`，不复制公共知识正文”；validator 仍校验三档术语（本轮 72684af 只新增使用中证伪协议，未改动此规则）。
+- 下次检查：`skills/obinit/SKILL.md`、`templates/instructions*.md` 和 `references/obsidian-sync.md` 是否仍说明“只回写链接和 `kind` / `use_as`，不复制公共知识正文”；校验脚本是否覆盖 `unknown` / `candidate` / `confirmed`。
 
 ## 2026-07-01 - memory 只补权威状态载体外的信息
 
 - 背景：发版过程中如果在 commit/tag/push 前后反复更新 `.agents/active.md` / `.agents/progress.md`，会制造额外提交尾巴；类似问题也会出现在 PR、CI/CD、ADR、migration、issue 或 runbook 等已经承载状态的流程里。
 - 经验：当状态已由权威状态载体记录时，memory 只记录下一次 agent 需要接手的载体外信息：未完成事项、载体中没有的决策背景、阻塞、人工确认点或可复用经验。已由载体记录的完成状态放在最终回复说明，不为短暂中间态额外写 memory。
 - 适用场景：维护 `$obclose`、`$obinit` 模板、发版流程、PR/CI/deployment 收尾、ADR/migration/issue/runbook 驱动的任务。
-- 验证方式：`grep -n "权威状态载体边界" skills/obclose/SKILL.md`；`grep -rn "权威状态载体" skills/obinit/templates/instructions.md skills/obinit/templates/instructions-index.md`；`grep -n "authoritative state carrier" scripts/validate-skills.mjs`。
-- 最后验证：2026-07-27 三处检查均命中（本轮 75edbae 为 obclose 新增“经验验证”节、72684af 为 obinit 新增使用中证伪协议，均未削弱此边界；本次 Task 6 收尾也在遵循该边界）。
+- 下次检查：`skills/obclose/SKILL.md` 是否仍有“权威状态载体边界”；`skills/obinit/templates/instructions*.md` 是否让新项目继承该规则；`scripts/validate-skills.mjs` 是否校验 `authoritative state carrier memory boundary`。
 
 ## 2026-07-01 - skill 示例不要把具体值写成默认值
 

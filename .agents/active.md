@@ -25,7 +25,7 @@
   - `grep -rn "下次检查" skills/` → 唯一命中 `skills/obclose/SKILL.md:131`（既有兼容规则行），符合预期，无需修复。
   - `git diff --check`（未提交内容）→ 无输出。
   - `git log --oneline -8` → 六个实现提交 + Task 0 提交 `aa07af5` + plan/spec 提交（`b96e917`/`05a07f9`）均存在。
-- 已验证（收尾时对相关 lessons 条目做的增量验证，见 `.agents/lessons.md` 对应条目的“最后验证”）：本轮改动触及的 5 条既有经验（Obsidian 写入约定、正向 contract 写法、obcurate document 边界、obinit 渐进回写、memory 权威状态载体边界）逐一 grep 复核，均未发现证伪证据，`最后验证` 已回写为 2026-07-27；未触及的条目保持原 `下次检查` 字段，未批量迁移。
+- 已核实：按计划 Global Constraints 的“历史条目不批量迁移”要求，`.agents/lessons.md` 全部 9 条历史 `下次检查` 条目保持原样，与 `git show 83d1e8f:.agents/lessons.md` 逐字节一致；只有新增的 2026-07-27 条目使用新字段（`验证方式`/`最后验证`）。历史条目保持旧字段不迁移，由后续 `$obclose` 会话按兼容规则在真正被触及时逐条顺手升级。
 
 ## 关键文件
 
