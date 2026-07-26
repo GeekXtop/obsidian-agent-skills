@@ -29,6 +29,7 @@ Obsidian 只承担三件事：
 - 仅在用户明确要求、catalog 的 `terms` / `aliases` 命中任务关键词，或风险较高且关键词明确时，在 `Agent/Knowledge/` 做有限关键词定向搜索。
 - 只有命中相关笔记后才明确读取并使用。
 - 读取 Knowledge catalog 命中项时看 `kind` 和 `use_as`：`kind: knowledge` / `use_as: rule`、`checklist` 或 `heuristic` 这类公共经验可以作为规则、检查清单或启发式判断。
+- 命中笔记 `status` 为 `deprecated` 或 `needs-review` 时不作为有效经验使用；已退役笔记只作为“此路不通”的反例背景。使用中发现知识与当前证据矛盾时，按证据强度分级更新该笔记状态；正常使用的由 `$obclose` 收尾时回写 `last_verified`。
 - `Agent/Documents/_catalog.md` 是文档目录；只有用户明确指定、任务明确涉及文档主题，或执行 `$obdoc` / `$obcurate` 文档流程时才读取。文档可能保留当前环境值，读取后要理解上下文并替换本地参数，不能把正文里的当前环境值直接当公共经验。
 - 不全量自动加载公共知识，不扫描整个 vault。
 

@@ -667,6 +667,21 @@ if (!existsSync(skillsDir)) {
           assertNoPhrases(`${skillName}: ${relativePath}`, referenceContent, forbiddenNonstandardAgentTempPaths, (phrase) => {
             return `must not use nonstandard agent temp path: ${phrase}`;
           });
+
+          if (relativePath === "references/memory-bank.md") {
+            const missing = requiredUsageFalsificationTerms.filter((term) => !referenceContent.includes(term));
+            if (missing.length > 0) {
+              fail(`${skillName}: ${relativePath} must include usage-time falsification terms: ${missing.join(", ")}`);
+            }
+          }
+
+          if (relativePath === "references/obsidian-sync.md") {
+            for (const term of ["deprecated", "needs-review", "last_verified", "反例"]) {
+              if (!referenceContent.includes(term)) {
+                fail(`${skillName}: ${relativePath} must include knowledge status handling term: ${term}`);
+              }
+            }
+          }
         }
       }
 
@@ -803,6 +818,11 @@ if (!existsSync(skillsDir)) {
           const missingAuthoritativeStateCarrier = requiredAuthoritativeStateCarrierTerms.filter((term) => !content.includes(term));
           if (missingAuthoritativeStateCarrier.length > 0) {
             fail(`${skillName}: template ${template} must include authoritative state carrier memory boundary terms: ${missingAuthoritativeStateCarrier.join(", ")}`);
+          }
+
+          const missingUsageFalsification = requiredUsageFalsificationTerms.filter((term) => !content.includes(term));
+          if (missingUsageFalsification.length > 0) {
+            fail(`${skillName}: template ${template} must include usage-time falsification terms: ${missingUsageFalsification.join(", ")}`);
           }
         }
 
