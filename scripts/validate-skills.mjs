@@ -327,6 +327,10 @@ const requiredSkillConcepts = {
       terms: ["已有公共知识维护", "最小修改", "aliases", "修正 wikilink", "可发现性"],
     },
     sharedObsidianMarkdownWritePolicy,
+    {
+      name: "knowledge lifecycle status",
+      terms: ["知识生命周期", "last_verified", "needs-review", "deprecated", "## 退役", "退役原因", "替代笔记", "反例", "不重新提取", "按证据强度分级", "直接证伪证据"],
+    },
   ],
   obdoc: [
     {
@@ -838,7 +842,7 @@ if (!existsSync(skillsDir)) {
         }
 
         if (skillName === "oblearn" && template === "public-knowledge-note.md") {
-          for (const term of ["kind: knowledge", "source_skill: oblearn"]) {
+          for (const term of ["kind: knowledge", "source_skill: oblearn", "last_verified:"]) {
             if (!content.includes(term)) {
               fail(`${skillName}: template ${template} must include ${term}`);
             }

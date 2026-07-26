@@ -11,6 +11,7 @@ tags:
   - agent/knowledge
 sensitivity: sanitized
 status: draft
+last_verified: YYYY-MM-DD
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 ---

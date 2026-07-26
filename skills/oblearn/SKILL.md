@@ -120,6 +120,7 @@ git log -5 --oneline
 - 未验证猜测。
 - 大段 spec/plan 原文。
 - secret、账号、密钥、客户数据、隐私信息。
+- 与已退役（`deprecated`）笔记同结论的经验。
 
 ## 输出目标
 
@@ -157,6 +158,15 @@ Agent/Knowledge/Inbox/<简短主题>.md
 ```
 
 `kind` 表示命中对象的类型，`use_as` 表示查到后怎么用。`oblearn` 写入的是 `kind: knowledge`；常见 `use_as` 是 `rule`、`checklist` 或 `heuristic`。机器层使用英文 token，中文展示用于正文、计划和完成说明，例如“类型：知识（`kind: knowledge`）”“用途：检查清单（`use_as: checklist`）”。最小明确更新 catalog 时只使用真实笔记标题、已有 frontmatter、用户确认的别名或本次知识的明确关键词。无法判断时，不登记，只列出维护建议并交给 `$obcurate`。
+
+## 知识生命周期
+
+公共知识笔记用 frontmatter `status` 表示生命周期：`draft` 表示未稳定归类，`active` 表示默认可用，`needs-review` 表示待复核（有怀疑但无直接证据），`deprecated` 表示已退役（有直接证伪证据或人工裁决）。`last_verified: YYYY-MM-DD` 记录最近一次真实使用验证；缺失时按 `created` / `updated` 推断新旧，不批量回填。
+
+- 已退役笔记保留原文，在正文顶部追加 `## 退役` 小节：退役原因、证据、日期和（如有）替代笔记的 wikilink。
+- 检索命中 `deprecated` 或 `needs-review` 笔记时不作为有效经验使用；退役记录只作为“此路不通”的反例背景。
+- 候选知识与已退役笔记同结论时不重新提取为有效经验；如有新证据推翻退役结论，先列出复核建议等用户裁决。
+- `status` 变更按证据强度分级：有直接证伪证据可标 `deprecated` 并附证据；仅怀疑标 `needs-review`；批量复查、恢复裁决和删除属于 `$obcurate`。
 
 ## Tags
 
