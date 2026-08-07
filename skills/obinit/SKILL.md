@@ -21,7 +21,7 @@ node <skill>/scripts/inspect-project.mjs <project-root>
 3. 读取 `AGENTS.md`、`CLAUDE.md`、`.agents/instructions.md`、`README.md` 和 package metadata；对 `docs/` 只检查 docs 顶层信号和索引。
 4. 只在 allowlist 内创建或更新：`AGENTS.md`、`CLAUDE.md`、`.agents/`、`docs/adr/`，以及 `.gitignore` 的 `.agents/scratch/` 条目。
 5. 选择模板、合并已有内容、写入项目 memory。
-6. 如果 Obsidian CLI 可用且 Obsidian 已打开，创建或更新 `Agent/Projects/<project>.md`。
+6. 按 `references/obsidian-sync.md` 的 vault 文件写入契约创建或更新 `Agent/Projects/<project>.md`。
 7. 读回更新过的项目文件；完成后必须读回 Obsidian 项目笔记。
 
 ## 初始化模式选择

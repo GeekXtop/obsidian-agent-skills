@@ -44,6 +44,16 @@ description: 整理和维护 Obsidian 公共知识库 `Agent/Knowledge/` 与文�
 
 整理计划必须按用户点名范围裁剪。如果某个文档不属于本轮范围，计划中写明“暂不处理”，并说明只在 Inbox 或 catalog 整理范围内检查 metadata/catalog。
 
+## Obsidian vault 写入契约
+
+所有 Obsidian Markdown mutation，包括创建、覆盖、追加、局部修改、frontmatter、catalog 或项目笔记更新，以及移动和重命名，都直接操作 vault 本地文件系统。
+
+`obsidian` CLI 只用于 vault 定位、有限搜索、读取和写入后读回校验。
+
+不得以 `obsidian create`、`obsidian append`、`obsidian prepend`、`obsidian property:set`、`obsidian move`、`obsidian rename` 或 `content=` 作为写入或回退路径。
+
+无法解析 vault 本地路径时，请用户提供或确认目标 vault 的本地文件系统路径，再执行文件操作。
+
 ## 默认行为
 
 用户只说 `$obcurate` 或“整理公共知识”时，按安全默认值执行：

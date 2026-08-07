@@ -111,9 +111,13 @@ obsidian read path="<明确命中的文档路径>"
 
 ## Obsidian 写入
 
-Obsidian Markdown 写入统一使用 vault 文件：根据目标 `path` 确定 vault 本地文件系统路径，将生成后的完整 Markdown 写入或更新对应 `.md` 文件。新建、覆盖和局部更新都走文件写入路径。
+所有 Obsidian Markdown mutation，包括创建、覆盖、追加、局部修改、frontmatter、catalog 或项目笔记更新，以及移动和重命名，都直接操作 vault 本地文件系统。
 
-`obsidian` CLI 用于查找、读取和写入后读回校验。无法确定目标 vault 的本地文件系统路径时，先说明需要目标 vault 路径或让用户确认可写位置，再执行文件写入。
+`obsidian` CLI 只用于 vault 定位、有限搜索、读取和写入后读回校验。
+
+不得以 `obsidian create`、`obsidian append`、`obsidian prepend`、`obsidian property:set`、`obsidian move`、`obsidian rename` 或 `content=` 作为写入或回退路径。
+
+无法解析 vault 本地路径时，请用户提供或确认目标 vault 的本地文件系统路径，再执行文件操作。
 
 ## 文档生成流程
 

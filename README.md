@@ -14,6 +14,8 @@ Obsidian-backed skills 集合，用于 agent 项目记忆、任务收尾、ADR�
 
 `$obinit` 同步 `Agent/Projects/`、`$oblearn` 写入 `Agent/Knowledge/`、`$obdoc` 写入 Obsidian 文档、`$obcurate` 整理公共知识库时都需要上述前提。构建、测试和发布本仓库不依赖 Obsidian。
 
+这些 skill 的所有 Obsidian Markdown mutation 都直接操作 vault 本地文件系统，不通过 CLI 参数传递正文或 metadata。CLI 只用于 vault 定位、有限搜索、读取和写入后读回；无法解析本地路径时会请用户提供或确认路径，而不会退回 CLI 写入。
+
 ## 安装
 
 ### Marketplace

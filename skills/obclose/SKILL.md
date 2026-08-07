@@ -53,6 +53,18 @@ description: 在任务、阶段或会话收尾时更新项目内 agent memory。
 
 `.agents/active.md` 只记录会影响下一次继续工作的真实阻塞或未完成事项；不记录“下一步 commit/tag/push”“等待 CI 完成后写一条状态”“部署完成后再补 progress”这类即将由权威状态载体承载的短暂中间态。
 
+## Obsidian vault 写入契约
+
+所有 Obsidian Markdown mutation，包括创建、覆盖、追加、局部修改、frontmatter、catalog 或项目笔记更新，以及移动和重命名，都直接操作 vault 本地文件系统。
+
+`obsidian` CLI 只用于 vault 定位、有限搜索、读取和写入后读回校验。
+
+不得以 `obsidian create`、`obsidian append`、`obsidian prepend`、`obsidian property:set`、`obsidian move`、`obsidian rename` 或 `content=` 作为写入或回退路径。
+
+无法解析 vault 本地路径时，请用户提供或确认目标 vault 的本地文件系统路径，再执行文件操作。
+
+本 skill 仅在回写本次实际使用过的 Obsidian 公共知识 `last_verified`、`status` 或退役说明时触发该契约；项目内 `.agents/` memory 继续直接写项目文件。
+
 ## 工作流
 
 1. 确定项目根目录：优先使用当前 git root，否则使用当前目录。

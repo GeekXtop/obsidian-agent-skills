@@ -198,10 +198,29 @@ const forbiddenObdocBehaviorShapingPhrases = [
   "不要在 `obdoc` 中替代",
 ];
 
-const sharedObsidianMarkdownWritePolicy = {
-  name: "shared Obsidian Markdown file write policy",
-  terms: ["Obsidian Markdown 写入", "统一使用 vault 文件", "文件写入", "本地文件系统路径", "写入后读回"],
+const obsidianVaultFilesystemMutationContract = {
+  name: "Obsidian vault filesystem mutation contract",
+  terms: [
+    "所有 Obsidian Markdown mutation",
+    "vault 本地文件系统",
+    "创建、覆盖、追加、局部修改",
+    "frontmatter",
+    "catalog",
+    "项目笔记",
+    "移动和重命名",
+    "`obsidian` CLI 只用于 vault 定位、有限搜索、读取和写入后读回",
+    "不得以 `obsidian create`、`obsidian append`、`obsidian prepend`、`obsidian property:set`、`obsidian move`、`obsidian rename` 或 `content=`",
+    "作为写入或回退路径",
+    "无法解析 vault 本地路径",
+    "请用户提供或确认",
+  ],
 };
+
+const requiredReadmeObsidianFilesystemWriteTerms = [
+  "vault 本地文件系统",
+  "不通过 CLI 参数传递正文或 metadata",
+  "CLI 只用于 vault 定位、有限搜索、读取和写入后读回",
+];
 
 const requiredObinitConcepts = [
   {
@@ -223,6 +242,10 @@ const requiredObinitConcepts = [
   {
     name: "obsidian idempotent sync",
     terms: ["重复运行", "Obsidian 项目笔记", "内容过期", "幂等更新", "读回"],
+  },
+  {
+    name: "Obsidian filesystem write contract routing",
+    terms: ["vault 文件写入契约", "references/obsidian-sync.md"],
   },
   {
     name: "obsidian related knowledge",
@@ -326,7 +349,7 @@ const requiredSkillConcepts = {
       name: "existing public knowledge maintenance",
       terms: ["已有公共知识维护", "最小修改", "aliases", "修正 wikilink", "可发现性"],
     },
-    sharedObsidianMarkdownWritePolicy,
+    obsidianVaultFilesystemMutationContract,
     {
       name: "knowledge lifecycle status",
       terms: ["知识生命周期", "last_verified", "needs-review", "deprecated", "## 退役", "退役原因", "替代笔记", "反例", "不重新提取", "按证据强度分级", "直接证伪证据"],
@@ -361,7 +384,7 @@ const requiredSkillConcepts = {
       name: "machine token and Chinese display labels",
       terms: requiredChineseDisplayEnumTerms,
     },
-    sharedObsidianMarkdownWritePolicy,
+    obsidianVaultFilesystemMutationContract,
     {
       name: "related links quality boundary",
       terms: ["相关链接", "真实主题关联", "空小节或省略内容"],
@@ -372,6 +395,7 @@ const requiredSkillConcepts = {
     },
   ],
   obcurate: [
+    obsidianVaultFilesystemMutationContract,
     {
       name: "bounded knowledge and document curation",
       terms: [...requiredKnowledgeDocumentsSplitTerms, "有限范围", "整理输入", "只整理 Knowledge", "只整理 Documents"],
@@ -442,6 +466,7 @@ const requiredSkillConcepts = {
     },
   ],
   obclose: [
+    obsidianVaultFilesystemMutationContract,
     {
       name: "close-only safety boundary",
       terms: ["不修改源码、依赖、构建配置或 git 配置", "不自动提交、不自动推送、不自动创建 release", "git status --short"],
@@ -684,6 +709,12 @@ if (!existsSync(skillsDir)) {
           }
 
           if (relativePath === "references/obsidian-sync.md") {
+            assertRequiredConcepts(
+              `${skillName}: ${relativePath}`,
+              referenceContent,
+              [obsidianVaultFilesystemMutationContract],
+            );
+
             for (const term of ["deprecated", "needs-review", "last_verified", "反例"]) {
               if (!referenceContent.includes(term)) {
                 fail(`${skillName}: ${relativePath} must include knowledge status handling term: ${term}`);
@@ -1014,6 +1045,12 @@ if (existsSync(packageJsonPath)) {
 
       if (!content.includes("npm run version:set --")) {
         fail("README.md: must document npm run version:set -- for synchronized release version bumps");
+      }
+
+      for (const term of requiredReadmeObsidianFilesystemWriteTerms) {
+        if (!content.includes(term)) {
+          fail(`README.md: must document Obsidian filesystem write boundary term: ${term}`);
+        }
       }
     }
   }

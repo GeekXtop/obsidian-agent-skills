@@ -2,6 +2,15 @@
 
 本文件只记录阶段性进展摘要，不记录聊天流水。
 
+## 2026-08-08 - Obsidian vault 文件写入契约
+
+- 已卸载：Codex 与 Claude Code 的第三方 `obsidian@obsidian-skills` 插件和 `obsidian-skills` marketplace；清理 Codex 早期独立安装的 `defuddle`、`json-canvas`、`obsidian-bases`、`obsidian-cli`、`obsidian-markdown`，以及 Claude Code/Codex 残留缓存目录。
+- 已修复：`$obinit`、`$oblearn`、`$obdoc`、`$obcurate`、`$obclose` 统一采用 vault 本地文件系统完成所有 Markdown mutation；CLI 只用于 vault 定位、有限搜索、读取和写入后读回，无法解析路径时要求用户提供或确认。
+- 已防回归：`scripts/validate-skills.mjs` 新增 `obsidianVaultFilesystemMutationContract`，统一覆盖五个写 vault 的 skill、`obinit/references/obsidian-sync.md` 和 README。
+- 已验证：修改 validator 后 `npm test` 先按预期报告五个 skill/reference/README 缺契约；补齐内容后恢复 `All skills are valid.`。`skills/obinit/SKILL.md` 正文 wordsish 为 1998，未突破 2000 上限。
+- 文档：spec 为 `docs/superpowers/specs/2026-08-08-obsidian-filesystem-write-contract-design.md`，plan 为 `docs/superpowers/plans/2026-08-08-obsidian-filesystem-write-contract.md`。
+- 发布与本地更新：遵循 `docs/adr/0001-use-marketplace-plugin-update-flow.md`，发布状态以 git commit/tag 为准，本地安装状态以两端 `plugin list --json` 为准；更新后需重启或开启新会话加载新 skill。
+
 ## 2026-07-27 - 经验验证生命周期落地
 
 - 已完成：按 `docs/superpowers/plans/2026-07-27-experience-verification-lifecycle.md`（spec：`docs/superpowers/specs/2026-07-27-experience-verification-lifecycle-design.md`）完成 Task 1-5，给 lessons 和公共知识补齐“验证方式：/最后验证：/状态：”经验生命周期字段。

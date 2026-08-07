@@ -20,7 +20,8 @@
 - 背景：发布 `0.1.18` 后，本地更新阶段曾尝试直接向 Codex plugin cache 写入新版本目录；用户要求改为正常商店更新和技能更新。
 - 经验：通过 marketplace 安装的 Claude Code / Codex 插件，发布后本地更新必须走客户端插件管理器命令；不要直接 clone、复制或改写 cache。更新后还要 reload、重启或开启新会话，否则当前会话可能仍使用旧 skill。
 - 适用场景：维护 Agent Skills marketplace 插件、发版后更新本地 Codex / Claude Code 插件、排查本地 skill 版本不一致。
-- 下次检查：README 是否保留 Codex 的 `codex plugin marketplace upgrade` + `codex plugin add`，Claude Code 的 `claude plugin marketplace update` + `claude plugin update`，以及 `/reload` / 重启提示；用 `plugin list --json` 验证实际安装版本。
+- 验证方式：确认 README 和 ADR 保留 Codex 的 `codex plugin marketplace upgrade` + `codex plugin add`、Claude Code 的 `claude plugin marketplace update` + `claude plugin update` 以及 reload/重启提示；用两端 `plugin list --json` 验证实际安装版本。
+- 最后验证：2026-08-08 Codex manual 与本机两端 CLI help 均确认上述 marketplace/plugin 更新命令；两端 `plugin list --json` 均能返回本项目已启用的安装版本。
 
 ## 2026-06-28 - 校验脚本应校验 metadata 内容而非仅文件存在
 
@@ -31,10 +32,11 @@
 
 ## 2026-06-30 - Obsidian Markdown 写入统一使用 vault 文件
 
-- 背景：`$obdoc` 生成 Markdown 文档时，如果通过命令参数传输正文，内容里的换行、引号、反斜杠、中文和代码块可能破坏 Obsidian 端 IPC JSON。
-- 经验：面向 Obsidian 的 Markdown 写入统一使用 vault 文件；根据目标 `path` 确定 vault 本地文件系统路径，将完整 Markdown 写入或更新对应 `.md` 文件。CLI 用于查找、读取和写入后读回校验。
-- 适用场景：维护 `$oblearn`、`$obdoc`、调整 Obsidian 写入流程、排查 `SyntaxError ... is not valid JSON` 这类 CLI/IPC 写入错误。
-- 下次检查：`skills/oblearn/SKILL.md` 和 `skills/obdoc/SKILL.md` 是否仍包含“Obsidian Markdown 写入 / 统一使用 vault 文件 / 文件写入 / 本地文件系统路径 / 写入后读回”；校验脚本是否继续覆盖这些术语并禁止旧写入措辞。
+- 背景：通过命令参数传输 Markdown 正文、frontmatter 或 catalog 内容时，换行、引号、反斜杠、中文和代码块可能破坏 Obsidian 端 IPC JSON；只约束 `$oblearn` / `$obdoc` 也会让其他写 vault 的 skill 继续退回 CLI mutation。
+- 经验：所有 Obsidian Markdown mutation 都直接操作 vault 本地文件系统，覆盖创建、覆盖、追加、局部修改、frontmatter、catalog、项目笔记、移动和重命名。`obsidian` CLI 只用于 vault 定位、有限搜索、读取和写入后读回；无法解析本地路径时请用户提供或确认，不使用 CLI mutation 回退。
+- 适用场景：维护 `$obinit`、`$oblearn`、`$obdoc`、`$obcurate`、`$obclose`，调整 Obsidian 写入流程，或排查 `SyntaxError ... is not valid JSON` 这类 CLI/IPC 写入错误。
+- 验证方式：运行 `npm test`，预期输出 `All skills are valid.`；确认 `scripts/validate-skills.mjs` 的 `obsidianVaultFilesystemMutationContract` 覆盖五个写 vault 的 skill 和 `skills/obinit/references/obsidian-sync.md`。
+- 最后验证：2026-08-08 已完成 validator-first 红灯→绿灯；五个写 vault 的 skill、obinit reference 和 README 均由共享契约覆盖。
 
 ## 2026-06-30 - Skill 行为规则优先写正向 contract
 

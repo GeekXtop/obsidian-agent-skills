@@ -8,6 +8,16 @@ Obsidian 只承担三件事：
 
 不要把 Obsidian 当成项目源码、运行依赖或全库搜索入口。访问范围默认只限配置好的项目笔记、`Agent/Knowledge/_catalog.md`、有限关键词命中的公共知识笔记，以及用户明确指定或任务明确相关时的 `Agent/Documents/_catalog.md` 和命中文档。
 
+## Obsidian vault 写入契约
+
+所有 Obsidian Markdown mutation，包括创建、覆盖、追加、局部修改、frontmatter、catalog 或项目笔记更新，以及移动和重命名，都直接操作 vault 本地文件系统。
+
+`obsidian` CLI 只用于 vault 定位、有限搜索、读取和写入后读回校验。
+
+不得以 `obsidian create`、`obsidian append`、`obsidian prepend`、`obsidian property:set`、`obsidian move`、`obsidian rename` 或 `content=` 作为写入或回退路径。
+
+无法解析 vault 本地路径时，请用户提供或确认目标 vault 的本地文件系统路径，再执行文件操作。
+
 项目笔记规则：
 
 - 笔记不存在：用 `templates/obsidian-project-note.md` 创建。
