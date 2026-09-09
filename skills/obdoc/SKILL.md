@@ -1,6 +1,6 @@
 ---
 name: obdoc
-description: 从当前对话、用户粘贴材料、命令输出、本地文件、项目材料或 Codex session id 中整理可独立阅读的 Obsidian 文档。适用于用户要求提取配置文档、服务器配置、教程、运维 runbook、迁移指南、排障记录、配置参考、操作手册，或希望把一次 Codex 会话整理成 Obsidian 长文档。不要用于只提取短经验条目；短经验沉淀使用 oblearn。
+description: 从当前对话、用户粘贴材料、命令输出、本地文件、项目材料或会话记录中整理可独立阅读的 Obsidian 文档。适用于用户要求提取配置文档、服务器配置、教程、运维 runbook、迁移指南、排障记录、配置参考、操作手册，或希望把一次会话记录整理成 Obsidian 长文档。不要用于只提取短经验条目；短经验沉淀使用 oblearn。
 ---
 
 # Obdoc
@@ -29,9 +29,9 @@ description: 从当前对话、用户粘贴材料、命令输出、本地文件�
 
 ## 运行时假设
 
-- 涉及 Obsidian 写入时，假设 Obsidian 桌面端已打开目标 vault，且 `obsidian` CLI 可用。
+- 涉及 Obsidian 写入时，假设 Obsidian 桌面端已打开目标 vault，且 `obsidian` CLI 可用；CLI 不可用或无法解析 vault 本地路径时只产出文档草稿和建议路径，请用户提供或确认路径后再写入，不退回 CLI mutation。
 - 构建、测试、部署和运行时不能依赖私人 vault；Obsidian 只作为文档写入目标。
-- Codex session id 只作为用户授权和定位线索；只读取本机 Codex 会话存储中精确匹配的 transcript。
+- 会话记录 只作为用户授权和定位线索；只读取本机 本机会话存储中精确匹配的 transcript。
 - 默认使用用户或项目既有语言偏好；当前模板使用简体中文。路径、命令、包名和英文专有名词保持原样。
 
 ## 输入来源
@@ -41,21 +41,22 @@ description: 从当前对话、用户粘贴材料、命令输出、本地文件�
 - 当前对话中明确出现的事实、命令、错误、结论和用户偏好。
 - 用户粘贴的 transcript、命令输出、配置片段、截图说明或会话摘要。
 - 用户明确指定的本地文件、项目文档、`.agents/` memory、ADR、计划或配置文件。
-- 用户提供的 Codex session id，且本机能精确定位对应 JSONL。
+- 用户提供的会话记录，且本机能精确定位对应 JSONL。
 
-如果用户只说“之前那次”“昨天那个会话”但没有 transcript、摘要、文件路径或 Codex session id，不要假装能自动读取历史；请用户补充可定位材料。
+如果用户只说“之前那次”“昨天那个会话”但没有 transcript、摘要、文件路径或会话记录，不要假装能自动读取历史；请用户补充可定位材料。
 
-## Codex Session ID
+## 会话记录定位
 
-用户提供 Codex session id 时：
+用户提供会话 id 或导出的 transcript 时，按本机对应工具的会话存储做精确查找。通用原则：
 
-- 只查找 `$CODEX_HOME/session_index.jsonl`、`$CODEX_HOME/sessions/`、`$CODEX_HOME/archived_sessions/`；未设置 `$CODEX_HOME` 时使用用户主目录下的 `.codex`。
-- 只用完整 ID 做 fixed-string 精确匹配，不按关键词、日期、标题或项目名扩大扫描。
-- 优先使用文件名或 `session_meta.session_id` / `payload.id` 精确等于该 ID 的 JSONL。
-- 如果只命中其他会话的 `forked_from_id`，那不是目标 transcript；继续查找目标 ID，找不到就说明。
-- 不运行 `codex resume <id>` 读取 transcript；`resume` 是恢复交互会话，不是导出命令。
-- 找到唯一 JSONL 后，只抽取 user / assistant / tool 事件中与目标文档相关的事实、步骤、命令、验证和结论；不要把完整聊天流水写入 Obsidian。
+- 只用完整 id 做精确匹配，不按关键词、日期、标题或项目名扩大扫描。
+- 优先使用文件名或元数据中 id 精确相等的记录。
+- 只命中派生关系（fork、parent、child）时不算目标记录；继续查找目标 id，找不到就说明。
+- 不运行交互式恢复命令读取历史；那类命令用于恢复会话，不是导出。
+- 找到唯一记录后，只抽取与目标文档相关的事实、步骤、命令、验证和结论；不要把完整聊天流水写入 Obsidian。
 - 找不到或命中不唯一时，请用户提供摘要、导出的 transcript 或明确文件路径。
+
+示例（Codex）：`$CODEX_HOME/session_index.jsonl`、`$CODEX_HOME/sessions/`、`$CODEX_HOME/archived_sessions/`；未设置 `$CODEX_HOME` 时使用 `%USERPROFILE%\.codex` 或 `~/.codex`。其他工具按各自的本机会话存储格式定位。
 
 ## 输出目标
 
@@ -83,7 +84,9 @@ Agent/Documents/Inbox/<主题>.md
 
 `obdoc` 新建文档使用 `kind: document` 和 `source_skill: obdoc`。机器层使用英文 token，中文展示用于正文、整理计划和完成说明，例如“类型：文档（`kind: document`）”“用途：操作手册（`use_as: runbook`）”。
 
-`doc_type` 和 `source` 是自由描述字段，不是固定枚举。`doc_type` 使用用户材料中的真实文档类型或自然语言短语，例如“服务器配置说明”“GUI 迁移教程”“值班检查 runbook”“排障复盘”。`source` 写实际输入来源，可以是一个或多个来源，例如“当前对话 + 本地配置文件”“Codex session + 用户补充说明”。字段值由材料事实决定。
+`doc_type` 和 `source` 是自由描述字段，不是固定枚举。`doc_type` 使用用户材料中的真实文档类型或自然语言短语，例如“服务器配置说明”“GUI 迁移教程”“值班检查 runbook”“排障复盘”。`source` 写实际输入来源，可以是一个或多个来源，例如“当前对话 + 本地配置文件”“会话记录 + 用户补充说明”。字段值由材料事实决定。
+
+文档 `status` 使用 `draft`、`active`、`needs-review`、`deprecated`：新建或不稳定归类时用 `draft`；文档稳定归类、路径固定且经真实使用验证后改为 `active`；怀疑过时但无直接证据时标 `needs-review`；有直接证伪证据或人工裁决时标 `deprecated`。`$obcurate` 按 `status` 复查文档。
 
 ## Tags
 
@@ -119,10 +122,12 @@ obsidian read path="<明确命中的文档路径>"
 
 无法解析 vault 本地路径时，请用户提供或确认目标 vault 的本地文件系统路径，再执行文件操作。
 
+写入前先读取目标文件的当前内容；发现本次范围外的外部改动时停止写入并列出待确认项，不覆盖对方内容。
+
 ## 文档生成流程
 
 1. 明确文档目标：配置参考、教程、runbook、迁移记录、排障记录或混合文档。
-2. 确定输入范围：当前对话、粘贴材料、Codex session id、本地文件或项目材料。
+2. 确定输入范围：当前对话、粘贴材料、会话记录、本地文件或项目材料。
 3. 读取材料，只保留目标文档需要的事实、步骤、命令、验证和结论。
 4. 标记需要脱敏的内容：secret、账号、token、客户信息、内网细节、绝对路径、设备唯一标识。
 5. 区分已验证事实、用户偏好、推断和未解决问题；不要把猜测写成事实。
@@ -162,7 +167,7 @@ obsidian read path="<明确命中的文档路径>"
 
 ## Documents Catalog 最小更新
 
-`obdoc` 不写 `Agent/Knowledge/_catalog.md`。文档实际写入 `Agent/Documents/` 且标题、路径、主题和敏感度明确时，才更新 `Agent/Documents/_catalog.md`。最小更新只允许为本次文档新增一个入口，或为已存在的匹配入口追加少量明确 `terms`、`aliases`、`kind`、`use_as`、`sensitivity` 或 `notes`。文档入口使用 `kind: document`，`use_as` 通常是 `guide`、`runbook`、`reference` 或 `evidence`，表示它是一等知识库产物，供人类实践和后续 agent 作为可阅读上下文、操作手册或证据使用；读取后不能把正文里的当前环境值直接泛化成公共经验规则。
+`obdoc` 不写 `Agent/Knowledge/_catalog.md`。文档实际写入 `Agent/Documents/` 且标题、路径、主题和敏感度明确时，才更新 `Agent/Documents/_catalog.md`，条目格式见 `templates/documents-catalog-entry.md`：按展示分组追加 wikilink，并注明类型、用途、敏感度和读取条件。最小更新只允许为本次文档新增一个入口，或为已存在的匹配入口补充明确信息。文档入口使用 `kind: document`，`use_as` 通常是 `guide`、`runbook`、`reference` 或 `evidence`，表示它是一等知识库产物，供人类实践和后续 agent 作为可阅读上下文、操作手册或证据使用；读取后不能把正文里的当前环境值直接泛化成公共经验规则。
 
 不要在 `obdoc` 中移动、重命名、合并、拆分、删除 catalog 入口，也不要为项目内 `docs/` 文档登记公共知识 catalog。结构性 Documents catalog 维护交给 `$obcurate`。
 

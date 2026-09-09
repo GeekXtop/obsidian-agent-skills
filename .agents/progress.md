@@ -296,3 +296,34 @@
 - 已完成：`scripts/validate-skills.mjs` 增加 `$obinit` 项目相关知识回写、模板渐进绑定协议校验。
 - 已验证：新增校验后先运行 `npm test` 得到目标红灯；补齐后 `npm test` 通过，输出 `All skills are valid.`。
 - 备注：本轮未发版，未提交未推送。
+
+## 2026-09-09 - validator 门禁与 skill 契约三批整改
+
+- 已完成：validator 新增引用存在性、命令→skill、README 表格、manifest `metadata.version`、description 语义、运行时假设、长度预算、枚举封闭、模板对齐、写前重读和可执行回退断言，并输出失败计数与 scope 汇总。
+- 已完成：6 个 skill 补齐 `## 运行时假设`，覆盖 Obsidian CLI 不可用、非 git 项目、vault 路径无法解析时的行为；vault 写入契约统一加写前重读与冲突检测。
+- 已完成：obinit 项目相关知识回写下沉到 `references/obsidian-sync.md` 并迁移断言目标；obadr progress 模板统一为五段式；obdoc 新增 `templates/documents-catalog-entry.md` 并指向唯一 catalog 格式；obcurate 新增 `## 机器层枚举` 与 `Agent/Archive/YYYY-MM-DD/` 回退；oblearn 模板 `last_verified` 不再预填、工作流补读回。
+- 已验证：`npm test` 输出 `All skills are valid. (6 skills checked)`；14 个破坏实验在临时副本上全部红灯。
+- 已变更：`scripts/validate-skills.mjs`、6 个 `SKILL.md`、`skills/obinit/references/obsidian-sync.md`、`skills/obinit/templates/active.md`、`skills/obadr/templates/progress-entry.md`、`skills/oblearn/templates/public-knowledge-note.md`、`skills/obdoc/templates/documents-catalog-entry.md`（新增）、`skills.json`、`README.md`。
+- 下一步：用户 review 后决定提交与发版。
+- 备注：未提交、未推送、未发版；README / commands / skills.json 的描述长度差异有意保留摘要定位。
+
+## 2026-09-09 - 多会话并行机制化与普适性清理
+
+- 已完成：新增 `.agents/handoffs/` 每会话交接机制（模板、命名 `YYYY-MM-DD_HHMMSS_<agent>_<任务slug>.md`、生命周期、12 小时新鲜度、独立上限），`active.md` 降级为可从 handoffs、`docs/adr/` 和项目笔记重建的派生视图，并写明「可重建、不含孤本」不变量。
+- 已完成：progress 条目新增 `来源：<agent>/<任务 slug>` 归因；`$obclose` 收尾输出 memory 占用；obinit 两个 instructions 模板新增空「协作策略」占位节，任务开始的认领动作改为创建 handoff。
+- 已完成：普适性回溯清理——移除 `docs/superpowers/` 硬编码（改为发现并遵守项目既有结构）、会话记录抽象为通用能力（Codex 降级为示例）、`inspect-project.mjs` 输出 `docs/` 顶层结构、新增禁硬编码工具路径与策略词的断言。
+- 已验证：`npm test` 输出 `All skills are valid. (6 skills checked)`；7 个新断言在临时副本上全部红灯。
+- 已变更：`scripts/validate-skills.mjs`、`skills/obclose/*`、`skills/obinit/*`、`skills/oblearn/SKILL.md`、`skills/obdoc/SKILL.md`、`skills/obadr/templates/progress-entry.md`、`.agents/instructions.md`。
+- 下一步：用户 review 后决定提交与发版；观察 handoffs 阈值是否合适。
+- 备注：未提交、未推送、未发版；既有 `docs/superpowers/` 结构保持不变。
+- 来源：dsh/multi-session-memory-and-generality
+
+## 2026-09-09 - 存量项目迁移机制（Task 7）
+
+- 已完成：新增 `skills/obinit/references/memory-upgrade.md`——memory 代际（v1 ≤ 0.1.27 / v2 = 0.1.28）、差异检测粒度（章节级 + 变更条目，措辞差异仅参考）、执行主体（agent 报告、用户确认）、验证方式（迁移后差异为空）、v1 → v2 清单（必做 4 / 可选 2 / 不做 2）。
+- 已完成：`obinit/SKILL.md` 加薄指针、`init-modes.md` 重复运行模式引用清单、validator 增加三处断言。
+- 已验证：`npm test` 输出 `All skills are valid. (6 skills checked)`；本仓库端到端对比差异归零。
+- 已变更：`skills/obinit/references/memory-upgrade.md`（新增）、`skills/obinit/SKILL.md`、`skills/obinit/references/init-modes.md`、`scripts/validate-skills.mjs`、`.agents/instructions.md`。
+- 下一步：用户 review 后决定提交与发版；发版前确认迁移机制与批次二同版本发布。
+- 备注：未提交、未推送、未发版；代际标记推迟到 v2 → v3。
+- 来源：dsh/multi-session-memory-and-generality

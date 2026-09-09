@@ -1,4 +1,4 @@
 interface:
   display_name: "Oblearn"
-  short_description: "提取项目、临时会话或 Codex session 经验"
-  default_prompt: "使用 $oblearn 从当前项目、临时会话或 Codex session 提取可复用公共知识。"
+  short_description: "提取项目、临时会话或 会话记录 经验"
+  default_prompt: "使用 $oblearn 从当前项目、临时会话或 会话记录 提取可复用公共知识。"

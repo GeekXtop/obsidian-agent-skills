@@ -7,6 +7,12 @@ description: 为当前项目记录 Architecture Decision Record，并在需要�
 
 把当前项目的重要技术取舍写成项目内 ADR。ADR 属于当前仓库，不属于 Obsidian 公共知识库；跨项目可复用经验由 `$oblearn` 另行提取。
 
+## 运行时假设
+
+- 只写当前仓库内的 `docs/adr/` 和项目 memory；不依赖 Obsidian CLI、运行中的 vault 或网络。
+- 需要可写文件系统；git 可选，非 git 项目按当前目录处理，ADR 链接使用相对路径。
+- 决策内容、备选方案或影响范围不明确时先问用户补齐，不凭推测生成 ADR。
+
 ## 默认行为
 
 用户只说 `$obadr`、`记录 ADR`、`把这个决定写下来` 或类似请求时，按安全默认值执行：

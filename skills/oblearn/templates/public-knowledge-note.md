@@ -11,7 +11,7 @@ tags:
   - agent/knowledge
 sensitivity: sanitized
 status: draft
-last_verified: YYYY-MM-DD
+last_verified: <留空；首次真实使用验证后由 $obclose 回填>
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 ---

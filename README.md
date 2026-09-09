@@ -109,6 +109,8 @@ claude plugin marketplace update obsidian-agent-skills
 claude plugin update obsidian-agent-skills@obsidian-agent-skills --scope user
 ```
 
+升级插件后，已有项目的 `.agents/` 不会自动跟着变。在项目里运行 `$obinit`（重复运行模式），它会按 `skills/obinit/references/memory-upgrade.md` 逐节对比当前模板与项目内文件，报告差异并等用户确认，再按最小改动收敛到当前 memory 代际。迁移前旧项目由 `$obclose` 的降级路径保持可用，不迁移也能继续工作。
+
 更新后需要 reload 或重启：
 
 - Claude Code：执行 `/reload` 或重启 Claude Code。
@@ -200,6 +202,6 @@ npm run version:set -- 0.1.23
 npm test
 ```
 
-校验脚本会检查 skill frontmatter、OpenAI agent metadata、命令入口、模板语言回归规则、Codex 插件 interface 发现层、版本同步脚本，以及插件 manifest 版本一致性。
+校验脚本会检查 skill frontmatter、OpenAI agent metadata、命令入口与对应 skill、模板和 reference 引用存在性、README 技能表、description 语义约束、`## 运行时假设` 章节、正文长度预算、机器层枚举、模板对齐规则、模板语言回归规则、Codex 插件 interface 发现层、版本同步脚本，以及插件 manifest 版本一致性；失败时输出问题计数和涉及范围。
 
 两个 plugin manifest 的 skills 发现方式不同，这是有意为之：`.codex-plugin/plugin.json` 用 `"skills": "./skills/"` 显式声明，`.claude-plugin/plugin.json` 依赖 Claude Code 对仓库根 `skills/` 与 `commands/` 目录的约定式发现，因此不重复声明。两者指向同一套 `skills/`，`.claude-plugin/plugin.json` 缺少 `skills` 字段不是配置遗漏。

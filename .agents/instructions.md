@@ -31,9 +31,17 @@ Obsidian 项目笔记：`Agent/Projects/obsidian-agent-skills.md`。
 - 构建、测试、部署和运行时不能依赖私人笔记、本地 vault 或个人工具。
 - 任务开始或遇到相关问题时，不凭空假设哪些领域已有公共知识；仅在用户明确要求、`Agent/Knowledge/_catalog.md` 命中任务关键词，或风险较高且关键词明确时，在 `Agent/Knowledge/` 做有限关键词定向搜索；命中相关笔记后再明确读取并使用，不全量自动加载。
 
+## 项目相关知识
+
+- 项目类型：`confirmed`（Agent Skills 仓库，发布为 Codex / Claude Code marketplace 插件）。
+- 相关知识：
+  - `[[Marketplace 插件更新流程]]`：`kind: knowledge` / `use_as: runbook`，用于本仓库插件发布、本地更新和 reload/restart 验证。
+  - `[[Skill 行为规则使用正向 contract]]`：`kind: knowledge` / `use_as: rule`，用于维护 `SKILL.md`、模板和校验脚本时的写法约束。
+
 ## 记忆库
 
-- 任务开始、阶段完成、会话收尾时更新 `.agents/active.md`。
+- 任务开始时在 `.agents/handoffs/` 创建自己的交接文件（会话、任务、涉及文件）。
+- 阶段完成、会话收尾时更新 `.agents/active.md`；它是派生视图，由 `$obclose` 从 handoffs、`docs/adr/` 和 Obsidian 项目笔记重建。
 - 完成实质代码/文档改动、阶段性验证或复杂任务暂停时，按 `$obclose` 收尾。
 - 有明确里程碑时更新 `.agents/progress.md`。
 - 只有可复用经验才更新 `.agents/lessons.md`。
@@ -49,3 +57,11 @@ Obsidian 项目笔记：`Agent/Projects/obsidian-agent-skills.md`。
 - 如果入口提示已经存在，不要重复追加。
 - 如果 `.agents/` 文件已经存在，保留现有内容，只补缺失段落或缺失文件。
 - 如果现有规则之间冲突，停止修改冲突文件并向用户列出待确认项。
+
+## 协作策略
+
+本节由项目自行约定；未填写时按单会话假设处理。
+
+- 并行策略：
+- 认领位置：
+- worktree 使用：

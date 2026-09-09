@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { execFileSync } from "node:child_process";
-import { existsSync, readFileSync, statSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { basename, join, resolve } from "node:path";
 import process from "node:process";
 
@@ -40,6 +40,19 @@ function pathExists(root, relativePath) {
   return existsSync(join(root, relativePath));
 }
 
+function listDocsTopLevel(root) {
+  const docsPath = join(root, "docs");
+  if (!existsSync(docsPath) || !statSync(docsPath).isDirectory()) {
+    return { directories: [], indexFiles: [] };
+  }
+
+  const entries = readdirSync(docsPath, { withFileTypes: true });
+  return {
+    directories: entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name).sort(),
+    indexFiles: entries.filter((entry) => entry.isFile() && /\.(md|mdx)$/i.test(entry.name)).map((entry) => entry.name).sort(),
+  };
+}
+
 const root = findRoot(process.argv[2] ? resolve(process.argv[2]) : process.cwd());
 const entryFiles = ["AGENTS.md", "CLAUDE.md"].map((path) => readFileState(root, path));
 const memoryFiles = [".agents/instructions.md", ".agents/active.md", ".agents/progress.md", ".agents/lessons.md"].map((path) => readFileState(root, path));
@@ -68,6 +81,7 @@ const result = {
   entryFiles,
   memoryFiles,
   docsSignals,
+  docsTopLevel: listDocsTopLevel(root),
   missingAllowlist: allowlist.filter((path) => !pathExists(root, path)),
   obsidianProjectNote: `Agent/Projects/${basename(root)}.md`,
 };

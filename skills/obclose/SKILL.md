@@ -7,6 +7,13 @@ description: 在任务、阶段或会话收尾时更新项目内 agent memory。
 
 把当前任务或会话的实际进展写回项目内 memory。`obclose` 不初始化项目，不创建架构决策，不沉淀公共知识；它只把当前项目状态整理到 `.agents/`，让下一次 agent 能接着做。
 
+## 运行时假设
+
+- 只写 `.agents/` 下的项目 memory；不修改源码、依赖、构建配置或 git 配置。
+- git 可选：非 git 项目跳过 `git status` / `git diff` / `git log`，改用文件改动清单作为证据，并在验证段说明证据来源。
+- 只有回写本次实际使用过的 Obsidian 公共知识 `last_verified` / `status` 时才需要 Obsidian；CLI 不可用或无法解析 vault 本地路径时跳过该回写并在完成说明中报告，不退回 CLI mutation。
+- 目标 memory 文件在写入前已被其他会话或工具改动时，先重新读取当前内容，只追加本次条目，不覆盖对方内容。
+
 ## 触发时机
 
 `obclose` 是收尾动作，不是后台 hook。用户显式说 `$obclose`、`收尾`、`同步状态`、`更新 memory` 或类似请求时必须执行。
@@ -63,6 +70,8 @@ description: 在任务、阶段或会话收尾时更新项目内 agent memory。
 
 无法解析 vault 本地路径时，请用户提供或确认目标 vault 的本地文件系统路径，再执行文件操作。
 
+写入前先读取目标文件的当前内容；发现本次范围外的外部改动时停止写入并列出待确认项，不覆盖对方内容。
+
 本 skill 仅在回写本次实际使用过的 Obsidian 公共知识 `last_verified`、`status` 或退役说明时触发该契约；项目内 `.agents/` memory 继续直接写项目文件。
 
 ## 工作流
@@ -73,6 +82,7 @@ description: 在任务、阶段或会话收尾时更新项目内 agent memory。
    - `.agents/instructions.md`
 3. 读取现有 memory：
    - `.agents/active.md`
+   - `.agents/handoffs/`（如果存在）
    - `.agents/progress.md`
    - `.agents/lessons.md`
 4. 如果是 git 项目，读取：
@@ -87,7 +97,7 @@ description: 在任务、阶段或会话收尾时更新项目内 agent memory。
    - 关键变更文件
    - 下一步
    - 阻塞问题
-6. 更新 `.agents/active.md` 为当前最新状态。
+6. 汇总 `.agents/handoffs/` 的进行中与已交接记录，重建 `.agents/active.md`；`handoffs/` 不存在时就地更新作为降级路径。
 7. 追加 `.agents/progress.md` 的日期条目。
 8. 如果发现跨任务复用经验，追加 `.agents/lessons.md`。
 9. 对本次任务相关的 lessons 条目执行增量验证；验证失败按证据强度分级标注。
@@ -100,15 +110,34 @@ description: 在任务、阶段或会话收尾时更新项目内 agent memory。
 
 `.agents/active.md` 表示“下一次打开项目时最该知道什么”。它应该短而具体。
 
-推荐结构见 `templates/active.md`。
+`.agents/active.md` 是派生视图：可从 `.agents/handoffs/`、`docs/adr/` 和 Obsidian 项目笔记重建，不保存孤本信息。多会话并行时它允许 last-writer-wins，因为内容可重建、无损失。
+
+推荐结构见 `templates/active.md`。段落来源：
+
+- 当前任务、当前状态、验证、关键文件、下一步、已使用知识：从 `.agents/handoffs/` 汇总。
+- 当前 ADR：从 `docs/adr/` 生成链接列表。
+- 已提取知识：指向 Obsidian 项目笔记的链接视图；vault 不可用时保留现值、不重生成。
 
 如果现有 `active.md` 已有不同结构，保留原结构并就地更新相关段落。不要整体重写用户已有内容，除非用户明确要求重写。
+
+`.agents/handoffs/` 不存在时（旧项目）保留就地更新作为降级路径。
+
+## handoffs 目录
+
+`.agents/handoffs/` 保存每个会话自己的交接记录，是多会话并行的 append-only 事实来源；`active.md` 由它派生。
+
+- 命名：`YYYY-MM-DD_HHMMSS_<agent>_<任务slug>.md`，零填充保证排序，同秒冲突加序号；slug 只负责可读性，唯一性靠时间戳与序号。
+- 模板：`templates/handoff.md`。
+- 创建时至少写：会话、任务、涉及文件、目标和下一步；`涉及文件` 用于判断多会话之间的改动是否重叠。
+- 生命周期：任务开始时创建并标 `状态：进行中`；收尾时改 `状态：已交接` 并填结论；`$obclose` 把已交接且超龄的 handoff 并入 `progress.md` 后移入 `.agents/archive/handoffs-YYYY.md`。
+- 新鲜度：`状态：进行中` 且最后修改时间超过 12 小时视为过期，可以接管，但必须在自己的 handoff 中注明接管来源。
+- 预算：`handoffs/` 不计入 `progress.md` 的 500 行 / 50 KB 预算，但必须有自己的顶——建议不超过 30 个文件或 200 KB，超限时优先归档已交接项。
 
 ## progress.md 写法
 
 `.agents/progress.md` 记录阶段性进展，不保存聊天流水。
 
-追加条目使用 `templates/progress-entry.md`。
+追加条目使用 `templates/progress-entry.md`。`来源` 写 `<agent>/<任务 slug>`：agent 是当前工具名，slug 是任务短名；多会话并行时靠它归因。
 
 只记录对后续工作有价值的信息。不要把每个命令输出全文复制进去。
 
@@ -150,6 +179,7 @@ description: 在任务、阶段或会话收尾时更新项目内 agent memory。
 
 - `.agents/progress.md` 是否超过约 500 行或 50 KB。
 - `.agents/lessons.md` 是否超过约 300 行或 30 KB。
+- `.agents/handoffs/` 是否超过自己的顶（见「handoffs 目录」）；已交接且超龄的条目优先归档。
 - 新增经验是否和已有条目明显重复。
 
 可以直接做的维护：
@@ -190,5 +220,6 @@ description: 在任务、阶段或会话收尾时更新项目内 agent memory。
 - 记录了哪些完成事项和下一步。
 - 是否建议运行 `$obadr`。
 - 是否建议运行 `$oblearn`。
+- memory 占用：`progress.md`、`lessons.md` 的行数和 KB，以及 `handoffs/` 数量，与各自阈值并列；字数口径复用项目校验脚本的统计方式，不另造第二套。
 
 不要把完整 memory 内容复制到最终回复，除非用户要求。

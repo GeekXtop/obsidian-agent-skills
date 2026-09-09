@@ -1,6 +1,6 @@
 {
   "name": "obsidian-agent-skills",
-  "version": "0.1.27",
+  "version": "0.1.28",
   "description": "Obsidian-backed 项目记忆、任务收尾、ADR、经验沉淀、文档整理和知识整理 skills",
   "repository": "https://github.com/GeekXtop/obsidian-agent-skills",
   "skills": [
@@ -12,7 +12,7 @@
     {
       "name": "obadr",
       "path": "skills/obadr",
-      "description": "为当前项目记录 Architecture Decision Record，并回写项目 memory 链接。"
+      "description": "为当前项目记录 Architecture Decision Record，并在需要时回写项目 memory 的 ADR 链接。"
     },
     {
       "name": "obclose",

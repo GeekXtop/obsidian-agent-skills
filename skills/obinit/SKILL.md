@@ -9,6 +9,12 @@ description: 初始化或更新软件项目的 Obsidian-backed 通用 agent 工�
 
 默认遵循用户或项目既有语言偏好。当前模板使用简体中文，fork 可替换 `templates/`、README 和 manifest 文案；路径、命令、包名和英文专有名词保持原样。
 
+## 运行时假设
+
+- 仓库内写入只依赖文件系统和 `node`；`scripts/inspect-project.mjs` 需要可用的 `node`，不可用时改为手工读取入口文件和 memory 文件判断模式。
+- git 可选：`inspect-project.mjs` 在非 git 目录回退到当前目录作为项目根，不报错。
+- Obsidian 同步需要桌面端已打开目标 vault 且 `obsidian` CLI 可用；CLI 不可用或无法解析 vault 本地路径时，只完成仓库内文件写入，把未完成的 Obsidian 同步项列为待确认，不退回 CLI mutation。
+
 ## 快速流程
 
 1. 确定项目根目录：优先 git root，否则当前目录。
@@ -34,11 +40,13 @@ node <skill>/scripts/inspect-project.mjs <project-root>
 | 成熟项目接入模式 | fork、已有项目、已有非空 `AGENTS.md` / `CLAUDE.md` / README / docs | 用索引型 `.agents/instructions.md`；保留已有指南 |
 | 重复运行模式 | `.agents/instructions.md`、`.agents/active.md` 或入口提示已存在 | 只补缺失文件、链接和过期表述 |
 
+重复运行模式先按 `references/memory-upgrade.md` 逐节对比模板与现有文件，报告差异并等用户确认，不自动改写。
+
 成熟项目接入模式下，`AGENTS.md` / `CLAUDE.md` 仍是项目/工具指南事实源。索引型 `.agents/instructions.md` 只记录 memory 协议、Obsidian 项目笔记路径、源文件链接和写入边界。
 
 不要把 `AGENTS.md` / `CLAUDE.md` 的长内容完整复制进 `.agents/instructions.md`。
 
-默认不递归读取 `docs/`。只列出 docs 顶层目录和读取已存在的索引文件，例如 `docs/README.md`、`docs/index.md`、`docs/adr/README.md`；默认不读取 `docs/superpowers/specs/` 或 `docs/superpowers/plans/`，除非 `.agents/active.md` 指向具体文件或用户指定。
+默认不递归读取 `docs/`。只列出 docs 顶层目录和读取已存在的索引文件，例如 `docs/README.md`、`docs/index.md`、`docs/adr/README.md`；设计/计划文档只读取 `.agents/active.md` 指向的具体文件或用户指定的文件，不按工具路径批量读取。
 
 发现规则冲突、入口文件语义冲突或目录用途不一致时，停止写入冲突文件并列出待确认项；无冲突的 allowlist 文件可以继续创建。
 
@@ -70,13 +78,14 @@ docs/adr/
 
 更新时机：
 
-- 任务开始、阶段完成、会话结束时更新 `.agents/active.md`；完成实质任务或复杂任务暂停时按 `$obclose` 收尾。
+- 任务开始时在 `.agents/handoffs/` 创建自己的交接文件；`.agents/active.md` 是派生视图，由 `$obclose` 重建。
+- 完成实质任务或复杂任务暂停时按 `$obclose` 收尾。
 - 重要里程碑追加 `.agents/progress.md`。
 - 可跨任务复用的坑和规则写入 `.agents/lessons.md`。
 - 当状态已由权威状态载体记录时（git commit、tag、PR、CI/CD、release、artifact、ADR、migration、issue/ticket、runbook），`.agents/active.md` / `.agents/progress.md` 只记录下一次 agent 需要接手的未完成事项、不在权威载体中的决策背景、阻塞或人工确认点；不记录短暂中间态，已完成状态在最终回复说明。
 - `.agents/archive/` 保存过长 `progress.md` 的历史归档，应提交；它不是临时草稿。
 - 长期技术决策写入 `docs/adr/`。
-- Superpowers spec/plan 保留原文件，memory 只链接；obinit 不创建、不改写、不递归读取 `docs/superpowers/specs/` 或 `docs/superpowers/plans/`。
+- 项目内既有的设计/计划文档（无论由哪个工具生成）保留原文件，memory 只链接；obinit 不创建、不改写、不按工具路径批量读取它们。
 - 临时调查草稿写入 `.agents/scratch/`；运行日志、缓存和生成物不要放进 agent memory。
 
 ## Obsidian 同步
@@ -99,19 +108,7 @@ Obsidian 只作为跨会话上下文和公共知识入口，不作为源码、�
 
 ## 项目相关知识回写
 
-第一次初始化只建立规则入口、memory、Obsidian 项目笔记和 catalog 查询协议；项目类型不明确时保持 `unknown`，不强行判断项目类型，不预填弱相关知识。
-
-重复初始化时，根据当前项目已经出现的稳定信号重新判断项目类型和主要任务域：README、package metadata、目录结构、显式 skill/spec/plan、docs 顶层索引、`.agents/active.md` 和 `.agents/progress.md`。按置信度处理：
-
-| 置信度 | 判定 | 处理 |
-| --- | --- | --- |
-| `unknown` | 项目类型或任务域不明确 | 只保留查询协议，不回写公共知识 |
-| `candidate` | 有单一信号或弱相关命中 | 只列建议，不写入项目相关知识 |
-| `confirmed` | 多个信号一致，或用户明确说明项目类型/任务域 | 查 `Agent/Knowledge/_catalog.md`，只回写高置信相关知识链接 |
-
-项目相关知识只回写链接和简短使用语义，不复制公共知识正文。优先写入 Obsidian 项目笔记的 `相关知识`；需要让后续 agent 启动时立即看见的少量高置信链接，可写入 `.agents/instructions.md` 的 `项目相关知识` 小节。每条链接保留 `kind` / `use_as`，让后续 agent 区分公共经验规则、检查清单、参考材料或证据。
-
-已有项目相关知识在重复初始化时幂等维护：确认仍高置信的保留；不存在或明显过期的链接列出修正建议；不确定的链接只列建议，等待用户确认。
+项目相关知识按 `unknown` / `candidate` / `confirmed` 三档渐进回写；判定信号、写入位置和幂等维护规则见 `references/obsidian-sync.md`。只回写链接和简短使用语义，不复制公共知识正文。
 
 ## 模板
 

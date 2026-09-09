@@ -6,7 +6,7 @@
 | --- | --- | --- |
 | 新项目模式 | 没有非空入口指南，也没有明显项目文档 | 创建完整 `.agents/instructions.md`；入口文件可用薄指针 |
 | 成熟项目接入模式 | fork、已有项目、已有非空 `AGENTS.md` / `CLAUDE.md` / README / docs 顶层信号 | 创建索引型 `.agents/instructions.md`；保留已有指南，只追加入口提示 |
-| 重复运行模式 | `.agents/instructions.md`、`.agents/active.md` 或入口提示已存在 | 只补缺失文件、链接和过期表述；不重写、不重复追加、不重置状态 |
+| 重复运行模式 | `.agents/instructions.md`、`.agents/active.md` 或入口提示已存在 | 只补缺失文件、链接和过期表述；不重写、不重复追加、不重置状态；代际差异按 `memory-upgrade.md` 逐节对比后报告 |
 
 执行前可运行：
 
@@ -18,7 +18,7 @@ node <skill>/scripts/inspect-project.mjs <project-root>
 
 成熟项目中，`AGENTS.md` / `CLAUDE.md` 是项目和工具指南事实源；`.agents/instructions.md` 只记录 memory 协议、Obsidian 项目笔记路径、源文件索引和写入边界。
 
-不要递归读取 `docs/` 来理解项目。只列出 docs 顶层目录，读取已存在的 `docs/README.md`、`docs/index.md`、`docs/adr/README.md` 等索引文件；`docs/superpowers/specs/` 和 `docs/superpowers/plans/` 只有在 `.agents/active.md` 指向具体文件或用户指定时才读取。
+不要递归读取 `docs/` 来理解项目。只列出 docs 顶层目录，读取已存在的索引文件（如 `docs/README.md`、`docs/index.md`、`docs/adr/README.md`）；设计/计划文档只有在 `.agents/active.md` 指向具体文件或用户指定时才读取，不按工具路径批量读取。
 
 重复运行时必须检查 Obsidian 项目笔记是否过期；过期则按当前模式幂等更新。
 

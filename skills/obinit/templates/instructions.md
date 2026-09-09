@@ -5,7 +5,7 @@
 - 修改代码前先读本文件。
 - 项目事实写在当前仓库内。
 - Agent 草稿、计划和调查记录写在 `.agents/`。
-- 当前任务状态写在 `.agents/active.md`。
+- 会话交接记录写在 `.agents/handoffs/`；`.agents/active.md` 是派生视图，由 `$obclose` 重建。
 - 阶段进展摘要写在 `.agents/progress.md`。
 - 可复用经验写在 `.agents/lessons.md`。
 - 过长进展归档写在 `.agents/archive/`。
@@ -42,7 +42,8 @@
 
 ## 记忆库
 
-- 任务开始、阶段完成、会话收尾时更新 `.agents/active.md`。
+- 任务开始时在 `.agents/handoffs/` 创建自己的交接文件（会话、任务、涉及文件）。
+- 阶段完成、会话收尾时更新 `.agents/active.md`；它是派生视图，由 `$obclose` 从 handoffs、`docs/adr/` 和 Obsidian 项目笔记重建。
 - 完成实质代码/文档改动、阶段性验证或复杂任务暂停时，按 `$obclose` 收尾。
 - 有明确里程碑时更新 `.agents/progress.md`。
 - 只有可复用经验才更新 `.agents/lessons.md`。
@@ -50,5 +51,13 @@
 - 当状态已由权威状态载体记录时（git commit、tag、PR、CI/CD、release、artifact、ADR、migration、issue/ticket、runbook），`.agents/active.md` / `.agents/progress.md` 只记录下一次 agent 需要接手的未完成事项、不在权威载体中的决策背景、阻塞或人工确认点；不记录短暂中间态，已完成状态在最终回复说明。
 - `.agents/archive/` 保存过长 `progress.md` 的历史归档，应提交。
 - 长期项目决策写入 `docs/adr/`。
-- 如已有 Superpowers spec/plan，在 `.agents/active.md` 链接当前文件，不复制全文。
+- 如已有设计/计划文档（无论由哪个工具生成），在 `.agents/active.md` 链接当前文件，不复制全文。
 - 临时调查草稿写入 `.agents/scratch/`；运行日志、缓存和生成物不要放进 agent memory。
+
+## 协作策略
+
+本节由项目自行约定；未填写时按单会话假设处理。
+
+- 并行策略：
+- 认领位置：
+- worktree 使用：

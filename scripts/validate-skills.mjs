@@ -43,6 +43,16 @@ const forbiddenGeneratedEnglish = [
   "Use the `ob",
 ];
 
+const forbiddenHardcodedToolPaths = [
+  "docs/superpowers/",
+];
+
+const forbiddenOrchestrationPolicyWords = [
+  "单写者",
+  "占坑",
+  "认领登记",
+];
+
 const forbiddenProjectPositioning = [
   "面向中文 agent 工作流",
   "面向中文 coding agent 工作流",
@@ -98,11 +108,27 @@ const requiredObinitReferences = [
   "references/entry-file-policy.md",
   "references/obsidian-sync.md",
   "references/memory-bank.md",
+  "references/memory-upgrade.md",
 ];
 
 const requiredObinitScripts = [
   "scripts/inspect-project.mjs",
 ];
+
+const requiredObinitReferenceConcepts = {
+  "references/obsidian-sync.md": [
+    {
+      name: "progressive project knowledge binding",
+      terms: ["项目相关知识回写", "第一次初始化", "重复初始化", "项目类型", "unknown", "candidate", "confirmed", "高置信", "只回写链接", "只列建议"],
+    },
+  ],
+  "references/memory-upgrade.md": [
+    {
+      name: "memory generation and migration",
+      terms: ["memory 代际", "v1 → v2", "必做", "可选", "执行主体", "验证方式"],
+    },
+  ],
+};
 
 const requiredSkillNames = ["obinit", "obadr", "obclose", "oblearn", "obcurate", "obdoc"];
 
@@ -213,6 +239,8 @@ const obsidianVaultFilesystemMutationContract = {
     "作为写入或回退路径",
     "无法解析 vault 本地路径",
     "请用户提供或确认",
+    "写入前先读取目标文件的当前内容",
+    "发现本次范围外的外部改动时停止写入",
   ],
 };
 
@@ -264,16 +292,16 @@ const requiredObinitConcepts = [
     terms: requiredDocumentsCatalogTerms,
   },
   {
-    name: "progressive project knowledge binding",
-    terms: ["项目相关知识回写", "第一次初始化", "重复初始化", "项目类型", "unknown", "candidate", "confirmed", "高置信", "只回写链接", "只列建议"],
-  },
-  {
     name: "authoritative state carrier memory boundary",
     terms: requiredAuthoritativeStateCarrierTerms,
   },
   {
     name: "bounded docs discovery",
-    terms: ["docs 顶层", "不递归读取", "docs/superpowers/specs/", "docs/superpowers/plans/", "用户指定"],
+    terms: ["docs 顶层", "不递归读取", "设计/计划文档", "用户指定"],
+  },
+  {
+    name: "memory upgrade path",
+    terms: ["references/memory-upgrade.md", "逐节对比", "差异", "不自动改写"],
   },
   {
     name: "scratch-only temporary workspace",
@@ -319,7 +347,7 @@ const requiredSkillConcepts = {
     },
     {
       name: "privacy and source boundaries",
-      terms: ["不写 secret", "不把 Superpowers spec/plan 原文复制", "用户指定范围"],
+      terms: ["不写 secret", "不把设计/计划文档原文复制", "用户指定范围"],
     },
     {
       name: "knowledge catalog source",
@@ -370,7 +398,7 @@ const requiredSkillConcepts = {
     },
     {
       name: "document source safety",
-      terms: ["Codex session id", "精确定位", "脱敏", "不写 secret"],
+      terms: ["会话记录", "精确定位", "脱敏", "不写 secret"],
     },
     {
       name: "flexible Obsidian document targets",
@@ -464,6 +492,14 @@ const requiredSkillConcepts = {
       name: "experience review and retirement",
       terms: ["复查候选", "needs-review", "deprecated", "长期未验证", "180 天", "逐项", "删除建议", "清理", "时间流逝本身不是证伪证据", "待验证"],
     },
+    {
+      name: "executable rollback",
+      terms: ["Agent/Archive/YYYY-MM-DD/", "回退路径"],
+    },
+    {
+      name: "machine token enum closure",
+      terms: ["## 机器层枚举", "public", "sanitized", "internal", "restricted", "needs-review"],
+    },
   ],
   obclose: [
     obsidianVaultFilesystemMutationContract,
@@ -487,10 +523,19 @@ const requiredSkillConcepts = {
       name: "evidence-graded deprecation",
       terms: requiredEvidenceGradedStatusTerms,
     },
+    {
+      name: "handoff workspace",
+      terms: [".agents/handoffs/", "已交接", "涉及文件", "不计入", "自己的顶"],
+    },
   ],
 };
 
+let failureCount = 0;
+const failureScopes = new Set();
+
 function fail(message) {
+  failureCount += 1;
+  failureScopes.add(String(message).split(":")[0]);
   console.error(message);
   process.exitCode = 1;
 }
@@ -547,6 +592,29 @@ function assertRequiredConcepts(label, content, concepts) {
     const missing = concept.terms.filter((term) => !content.includes(term));
     if (missing.length > 0) {
       fail(`${label}: missing required ${concept.name} concept terms: ${missing.join(", ")}`);
+    }
+  }
+}
+
+function assertReferencedAssetsExist(skillName, markdown) {
+  const references = [...markdown.matchAll(/(?:templates|references|scripts)\/[A-Za-z0-9._-]+/g)].map((match) => match[0]);
+
+  for (const relativePath of new Set(references)) {
+    if (!existsSync(join(skillsDir, skillName, relativePath))) {
+      fail(`${skillName}: SKILL.md references missing asset ${relativePath}`);
+    }
+  }
+}
+
+function assertDescriptionSemantics(skillName, description) {
+  const required = {
+    obadr: ["需要时"],
+    obdoc: ["不要用于"],
+  }[skillName];
+
+  for (const term of required ?? []) {
+    if (!String(description ?? "").includes(term)) {
+      fail(`${skillName}: SKILL.md description must keep the semantic constraint "${term}"`);
     }
   }
 }
@@ -614,6 +682,18 @@ function runInspectProjectFixtures() {
       writeFileSync(join(projectRoot, "GEMINI.md"), "# Gemini\n", "utf8");
     }),
     {
+      name: "docs top level is reported",
+      setup: (projectRoot) => {
+        mkdirSync(join(projectRoot, "docs", "specs"), { recursive: true });
+        mkdirSync(join(projectRoot, "docs", "plans"), { recursive: true });
+        writeFileSync(join(projectRoot, "docs", "README.md"), "# Docs\n", "utf8");
+      },
+      assert: (result) => {
+        expectEqual("inspect-project docs directories", JSON.stringify(result.docsTopLevel?.directories), JSON.stringify(["plans", "specs"]));
+        expectEqual("inspect-project docs index files", JSON.stringify(result.docsTopLevel?.indexFiles), JSON.stringify(["README.md"]));
+      },
+    },
+    {
       name: "git subdirectory resolves repository root",
       setup: (projectRoot) => {
         execFileSync("git", ["init"], { cwd: projectRoot, stdio: "ignore" });
@@ -679,11 +759,6 @@ if (!existsSync(skillsDir)) {
     });
 
     if (skillName === "obinit") {
-      const body = markdown.replace(/^---\r?\n[\s\S]*?\r?\n---\s*/, "");
-      const bodyWordsish = countWordsish(body);
-      if (bodyWordsish > 2000) {
-        fail(`${skillName}: SKILL.md body is too long (${bodyWordsish} > 2000); move details to references or scripts`);
-      }
 
       for (const relativePath of requiredObinitReferences) {
         const referencePath = join(skillsDir, skillName, relativePath);
@@ -721,6 +796,12 @@ if (!existsSync(skillsDir)) {
               }
             }
           }
+
+          assertRequiredConcepts(
+            `${skillName}: ${relativePath}`,
+            referenceContent,
+            requiredObinitReferenceConcepts[relativePath] ?? [],
+          );
         }
       }
 
@@ -746,9 +827,32 @@ if (!existsSync(skillsDir)) {
       });
     }
 
+    assertReferencedAssetsExist(skillName, markdown);
+    assertDescriptionSemantics(skillName, frontmatter.description);
+
+    assertNoPhrases(`${skillName}: SKILL.md`, markdown, forbiddenHardcodedToolPaths, (phrase) => {
+      return `must not hardcode a third-party tool path as a rule: ${phrase}`;
+    });
+    assertNoPhrases(`${skillName}: SKILL.md`, markdown, forbiddenOrchestrationPolicyWords, (phrase) => {
+      return `must not embed orchestration policy vocabulary: ${phrase}`;
+    });
+
+    const bodyLimit = skillName === "obinit" ? 2000 : 5000;
+    const bodyWordsish = countWordsish(markdown.replace(/^---\r?\n[\s\S]*?\r?\n---\s*/, ""));
+    if (bodyWordsish > bodyLimit) {
+      fail(`${skillName}: SKILL.md body is too long (${bodyWordsish} > ${bodyLimit}); move details to references, templates or scripts`);
+    }
+
+    if (!markdown.includes("## 运行时假设")) {
+      fail(`${skillName}: SKILL.md must declare a "## 运行时假设" section`);
+    }
     assertRequiredConcepts(skillName, markdown, requiredSkillConcepts[skillName] ?? []);
 
     if (skillName === "obdoc") {
+      if (!markdown.includes("templates/documents-catalog-entry.md")) {
+        fail(`${skillName}: SKILL.md must reference templates/documents-catalog-entry.md`);
+      }
+
       assertNoPhrases(`${skillName}: SKILL.md`, markdown, forbiddenObdocWritePolicyPhrases, (phrase) => {
         return `must describe Obsidian writes with the positive file-write policy, not old phrasing: ${phrase}`;
       });
@@ -876,6 +980,34 @@ if (!existsSync(skillsDir)) {
           });
         }
 
+        if (skillName === "obadr" && template === "progress-entry.md") {
+          for (const term of ["- 已完成：", "- ADR：", "- 来源："]) {
+            if (!content.includes(term)) {
+              fail(`${skillName}: template ${template} must align with the obclose progress entry format: ${term}`);
+            }
+          }
+        }
+
+        if (skillName === "obclose" && template === "progress-entry.md" && !content.includes("- 来源：")) {
+          fail(`${skillName}: template ${template} must include a source attribution line`);
+        }
+
+        if (skillName === "obclose" && template === "handoff.md") {
+          for (const term of ["状态：", "会话：", "涉及文件："]) {
+            if (!content.includes(term)) {
+              fail(`${skillName}: template ${template} must include handoff field: ${term}`);
+            }
+          }
+        }
+
+        if ((skillName === "obclose" || skillName === "obinit") && template === "active.md" && !content.includes("派生视图")) {
+          fail(`${skillName}: template ${template} must declare that active.md is a derived view`);
+        }
+
+        if (skillName === "obinit" && ["instructions.md", "instructions-index.md"].includes(template) && !content.includes("## 协作策略")) {
+          fail(`${skillName}: template ${template} must include a "## 协作策略" section`);
+        }
+
         if (skillName === "oblearn" && template === "public-knowledge-note.md") {
           for (const term of ["kind: knowledge", "source_skill: oblearn", "last_verified:"]) {
             if (!content.includes(term)) {
@@ -946,6 +1078,10 @@ if (!existsSync(commandsDir)) {
       fail(`${skillName}: command missing description`);
     }
 
+    if (!command.includes(`使用 \`${skillName}\` skill`)) {
+      fail(`${skillName}: command must invoke \`${skillName}\` skill`);
+    }
+
     assertNoPhrases(`${skillName}: command`, command, forbiddenGeneratedEnglish, (phrase) => {
       return `contains English generated-doc phrase: ${phrase}`;
     });
@@ -1005,6 +1141,10 @@ if (existsSync(packageJsonPath)) {
           fail(`${skill.name}: skills.json path must be ${expectedPath}`);
         }
 
+        if (skill.name === "obadr" && !String(skill.description ?? "").includes("需要时")) {
+          fail(`${skill.name}: skills.json description must keep the semantic constraint "需要时"`);
+        }
+
         const skillPath = join(root, skill.path);
         if (!existsSync(skillPath) || !statSync(skillPath).isDirectory()) {
           fail(`${skill.name}: skills.json path does not exist or is not a directory`);
@@ -1045,6 +1185,12 @@ if (existsSync(packageJsonPath)) {
 
       if (!content.includes("npm run version:set --")) {
         fail("README.md: must document npm run version:set -- for synchronized release version bumps");
+      }
+
+      for (const skillName of skillNames) {
+        if (!content.includes(`[${skillName}](skills/${skillName})`)) {
+          fail(`README.md: must list ${skillName} in the skills table`);
+        }
       }
 
       for (const term of requiredReadmeObsidianFilesystemWriteTerms) {
@@ -1110,6 +1256,10 @@ if (existsSync(packageJsonPath)) {
       fail(".claude-plugin/marketplace.json: marketplace name must match package name");
     }
 
+    if (marketplace.metadata?.version !== packageJson.version) {
+      fail(".claude-plugin/marketplace.json: metadata.version must match package version");
+    }
+
     if (!marketplacePlugin) {
       fail(".claude-plugin/marketplace.json: missing plugin entry for package name");
     } else {
@@ -1127,7 +1277,8 @@ if (existsSync(packageJsonPath)) {
 runInspectProjectFixtures();
 
 if (process.exitCode) {
+  console.error(`\nValidation failed: ${failureCount} problem(s) across ${failureScopes.size} scope(s): ${[...failureScopes].join(", ")}`);
   process.exit();
 }
 
-console.log("All skills are valid.");
+console.log(`All skills are valid. (${skillNames.length} skills checked)`);

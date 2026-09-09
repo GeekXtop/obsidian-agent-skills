@@ -54,6 +54,14 @@ description: 整理和维护 Obsidian 公共知识库 `Agent/Knowledge/` 与文�
 
 无法解析 vault 本地路径时，请用户提供或确认目标 vault 的本地文件系统路径，再执行文件操作。
 
+写入前先读取目标文件的当前内容；发现本次范围外的外部改动时停止写入并列出待确认项，不覆盖对方内容。
+
+## 运行时假设
+
+- 整理对象是 vault 本地文件；需要能解析目标 vault 的本地文件系统路径，无法解析时请用户提供或确认，不退回 CLI mutation。
+- `obsidian` CLI 只用于 vault 定位、有限搜索、读取和写入后读回校验；CLI 不可用时只产出整理计划，不执行移动、重命名、合并、拆分或删除。
+- 移动、重命名、合并、拆分、删除前先保留可恢复副本（`Agent/Archive/YYYY-MM-DD/`），并在整理计划中写明该回退路径。
+
 ## 默认行为
 
 用户只说 `$obcurate` 或“整理公共知识”时，按安全默认值执行：
@@ -129,7 +137,7 @@ obsidian read path="Agent/Documents/<命中文档>.md"
 4. 生成整理计划，先按批量整理分组：稳定归类、保持 Inbox、敏感文档、需要人工判断；再在每组内按动作标明保留、移动、重命名、合并、拆分、修正 metadata、更新 catalog、暂不处理。
 5. 对每个 `kind: document` 计划项标明处理类型：整理 metadata/catalog、保留为文档入口、补充 `sensitivity`，或因不属于本轮范围而暂不处理。
 6. 等待用户按组确认结构性修改；“需要人工判断”和高风险例外必须逐项确认。
-7. 执行确认过的修改；每次修改保持最小范围。移动前检查路径冲突，确认目标路径目录，并先确保目标目录存在。
+7. 执行确认过的修改；每次修改保持最小范围。移动、重命名、合并、拆分或删除前，先把目标内容复制到 `Agent/Archive/YYYY-MM-DD/`，并在整理计划中记录回退路径；移动前检查路径冲突，确认目标路径目录，并先确保目标目录存在。
 8. 读回被修改的笔记和对应 `_catalog.md`，确认 wikilink、aliases、terms、notes 一致。
 9. 汇报修改过的文件、跳过的建议和需要用户判断的剩余项。
 
@@ -171,7 +179,7 @@ Documents catalog 可使用更人类友好的 Markdown 目录。展示分组名�
 - [[<目标路径目录>/<真实文档标题>|<真实文档标题>]]
   - 类型：文档（`kind: document`）
   - 用途：操作手册（`use_as: runbook`）
-  - 敏感度：内部网络细节（`sensitivity: internal-network-details`）
+  - 敏感度：内部网络细节（`sensitivity: internal`）
   - 读取条件：仅在用户明确涉及本地 PVE / ImmortalWrt / 内网迁移，或指定该文档时读取。
 ```
 
@@ -217,6 +225,18 @@ Documents catalog 可使用更人类友好的 Markdown 目录。展示分组名�
 - 原笔记是否保留为索引或归档。
 
 重命名前先读取 backlinks 或定向搜索旧标题；重命名后更新明确指向旧标题的 wikilink，并把旧标题写入 `aliases`。
+
+## 机器层枚举
+
+以下字段值使用固定英文 token；`$oblearn`、`$obdoc`、`$obcurate` 的正文和模板都只使用这些值，不新增同义值：
+
+| 字段 | 取值 |
+| --- | --- |
+| `kind` | `knowledge`、`document` |
+| `source_skill` | `oblearn`、`obdoc` |
+| `use_as` | `rule`、`checklist`、`heuristic`、`guide`、`runbook`、`reference`、`evidence` |
+| `sensitivity` | `public`、`sanitized`、`internal`、`restricted` |
+| `status` | `draft`、`active`、`needs-review`、`deprecated` |
 
 ## 隐私和脱敏
 
