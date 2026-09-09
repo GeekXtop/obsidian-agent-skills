@@ -4,7 +4,7 @@
 
 - 目标：把 `.agents/` 从共享可变状态改造为「追加日志 + 派生视图」，并清理 skills 中的工具耦合。
 - Plan：`docs/superpowers/plans/2026-09-09-multi-session-memory-and-generality.md`。
-- 状态：Task 1-7 全部完成并通过验证，改动尚未提交。
+- 状态：Task 1-7 全部完成并通过验证；已提交（`860e2fa`）并发版 `0.1.28`（tag `obsidian-agent-skills--v0.1.28`，已推送）。
 - 最后更新：2026-09-09
 
 ## 当前状态
@@ -33,7 +33,7 @@
 
 ## 下一步
 
-1. 用户 review 全部 diff 后决定是否提交、是否发版（`npm run version:set -- <版本>`）。
+1. 客户端同步：Codex 与 Claude Code 已更新到 `0.1.28`；ZCode 仍为 `0.1.27`（无独立 CLI，需在 GUI 内更新）；DSH 未全局安装，本会话从工作区加载。
 2. 首个使用 `.agents/handoffs/` 的任务结束后，按实际校准 12 小时新鲜度阈值与 30 文件 / 200 KB 上限。
 3. 未决项：既有 `docs/superpowers/` 结构是否改用中性路径（破坏性，需用户确认）。
 

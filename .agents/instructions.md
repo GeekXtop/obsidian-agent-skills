@@ -49,7 +49,7 @@ Obsidian 项目笔记：`Agent/Projects/obsidian-agent-skills.md`。
 - 当状态已由权威状态载体记录时（git commit、tag、PR、CI/CD、release、artifact、ADR、migration、issue/ticket、runbook），`.agents/active.md` / `.agents/progress.md` 只记录下一次 agent 需要接手的未完成事项、不在权威载体中的决策背景、阻塞或人工确认点；不记录短暂中间态，已完成状态在最终回复说明。
 - `.agents/archive/` 保存过长 `progress.md` 的历史归档，应提交。
 - 长期项目决策写入 `docs/adr/`。
-- 如已有 Superpowers spec/plan，在 `.agents/active.md` 链接当前文件，不复制全文。
+- 如已有设计/计划文档（无论由哪个工具生成），在 `.agents/active.md` 链接当前文件，不复制全文。
 - 临时调查草稿写入 `.agents/scratch/`；运行日志、缓存和生成物不要放进 agent memory。
 
 ## 重复运行
