@@ -39,8 +39,4 @@
 
 ## 已提取知识
 
-- 暂无。
-
-## Obsidian
-
-- 项目笔记：`Agent/Projects/<project>.md`
+- Obsidian 项目笔记：`Agent/Projects/<project>.md`

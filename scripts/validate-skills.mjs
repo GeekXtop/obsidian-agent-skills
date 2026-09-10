@@ -125,12 +125,21 @@ const requiredObinitReferenceConcepts = {
   "references/memory-upgrade.md": [
     {
       name: "memory generation and migration",
-      terms: ["memory 代际", "v1 → v2", "必做", "可选", "执行主体", "验证方式"],
+      terms: ["memory 代际", "v1 → v2", "v2 → v3", "必做", "可选", "执行主体", "验证方式"],
     },
   ],
 };
 
 const requiredSkillNames = ["obinit", "obadr", "obclose", "oblearn", "obcurate", "obdoc"];
+
+const requiredSelfHostingGateTerms = [
+  "## 自举门禁",
+  "0.1.28",
+  "## handoffs 目录",
+  "docs/adr/0001-use-marketplace-plugin-update-flow.md",
+];
+
+const requiredSelfHostingMemoryIndexTerms = ["handoffs/", "派生视图"];
 
 const requiredProjectDescriptionTerms = ["文档整理"];
 
@@ -210,6 +219,10 @@ const requiredLessonVerificationFieldTerms = ["验证方式：", "最后验证�
 const forbiddenLessonLegacyFieldTerms = ["下次检查"];
 
 const requiredUsageFalsificationTerms = ["使用中证伪", "直接证伪证据", "needs-review", "deprecated", "最后验证"];
+
+const requiredDocMapTerms = ["## 文档地图", "`docs/README.md`", "事实源", "同步触发", "时点快照"];
+
+const requiredDocsReadmeTerms = ["## 权威文档地图", "同步触发", "时点快照", "docs/adr/"];
 
 const forbiddenObdocWritePolicyPhrases = [
   "长文写入",
@@ -894,6 +907,10 @@ if (!existsSync(skillsDir)) {
         fail(`${skillName}: missing templates/instructions-index.md for mature project onboarding`);
       }
 
+      if (skillName === "obinit" && !templates.includes("docs-readme.md")) {
+        fail(`${skillName}: missing templates/docs-readme.md for the project doc map`);
+      }
+
       for (const template of templates) {
         const templatePath = join(templatesDir, template);
         const content = readFileSync(templatePath, "utf8");
@@ -966,6 +983,20 @@ if (!existsSync(skillsDir)) {
           const missingUsageFalsification = requiredUsageFalsificationTerms.filter((term) => !content.includes(term));
           if (missingUsageFalsification.length > 0) {
             fail(`${skillName}: template ${template} must include usage-time falsification terms: ${missingUsageFalsification.join(", ")}`);
+          }
+        }
+
+        if (skillName === "obinit" && ["instructions.md", "instructions-index.md"].includes(template)) {
+          const missingDocMap = requiredDocMapTerms.filter((term) => !content.includes(term));
+          if (missingDocMap.length > 0) {
+            fail(`${skillName}: template ${template} must include the doc map section terms: ${missingDocMap.join(", ")}`);
+          }
+        }
+
+        if (skillName === "obinit" && template === "docs-readme.md") {
+          const missingDocsReadme = requiredDocsReadmeTerms.filter((term) => !content.includes(term));
+          if (missingDocsReadme.length > 0) {
+            fail(`${skillName}: template ${template} must include doc map table terms: ${missingDocsReadme.join(", ")}`);
           }
         }
 
@@ -1198,6 +1229,110 @@ if (existsSync(packageJsonPath)) {
           fail(`README.md: must document Obsidian filesystem write boundary term: ${term}`);
         }
       }
+    }
+  }
+
+  // Shared active.md contract: obinit seeds the file and obclose rebuilds it,
+  // so both templates must expose the same section set.
+  const sharedActiveTemplateSkillNames = ["obinit", "obclose"];
+  const sharedActiveTemplateHeadings = new Map();
+
+  for (const skillName of sharedActiveTemplateSkillNames) {
+    const templatePath = join(skillsDir, skillName, "templates", "active.md");
+
+    if (!existsSync(templatePath)) {
+      fail(`${skillName}: missing templates/active.md required by the shared active.md section contract`);
+      continue;
+    }
+
+    sharedActiveTemplateHeadings.set(
+      skillName,
+      readFileSync(templatePath, "utf8")
+        .split(/\r?\n/)
+        .filter((line) => line.startsWith("## "))
+        .join(" | "),
+    );
+  }
+
+  const sharedActiveReferenceSkill = "obclose";
+  const sharedActiveHeadings = sharedActiveTemplateHeadings.get(sharedActiveReferenceSkill);
+
+  if (sharedActiveHeadings !== undefined) {
+    for (const [skillName, headings] of sharedActiveTemplateHeadings) {
+      if (skillName !== sharedActiveReferenceSkill && headings !== sharedActiveHeadings) {
+        fail(`${skillName}: templates/active.md sections must match ${sharedActiveReferenceSkill} — expected (${sharedActiveHeadings}), got (${headings})`);
+      }
+    }
+  }
+
+  // Self-hosting gate: this repository iterates its own skills, so its own
+  // `.agents/` instance must satisfy the memory generation it ships.
+  const selfHostingInstructionsPath = join(root, ".agents", "instructions.md");
+
+  if (!existsSync(selfHostingInstructionsPath)) {
+    fail(".agents/instructions.md: missing self-hosting gate file");
+  } else {
+    const content = readFileSync(selfHostingInstructionsPath, "utf8");
+    for (const term of requiredSelfHostingGateTerms) {
+      if (!content.includes(term)) {
+        fail(`.agents/instructions.md: self-hosting gate must include ${term}`);
+      }
+    }
+  }
+
+  const obcloseSkillPath = join(skillsDir, "obclose", "SKILL.md");
+  if (!existsSync(obcloseSkillPath)) {
+    fail("obclose: missing SKILL.md for self-hosting gate probe");
+  } else if (!readFileSync(obcloseSkillPath, "utf8").includes("## handoffs 目录")) {
+    fail("obclose: the self-hosting gate probes for '## handoffs 目录', so that section title is part of the contract");
+  }
+
+  const selfHostingActivePath = join(root, ".agents", "active.md");
+  if (!existsSync(selfHostingActivePath)) {
+    fail(".agents/active.md: missing derived-view file");
+  } else {
+    const selfHostingActive = readFileSync(selfHostingActivePath, "utf8");
+
+    if (!selfHostingActive.includes("派生视图")) {
+      fail(".agents/active.md: must declare that it is a derived view of handoffs, ADRs and the Obsidian project note");
+    }
+
+    if (sharedActiveHeadings !== undefined) {
+      const instanceHeadings = selfHostingActive
+        .split(/\r?\n/)
+        .filter((line) => line.startsWith("## "))
+        .join(" | ");
+
+      if (instanceHeadings !== sharedActiveHeadings) {
+        fail(`.agents/active.md: sections must match the shipped active.md template — expected (${sharedActiveHeadings}), got (${instanceHeadings})`);
+      }
+    }
+  }
+
+  const selfHostingMemoryIndexPath = join(root, ".agents", "README.md");
+  if (!existsSync(selfHostingMemoryIndexPath)) {
+    fail(".agents/README.md: missing memory index");
+  } else {
+    const content = readFileSync(selfHostingMemoryIndexPath, "utf8");
+    for (const term of requiredSelfHostingMemoryIndexTerms) {
+      if (!content.includes(term)) {
+        fail(`.agents/README.md: memory index must include ${term}`);
+      }
+    }
+  }
+
+  if (!existsSync(join(root, ".agents", "handoffs"))) {
+    fail(".agents/handoffs/: missing handoff directory required by memory generation v2");
+  }
+
+  const selfHostingProgressPath = join(root, ".agents", "progress.md");
+  if (existsSync(selfHostingProgressPath)) {
+    const progressLines = readFileSync(selfHostingProgressPath, "utf8").split(/\r?\n/);
+    const lastEntryStart = progressLines.reduce((acc, line, index) => (line.startsWith("## ") ? index : acc), -1);
+    const lastEntry = progressLines.slice(lastEntryStart).join("\n");
+
+    if (!lastEntry.includes("- 来源：")) {
+      fail(".agents/progress.md: the newest progress entry must carry '- 来源：<agent>/<task slug>'");
     }
   }
 

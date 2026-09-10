@@ -327,3 +327,39 @@
 - 下一步：用户 review 后决定提交与发版；发版前确认迁移机制与批次二同版本发布。
 - 备注：未提交、未推送、未发版；代际标记推迟到 v2 → v3。
 - 来源：dsh/multi-session-memory-and-generality
+
+## 2026-09-11 - 通用自举门禁与仓库自身 v2 收敛
+
+- 已完成：`.agents/instructions.md` 新增「自举门禁」节——声明当前 memory 代际 v2（对应插件 `0.1.28` 及以上），用行为探针判定执行者版本（加载到的 `$obclose` 正文缺 `## handoffs 目录`、或 `$obinit` 正文缺 `references/memory-upgrade.md` 指针即判定过旧），过旧时只读不写 `.agents/`，恢复路径指向 ADR 0001。
+- 已完成：补齐本仓库自身 v1 → v2 迁移——创建 `.agents/handoffs/` 并接入首份交接记录、`.agents/active.md` 补派生视图声明与 `## 已提取知识` 节、`.agents/README.md` 记忆库索引补 `handoffs/` 与派生视图说明。
+- 已完成：`scripts/validate-skills.mjs` 新增自举 scope——门禁四要素、obclose 探针章节标题、active 派生声明、README 记忆库索引两项、`handoffs/` 目录存在、progress 末条 `来源` 行，让仓库自身 memory 也进 `npm test` 门禁。
+- 已验证：`npm test` 输出 `All skills are valid. (6 skills checked)`；9 条新断言在临时副本上逐条红灯（门禁标题、版本下限、探针术语、obclose 章节改名、派生声明、README 两项、删 `handoffs/` 目录、末条来源行）。
+- 已变更：`.agents/instructions.md`、`.agents/README.md`、`.agents/active.md`、`.agents/handoffs/`（新增）、`scripts/validate-skills.mjs`。
+- 下一步：产品侧评估是否把自举门禁下沉到 `skills/obinit/templates/instructions.md`，让 obinit 生成的项目同样带版本门禁（属产品改动，需发版）；另核对 `skills/obinit/templates/active.md` 与 `skills/obclose/templates/active.md` 的章节集不一致问题。
+- 备注：未提交、未发版。
+- 来源：dsh/self-hosting-gate
+
+## 2026-09-11 - 统一 active.md 章节集
+
+- 已完成：`skills/obinit/templates/active.md` 移除独立的 `## Obsidian` 节，项目笔记路径并入 `## 已提取知识`，与 `skills/obclose/templates/active.md` 以及 obclose 的段落归属（已提取知识 = 指向 Obsidian 项目笔记的链接视图）对齐。
+- 已完成：`scripts/validate-skills.mjs` 增加共享章节契约断言——两个 `active.md` 模板的 `## ` 章节序列必须一致（以 obclose 为基准），且本仓库 `.agents/active.md` 的章节集必须等于发布模板。
+- 已完成：本仓库 `.agents/active.md` 同步去重，项目笔记路径并入 `## 已提取知识`。
+- 已验证：`npm test` 输出 `All skills are valid. (6 skills checked)`；4 条新断言在临时副本上逐条红灯（obinit 模板加回 `## Obsidian`、obclose 模板改章节名、仓库实例多出 `## Obsidian`、仓库实例丢掉 `## 验证`）。
+- 已变更：`skills/obinit/templates/active.md`、`scripts/validate-skills.mjs`、`.agents/active.md`。
+- 下一步：属产品改动，需随下一版发布（0.1.29 候选）；发版说明记录「active.md 不再有独立 `## Obsidian` 节」。这是同代际内的兼容调整，不改变 memory 代际，不要求存量项目迁移。
+- 备注：未提交、未发版；连同上一轮自举门禁改动一起待 review。
+- 来源：dsh/active-section-set
+
+## 2026-09-11 - 文档地图契约与 memory 代际 v3
+
+- 已完成：新增 `skills/obinit/templates/docs-readme.md`——`docs/README.md` 文档地图模板与维护规则。形态为三列反查表「文档 / 事实范围 / 同步触发」，只收**当前状态**文档与 `docs/adr/`，明写设计稿、实施计划这类**时点快照不入表**；定位粒度要求到「文件名 + 节标题」，能写行号就写行号。
+- 已完成：`templates/instructions.md` 与 `templates/instructions-index.md` 各新增 `## 文档地图` 节（纯新增，未改动既有行）——声明 `docs/README.md` 是事实源地图、改行为前先读地图、改动与文档同批提交、**写实施计划时把受影响文档的节标题写进每个任务的改动点**、文档增删改名时同批更新地图、时点快照不入表。
+- 已完成：`obinit/SKILL.md`——allowlist 加 `docs/README.md`（最窄写法，未触发「必须用更窄的 `docs/adr/` 初始化范围」断言）、Memory Bank 文件树与更新时机补建图要求、Obsidian 同步节声明地图不写进 vault、模板表加 `docs-readme.md`。
+- 已完成：`references/memory-upgrade.md` 推进到 **v3（0.1.29）**——代际表加一行，新增 v2 → v3 迁移清单（必做 4 / 可选 1 / 不做 2），并兑现原先推迟的「有意保留」持久化记录（改由文档地图的维护规则承载）。
+- 已完成：`scripts/validate-skills.mjs` 新增 `requiredDocMapTerms`、`requiredDocsReadmeTerms` 与三条断言（两个指令模板含文档地图节术语、`docs-readme.md` 含表结构术语、模板文件存在），并把 `v2 → v3` 纳入 memory-upgrade 概念断言。
+- 已完成：`README.md` 的 `$obinit` 模式说明补文档地图条目（两种建立模式、空行待补、已有文件先读回再合并不覆盖）。
+- 已验证：`npm test` 输出 `All skills are valid. (6 skills checked)`；负向验证两条新断言逐条红灯（删 `docs-readme.md` 的「同步触发」、把 `instructions.md` 的 `## 文档地图` 改名），恢复后全绿。模板 diff 为纯新增（两模板各 8 增 0 删）。
+- 已变更：`skills/obinit/templates/docs-readme.md`（新增）、`skills/obinit/templates/instructions.md`、`skills/obinit/templates/instructions-index.md`、`skills/obinit/references/memory-upgrade.md`、`skills/obinit/SKILL.md`、`scripts/validate-skills.mjs`、`README.md`、`docs/README.md`（新增）。
+- 下一步：随 0.1.29 发布，发版说明记录 memory 代际 v3；发布并 reload 后推进 `.agents/instructions.md` 的自举门禁代际标记到 v3 / `0.1.29`。
+- 备注：自举门禁代际标记**刻意保持 v2 / `0.1.28`**——0.1.29 发布前不存在 v3 执行者，提前推进会让门禁宣称的代际高于执行者实际契约（见 `lessons.md` 关于「仓库无法决定执行者插件版本」的教训）。
+- 来源：dsh/doc-map-contract

@@ -12,6 +12,16 @@ Obsidian 项目笔记：`Agent/Projects/obsidian-agent-skills.md`。
 - 如果需要项目结构、命令、测试、架构或提交规范细节，读取上述源文件，不要依赖本文件的二次摘要。
 - 不要把 `AGENTS.md` / `CLAUDE.md` / `README.md` / docs 的长内容完整复制进本文件。
 
+## 自举门禁
+
+本仓库同时是 ob* skill 的源码仓库，执行者手上的插件版本不一定等于仓库当前契约。写 memory 或改 skill 之前先做一次自检。
+
+- 当前 memory 代际：v2，对应插件版本 `0.1.28` 及以上；代际定义和迁移清单见 `skills/obinit/references/memory-upgrade.md`。
+- 代际标记只在本版**已发布且执行者已更新插件**后推进：仓库先把 v3 契约写进模板，但加载到的插件仍是 v2 时，按 v2 行事；0.1.29 发布并 reload 后再把本行改为 v3 / `0.1.29`。
+- 自检依据是你**实际加载到的 skill 正文**，不是版本号：加载到的 `$obclose` 正文如果没有 `## handoffs 目录` 一节，或 `$obinit` 正文没有 `references/memory-upgrade.md` 指针，就判定插件过旧。
+- 判定插件过旧时：只做只读分析和代码阅读，不执行 `$obinit`、`$obclose`、`$oblearn`、`$obdoc`、`$obadr`、`$obcurate` 的写入，不改 `.agents/`。
+- 恢复方式：按 `docs/adr/0001-use-marketplace-plugin-update-flow.md` 更新插件，reload 或重启客户端后继续。
+
 ## 初始化范围
 
 项目初始化阶段，agent 只能创建或更新：
@@ -51,6 +61,14 @@ Obsidian 项目笔记：`Agent/Projects/obsidian-agent-skills.md`。
 - 长期项目决策写入 `docs/adr/`。
 - 如已有设计/计划文档（无论由哪个工具生成），在 `.agents/active.md` 链接当前文件，不复制全文。
 - 临时调查草稿写入 `.agents/scratch/`；运行日志、缓存和生成物不要放进 agent memory。
+
+## 文档地图
+
+- `docs/README.md` 是项目文档的事实源地图：登记每个当前状态文档的事实范围和同步触发。初始化时建立，内容由项目自填。
+- 改行为之前先读文档地图，定位受影响的文档与节；改动与文档更新同批提交。
+- 写实施计划时把受影响文档的**节标题**写进每个任务的改动点，不要留到实现完再补。
+- 新增、改名或下掉文档时同批更新文档地图；地图里未定位的条目按「先定位再改行为」处理。
+- 设计稿、实施计划等时点快照不进文档地图：它们记录当时的判断，不随后续改动更新。
 
 ## 重复运行
 

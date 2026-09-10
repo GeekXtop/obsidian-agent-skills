@@ -170,6 +170,8 @@ $obcurate
 - 成熟项目或 fork：保留已有 `AGENTS.md` / `CLAUDE.md`，只追加中文入口提示；`.agents/instructions.md` 使用索引型结构，避免重复复制长规则。
 - 重复运行：只补缺失文件、链接和入口提示，不覆盖、不重复追加、不重置状态。
 
+新项目模式和成熟项目接入模式都会建立 `docs/README.md` 文档地图：登记当前状态文档的事实范围和同步触发，让行为改动能定位到具体文档与节。项目暂无当前状态文档时保留空行并标注待补，不登记设计稿、实施计划这类不随后续改动更新的时点快照。已有 `docs/README.md` 的项目先读回再合并，不整体覆盖。
+
 首次 `$obinit` 不强行判断尚未成型的项目类型，也不预填弱相关公共知识。重复 `$obinit` 时会根据 README、package metadata、目录结构、显式 skill/spec/plan、docs 顶层索引和 agent memory 重新判断项目类型；`unknown` 只保留查询协议，`candidate` 只列建议，`confirmed` 才回写高置信相关知识链接。回写只写链接和 `kind` / `use_as`，不复制公共知识正文。
 
 `.agents/active.md`、`.agents/progress.md`、`.agents/lessons.md` 等项目 memory 文件不会后台自动同步。需要 agent 在任务开始、阶段结束或会话收尾时主动回写；完成实质代码/文档改动、阶段性验证或复杂任务暂停时，agent 应按 `$obclose` 收尾。`$obclose` 还会检查 `progress` / `lessons` 是否过长或重复，必要时轻量合并、压缩或把旧进展归档到 `.agents/archive/`。

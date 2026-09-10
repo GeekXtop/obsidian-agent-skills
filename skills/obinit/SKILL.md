@@ -25,7 +25,7 @@ node <skill>/scripts/inspect-project.mjs <project-root>
 ```
 
 3. 读取 `AGENTS.md`、`CLAUDE.md`、`.agents/instructions.md`、`README.md` 和 package metadata；对 `docs/` 只检查 docs 顶层信号和索引。
-4. 只在 allowlist 内创建或更新：`AGENTS.md`、`CLAUDE.md`、`.agents/`、`docs/adr/`，以及 `.gitignore` 的 `.agents/scratch/` 条目。
+4. 只在 allowlist 内创建或更新：`AGENTS.md`、`CLAUDE.md`、`.agents/`、`docs/adr/`、`docs/README.md`，以及 `.gitignore` 的 `.agents/scratch/` 条目。
 5. 选择模板、合并已有内容、写入项目 memory。
 6. 按 `references/obsidian-sync.md` 的 vault 文件写入契约创建或更新 `Agent/Projects/<project>.md`。
 7. 读回更新过的项目文件；完成后必须读回 Obsidian 项目笔记。
@@ -73,6 +73,7 @@ node <skill>/scripts/inspect-project.mjs <project-root>
 .agents/lessons.md
 .agents/archive/
 .agents/scratch/
+docs/README.md
 docs/adr/
 ```
 
@@ -85,6 +86,7 @@ docs/adr/
 - 当状态已由权威状态载体记录时（git commit、tag、PR、CI/CD、release、artifact、ADR、migration、issue/ticket、runbook），`.agents/active.md` / `.agents/progress.md` 只记录下一次 agent 需要接手的未完成事项、不在权威载体中的决策背景、阻塞或人工确认点；不记录短暂中间态，已完成状态在最终回复说明。
 - `.agents/archive/` 保存过长 `progress.md` 的历史归档，应提交；它不是临时草稿。
 - 长期技术决策写入 `docs/adr/`。
+- 建立 `docs/README.md` 的文档地图：登记当前状态文档、各自的事实范围和同步触发；项目暂无当前状态文档时保留空行，标注待补，不要删行。
 - 项目内既有的设计/计划文档（无论由哪个工具生成）保留原文件，memory 只链接；obinit 不创建、不改写、不按工具路径批量读取它们。
 - 临时调查草稿写入 `.agents/scratch/`；运行日志、缓存和生成物不要放进 agent memory。
 
@@ -96,6 +98,7 @@ Obsidian 只作为跨会话上下文和公共知识入口，不作为源码、�
 - 公共知识默认路径：`Agent/Knowledge/`。
 - 公共知识发现入口：`Agent/Knowledge/_catalog.md`。它是已沉淀公共知识的事实来源，不存在或不命中时不要凭空假设。
 - 文档默认路径：`Agent/Documents/`。
+- 文档地图路径：`docs/README.md`。它是项目文档的事实索引（哪个文档是哪些内容的事实源），与 Obsidian 文档库无关，不写进 vault。
 - 文档目录入口：`Agent/Documents/_catalog.md`。它是人类可读文档目录和显式读取入口，只有用户明确指定、任务明确涉及文档主题，或执行 `$obdoc` / `$obcurate` 文档流程时读取。
 - 重复运行时也要检查 Obsidian 项目笔记。
 - Obsidian 项目笔记存在但内容过期时，按当前模式幂等更新。
@@ -123,6 +126,7 @@ Obsidian 只作为跨会话上下文和公共知识入口，不作为源码、�
 | `templates/progress.md` | `.agents/progress.md` |
 | `templates/lessons.md` | `.agents/lessons.md` |
 | `templates/agents-readme.md` | `.agents/README.md` |
+| `templates/docs-readme.md` | `docs/README.md`（文档地图） |
 | `templates/adr-readme.md` | `docs/adr/README.md` |
 | `templates/obsidian-project-note.md` | Obsidian 项目笔记 |
 
