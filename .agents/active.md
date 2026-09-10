@@ -14,7 +14,7 @@
 - 已完成：仓库自身 v1 → v2 收敛——`.agents/handoffs/` 建立并接入交接记录、`active.md` 补派生视图声明、`.agents/README.md` 补 `handoffs/` 与派生视图说明。
 - 已完成：`active.md` 章节集统一——obinit 模板移除独立 `## Obsidian` 节，项目笔记路径并入 `## 已提取知识`，与 obclose 模板和段落归属对齐。
 - 已完成：文档地图契约（本版主要内容，memory 代际 v3）——新增 `skills/obinit/templates/docs-readme.md`；两个指令模板新增 `## 文档地图` 节（纯增量）；`SKILL.md` allowlist 加 `docs/README.md`；`references/memory-upgrade.md` 推进到 v3 并给出 v2 → v3 迁移清单；`README.md` 补模式说明。
-- 已完成：本仓库自身按新契约建立 `docs/README.md`，登记 6 份当前状态文档的事实范围与同步触发，`docs/adr/` 整体一行。
+- 已完成：本仓库自身按新契约建立 `docs/README.md`，登记 7 份当前状态文档的事实范围与同步触发，`docs/adr/` 与 `docs/superpowers/`（时点快照，标注「不更新」）各一行。
 - 已完成：`scripts/validate-skills.mjs` 新增自举 scope（9 条断言）、共享章节契约（4 条断言）、文档地图契约（3 条断言），并把 `v2 → v3` 纳入 memory-upgrade 概念断言；仓库自身 memory 与模板一致性都进 `npm test`。
 - 阻塞：无。
 
