@@ -363,3 +363,15 @@
 - 下一步：随 0.1.29 发布，发版说明记录 memory 代际 v3；发布并 reload 后推进 `.agents/instructions.md` 的自举门禁代际标记到 v3 / `0.1.29`。
 - 备注：自举门禁代际标记**刻意保持 v2 / `0.1.28`**——0.1.29 发布前不存在 v3 执行者，提前推进会让门禁宣称的代际高于执行者实际契约（见 `lessons.md` 关于「仓库无法决定执行者插件版本」的教训）。
 - 来源：dsh/doc-map-contract
+
+## 2026-09-11 - memory 体积预算与读取分级
+
+- 已完成：`obinit/references/memory-bank.md` 新增「体积与读取成本」节——按读取方式分两类：每次必读的文件（`.agents/instructions.md` 硬预算 8 KB、`docs/README.md` 软约束 4 KB、`active.md` 快照不留历史）与按需读取的文件（`progress.md` / `lessons.md` 用 grep 定位，不整篇读入）；并写明代际推进往里加节时必须同时压缩已成为存量稳定态的旧节，否则预算在下一次代际推进时失效。
+- 已完成：`obclose/SKILL.md` 的「Memory 维护」加读取分级段，检查清单补 `instructions.md` 8 KB 与文档地图 4 KB 两项；并把原「新增经验是否和已有条目明显重复」改为「用 grep 定位同主题条目后比对」，消除与新读取规则的自相矛盾。
+- 已完成：`obinit/templates/instructions.md`、`instructions-index.md`、`docs-readme.md` 与 `.agents/instructions.md`、`docs/README.md` 各补体积预算声明与分工说明。
+- 已完成：`scripts/validate-skills.mjs` 新增 `assertByteBudget` 与两种阈值——`instructions.md` 硬预算 8 KB（仓库实例 + 两个指令模板），文档地图 3 KB→**4 KB** 软约束配 6 KB 硬上限；另加「仓库实例与两个发布模板必须声明同一套预算」的跨仓库一致性断言。
+- 已验证：`npm test` 输出 `All skills are valid. (6 skills checked)`；三条新断言在临时副本上逐条红灯——仓库 `instructions.md` 超 8 KB、`docs/README.md` 超 6 KB、`instructions-index.md` 删掉「4 KB」（后者同时触发模板断言与跨仓库一致性断言，共 3 条报错）。
+- 已变更：`skills/obinit/references/memory-bank.md`、`skills/obclose/SKILL.md`、`skills/obinit/templates/docs-readme.md`、`skills/obinit/templates/instructions.md`、`skills/obinit/templates/instructions-index.md`、`scripts/validate-skills.mjs`、`.agents/instructions.md`、`docs/README.md`。
+- 下一步：`progress.md` 归档与压缩未执行（见 `active.md` 下一步）。
+- 备注：地图软约束原定 3 KB，实测标定偏低——发出的模板实例 2.0 KB、本仓库实例 3.5 KB、按 8 条目估算约 3.6 KB，三个数据点都贴近或超过 3 KB，故上调为 4 KB。改指导值而不是扭曲地图。
+- 来源：dsh/memory-budget

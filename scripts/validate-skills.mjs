@@ -220,9 +220,19 @@ const forbiddenLessonLegacyFieldTerms = ["下次检查"];
 
 const requiredUsageFalsificationTerms = ["使用中证伪", "直接证伪证据", "needs-review", "deprecated", "最后验证"];
 
-const requiredDocMapTerms = ["## 文档地图", "`docs/README.md`", "事实源", "同步触发", "时点快照"];
+const requiredDocMapTerms = [
+  "## 文档地图",
+  "`docs/README.md`",
+  "事实源",
+  "同步触发",
+  "时点快照",
+  "8 KB",
+  "4 KB",
+];
 
 const requiredDocsReadmeTerms = ["## 权威文档地图", "同步触发", "时点快照", "docs/adr/"];
+
+const requiredMemoryBudgetTerms = ["8 KB", "4 KB"];
 
 const forbiddenObdocWritePolicyPhrases = [
   "长文写入",
@@ -584,6 +594,25 @@ function parseOpenAiInterface(yaml) {
 
 function countWordsish(markdown) {
   return markdown.match(/[A-Za-z0-9_`$./-]+|[\u4e00-\u9fff]/g)?.length ?? 0;
+}
+
+// memory 文件的成本是读它的人付的上下文：instructions.md 每任务必读，文档地图写计划时必查。
+// instructions.md 用硬预算；地图用「防膨胀上限」——prose 里的 4 KB 是收并条目的软约束，
+// 硬上限留出余量，避免合法项目刚建好表就触红。
+const instructionsByteBudget = 8 * 1024;
+const docsMapByteBudget = 6 * 1024;
+
+function assertByteBudget(label, path, limit) {
+  if (!existsSync(path)) {
+    fail(`${label}: missing file for byte budget`);
+    return;
+  }
+
+  const bytes = statSync(path).size;
+
+  if (bytes > limit) {
+    fail(`${label}: ${bytes} bytes exceeds the ${limit}-byte ceiling; compress or merge before adding`);
+  }
 }
 
 function assertNoPhrases(label, content, phrases, describe) {
@@ -993,6 +1022,21 @@ if (!existsSync(skillsDir)) {
           }
         }
 
+        if (skillName === "obinit" && ["instructions.md", "instructions-index.md", "docs-readme.md"].includes(template)) {
+          const missingBudget = requiredMemoryBudgetTerms.filter((term) => !content.includes(term));
+          if (missingBudget.length > 0) {
+            fail(`${skillName}: template ${template} must document the memory size budgets: ${missingBudget.join(", ")}`);
+          }
+        }
+
+        if (skillName === "obinit" && ["instructions.md", "instructions-index.md"].includes(template)) {
+          assertByteBudget(`${skillName}: template ${template}`, templatePath, instructionsByteBudget);
+        }
+
+        if (skillName === "obinit" && template === "docs-readme.md") {
+          assertByteBudget(`${skillName}: template ${template}`, templatePath, docsMapByteBudget);
+        }
+
         if (skillName === "obinit" && template === "docs-readme.md") {
           const missingDocsReadme = requiredDocsReadmeTerms.filter((term) => !content.includes(term));
           if (missingDocsReadme.length > 0) {
@@ -1278,7 +1322,26 @@ if (existsSync(packageJsonPath)) {
         fail(`.agents/instructions.md: self-hosting gate must include ${term}`);
       }
     }
+
+    // instructions.md 是唯一每任务必读的 memory 文件，它的体积是每次对话的固定成本。
+    assertByteBudget(".agents/instructions.md", selfHostingInstructionsPath, instructionsByteBudget);
+
+    // 仓库实例与两个发布模板必须声明同一套体积预算，否则预算只活在本仓库里。
+    for (const name of ["instructions.md", "instructions-index.md"]) {
+      const templatePath = join(skillsDir, "obinit", "templates", name);
+      if (!existsSync(templatePath)) {
+        fail(`.agents/instructions.md: missing templates/${name} for memory budget parity`);
+        continue;
+      }
+
+      const missingBudget = requiredMemoryBudgetTerms.filter((term) => !readFileSync(templatePath, "utf8").includes(term));
+      if (missingBudget.length > 0) {
+        fail(`.agents/instructions.md: templates/${name} must declare the same memory budgets (${missingBudget.join(", ")})`);
+      }
+    }
   }
+
+  assertByteBudget("docs/README.md", join(root, "docs", "README.md"), docsMapByteBudget);
 
   const obcloseSkillPath = join(skillsDir, "obclose", "SKILL.md");
   if (!existsSync(obcloseSkillPath)) {

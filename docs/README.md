@@ -17,6 +17,7 @@
 | [`AGENTS.md`](../AGENTS.md) | 仓库项目约定：skill 放置路径、frontmatter 字段、运行时假设、发布前验证 | 目录约定、skill 结构要求、发布门禁 |
 | [`.agents/instructions.md`](../.agents/instructions.md) | agent 工作约定、自举门禁、memory 契约与代际 | memory 代际、初始化范围、自举门禁判据 |
 | [`skills/obinit/references/memory-upgrade.md`](../skills/obinit/references/memory-upgrade.md) | `.agents/` 模板代际定义与存量项目迁移清单 | 任一模板的代际变更（新增/改名/删除节、规则口径变化） |
+| [`skills/obinit/references/memory-bank.md`](../skills/obinit/references/memory-bank.md) | memory 文件职责、各文件体积预算与读取分级 | `.agents/` 文件增删、任一预算或读取规则变化 |
 | [`skills/ob*/SKILL.md`](../skills/) | 各 skill 的行为契约与运行时假设 | 对应该 skill 的模板、脚本、references 或校验规则 |
 | [`scripts/validate-skills.mjs`](../scripts/validate-skills.mjs) | `npm test` 的全部门禁：模板必备术语、共享章节、自举一致性 | 任何模板或 SKILL.md 契约变化（新断言必须同批加） |
 | [`docs/README.md`](README.md) | 本文件：项目文档的事实索引 | 文档新增、改名或下掉 |
@@ -31,4 +32,7 @@
 - 定位要写到能跳过去的粒度：**文件名 + 节标题**，能写到行号就写行号。只写文档名等于没定位。
 - 写实施计划时先读本表，把受影响文档的节标题写进每个任务的改动点，不要留到实现完再补。
 - 表中未定位的条目表示尚未落位，按「先定位再改行为」处理。
+- 有意保留旧写法或刻意不改的条目，在对应行注明「有意保留」，避免重复运行 `$obinit` 时被反复报告为差异。
+- 体积：本表保持 4 KB 以内，超过时把同类文档归到一行。`.agents/instructions.md` 是每任务必读的规则源头，同受 8 KB 预算约束——本表记「文档在哪、改什么要动它」，`instructions.md` 记规则与纪律，两边不互相复制。
+- `.agents/progress.md` 与 `.agents/lessons.md` 是日志与经验库，**用 grep 定位相关条目，不整篇读入**。
 - 有意保留旧写法或刻意不改的条目，在对应行注明「有意保留」，避免在重复运行 `$obinit` 时被反复报告为差异。

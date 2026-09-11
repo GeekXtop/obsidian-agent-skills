@@ -13,6 +13,7 @@
   scratch/          # 临时调查草稿，可清理
 docs/
   adr/              # 长期架构决策
+  README.md         # 文档地图：项目文档的事实源索引
 ```
 
 更新规则：
@@ -27,5 +28,20 @@ docs/
 - 长期设计决策抽成 `docs/adr/`。
 - 项目内既有的设计/计划文档（无论由哪个工具生成）保留原文件，`.agents/active.md` 只链接当前使用的文件；obinit 不创建、不改写、不按工具路径批量读取，只有 `.agents/active.md` 指向具体文件或用户指定时才读取。
 - 临时调查草稿写入 `.agents/scratch/`，并在 `.gitignore` 忽略；运行日志、缓存和生成物不要放进 agent memory。
+
+## 体积与读取成本
+
+memory 文件的成本不在体积本身，而在**读它的人付多少上下文**。按读取方式分两类：
+
+**每次必读，必须小**：
+
+- `.agents/instructions.md` 是中立规则源头，每个任务开始都要读。**硬预算 8 KB**。模板代际推进（见 `memory-upgrade.md`）往里加节时，必须同时压缩或移除已成为存量稳定态的旧节说明；只加不减会让预算在下一次代际推进时失效。
+- `docs/README.md` 是文档地图，写实施计划、改行为前要查。**软约束约 4 KB**：超过时收并条目、把同类文档归到一行，不要为了完整而逐条登记。地图规模由「当前状态文档数」决定，不随历史堆积增长。
+- `.agents/active.md` 是派生视图，始终保持当前状态快照，就地更新，不留历史。
+
+**按需读取，不要全文加载**：
+
+- `.agents/progress.md` 与 `.agents/lessons.md` 是日志与经验库，是**用 grep 定位相关条目的对象，不是通读对象**。收尾时只读与本次任务相关的条目，不要为了“了解项目历史”整篇读入。
+- 现行预算：`.agents/progress.md` 约 500 行 / 50 KB；`.agents/lessons.md` 约 300 行 / 30 KB；`.agents/handoffs/` 建议不超过 30 个文件或 200 KB。
 
 成熟项目的索引型 `.agents/instructions.md` 必须包含已有指南链接、memory 文件用途、Obsidian 项目笔记路径和写入边界。不要复制 `AGENTS.md` / `CLAUDE.md`、README、docs 或第三方工具文档的长章节。

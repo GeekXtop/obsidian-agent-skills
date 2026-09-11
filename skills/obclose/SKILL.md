@@ -175,12 +175,16 @@ description: 在任务、阶段或会话收尾时更新项目内 agent memory。
 
 `obclose` 负责控制项目内 memory 膨胀，但只做轻量维护。
 
+读取分级：`.agents/instructions.md`、`docs/README.md` 和 `.agents/active.md` 可以整篇读；`.agents/progress.md` 与 `.agents/lessons.md` 是日志与经验库，是**用 grep 定位相关条目的对象，不是通读对象**——收尾和比对重复时只读与本次任务相关的条目，不要为了“了解项目历史”整篇读入。
+
 每次收尾时检查：
 
+- `.agents/instructions.md` 是否超过约 8 KB——它是每个任务开始都要读的文件，膨胀代价最高。
+- `docs/README.md` 文档地图是否超过约 4 KB——超过时收并条目，把同类文档归到一行。
 - `.agents/progress.md` 是否超过约 500 行或 50 KB。
 - `.agents/lessons.md` 是否超过约 300 行或 30 KB。
 - `.agents/handoffs/` 是否超过自己的顶（见「handoffs 目录」）；已交接且超龄的条目优先归档。
-- 新增经验是否和已有条目明显重复。
+- 本次要新增的经验是否和已有条目明显重复——用 grep 在 `.agents/lessons.md` 里定位同主题条目后比对，不要全量读取文件。
 
 可以直接做的维护：
 
