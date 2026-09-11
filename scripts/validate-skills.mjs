@@ -234,6 +234,10 @@ const requiredDocsReadmeTerms = ["## 权威文档地图", "同步触发", "时�
 
 const requiredMemoryBudgetTerms = ["8 KB", "4 KB"];
 
+// progress.md 曾在多个项目里以「开头一段倒序积压 + 其后升序追加」的形态出现，
+// 根因是追加位置没有明文规定；这两条术语把它固定成契约。
+const requiredProgressOrderingTerms = ["追加到文件末尾", "时间升序"];
+
 const forbiddenObdocWritePolicyPhrases = [
   "长文写入",
   "不把整篇 Markdown",
@@ -1044,6 +1048,14 @@ if (!existsSync(skillsDir)) {
           }
         }
 
+        if (skillName === "obinit" && template === "progress.md") {
+          for (const term of requiredProgressOrderingTerms) {
+            if (!content.includes(term)) {
+              fail(`${skillName}: template ${template} must state the progress append order: ${term}`);
+            }
+          }
+        }
+
         if ((skillName === "obclose" && template === "lesson-entry.md") || (skillName === "obinit" && template === "lessons.md")) {
           for (const term of requiredLessonVerificationFieldTerms) {
             if (!content.includes(term)) {
@@ -1346,8 +1358,19 @@ if (existsSync(packageJsonPath)) {
   const obcloseSkillPath = join(skillsDir, "obclose", "SKILL.md");
   if (!existsSync(obcloseSkillPath)) {
     fail("obclose: missing SKILL.md for self-hosting gate probe");
-  } else if (!readFileSync(obcloseSkillPath, "utf8").includes("## handoffs 目录")) {
-    fail("obclose: the self-hosting gate probes for '## handoffs 目录', so that section title is part of the contract");
+  } else {
+    const obcloseSkill = readFileSync(obcloseSkillPath, "utf8");
+
+    if (!obcloseSkill.includes("## handoffs 目录")) {
+      fail("obclose: the self-hosting gate probes for '## handoffs 目录', so that section title is part of the contract");
+    }
+
+    // 追加位置必须和 progress.md 模板声明一致，否则模板与收尾skill 会各说一套。
+    for (const term of requiredProgressOrderingTerms) {
+      if (!obcloseSkill.includes(term)) {
+        fail(`obclose: SKILL.md must state the progress append order: ${term}`);
+      }
+    }
   }
 
   const selfHostingActivePath = join(root, ".agents", "active.md");
