@@ -112,6 +112,8 @@ description: 在任务、阶段或会话收尾时更新项目内 agent memory。
 
 `.agents/active.md` 是派生视图：可从 `.agents/handoffs/`、`docs/adr/` 和 Obsidian 项目笔记重建，不保存孤本信息。多会话并行时它允许 last-writer-wins，因为内容可重建、无损失。
 
+它是快照，不是历史台账，**软约束 4 KB**。`## 当前状态` 里已由权威状态载体（commit、release、`.agents/handoffs/`、`progress.md` 条目）记录的完成项折叠成一行并指向载体，只保留当前任务、真实阻塞、下一次 agent 需要接手的未完成事项和关键指针；逐条累积已完成项会让每任务必读的固定成本随历史线性增长。
+
 推荐结构见 `templates/active.md`。段落来源：
 
 - 当前任务、当前状态、验证、关键文件、下一步、已使用知识：从 `.agents/handoffs/` 汇总。
@@ -183,6 +185,7 @@ description: 在任务、阶段或会话收尾时更新项目内 agent memory。
 
 - `.agents/instructions.md` 是否超过约 8 KB——它是每个任务开始都要读的文件，膨胀代价最高。
 - `docs/README.md` 文档地图是否超过约 4 KB——超过时收并条目，把同类文档归到一行。
+- `.agents/active.md` 是否超过约 4 KB——它是任务开始与收尾都读的派生快照；超限时把已由权威状态载体记录的完成项折叠成一行，只留未完成事项与指针。
 - `.agents/progress.md` 是否超过约 500 行或 50 KB。
 - `.agents/lessons.md` 是否超过约 300 行或 30 KB。
 - `.agents/handoffs/` 是否超过自己的顶（见「handoffs 目录」）；已交接且超龄的条目优先归档。
@@ -190,7 +193,7 @@ description: 在任务、阶段或会话收尾时更新项目内 agent memory。
 
 可以直接做的维护：
 
-- `active.md` 始终保持当前状态快照，直接就地更新。
+- `active.md` 始终保持当前状态快照，直接就地更新；超过软约束时把已由权威状态载体记录的完成项折叠成一行并保留载体指针，折叠不丢信息——它可从 `handoffs/` 重建。
 - `progress.md` 过长时，保留最近阶段记录，把较旧阶段压缩为短摘要，或归档到 `.agents/archive/progress-YYYY.md`。归档时按连续区块整体移出，并让归档文件内部**按时间升序排列**——现行文件与归档文件都升序，新旧之分只体现在哪个文件里。
 - `lessons.md` 新增条目与已有经验明显重复时，合并到已有条目，不追加近似重复段落。
 - `lessons.md` 有少量同主题重复时，在原文件内合并和重排。

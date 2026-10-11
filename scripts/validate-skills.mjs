@@ -606,6 +606,10 @@ function countWordsish(markdown) {
 const instructionsByteBudget = 8 * 1024;
 const docsMapByteBudget = 6 * 1024;
 
+// active.md 同为必读类（任务开始与收尾各读一次），但它记录的是当前快照不是历史台账：
+// prose 里的 4 KB 是折叠已完成项的软约束，硬上限留出多任务并发时的余量。
+const activeSnapshotByteBudget = 6 * 1024;
+
 function assertByteBudget(label, path, limit) {
   if (!existsSync(path)) {
     fail(`${label}: missing file for byte budget`);
@@ -616,6 +620,22 @@ function assertByteBudget(label, path, limit) {
 
   if (bytes > limit) {
     fail(`${label}: ${bytes} bytes exceeds the ${limit}-byte ceiling; compress or merge before adding`);
+  }
+}
+
+// 预算是 prose 约定，容易被单侧改动：memory-bank 与 obclose 必须声明同一个 active.md 预算。
+function assertActiveSnapshotBudgetTerm(label, path) {
+  if (!existsSync(path)) {
+    fail(`${label}: missing file for the active.md budget declaration`);
+    return;
+  }
+
+  const hasBudgetLine = readFileSync(path, "utf8")
+    .split(/\r?\n/)
+    .some((line) => line.includes("active.md") && line.includes("4 KB"));
+
+  if (!hasBudgetLine) {
+    fail(`${label}: must state the active.md budget as 4 KB`);
   }
 }
 
@@ -827,6 +847,8 @@ if (!existsSync(skillsDir)) {
             if (missing.length > 0) {
               fail(`${skillName}: ${relativePath} must include usage-time falsification terms: ${missing.join(", ")}`);
             }
+
+            assertActiveSnapshotBudgetTerm(`${skillName}: ${relativePath}`, referencePath);
           }
 
           if (relativePath === "references/obsidian-sync.md") {
@@ -1371,6 +1393,8 @@ if (existsSync(packageJsonPath)) {
         fail(`obclose: SKILL.md must state the progress append order: ${term}`);
       }
     }
+
+    assertActiveSnapshotBudgetTerm("obclose: SKILL.md", obcloseSkillPath);
   }
 
   const selfHostingActivePath = join(root, ".agents", "active.md");
@@ -1382,6 +1406,9 @@ if (existsSync(packageJsonPath)) {
     if (!selfHostingActive.includes("派生视图")) {
       fail(".agents/active.md: must declare that it is a derived view of handoffs, ADRs and the Obsidian project note");
     }
+
+    // active.md 是必读类的派生快照，它的体积同样是每次任务的固定成本。
+    assertByteBudget(".agents/active.md", selfHostingActivePath, activeSnapshotByteBudget);
 
     if (sharedActiveHeadings !== undefined) {
       const instanceHeadings = selfHostingActive

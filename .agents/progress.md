@@ -165,3 +165,15 @@
 - 下一步：对 bn-alpha-bot 与 ClashRouteKit 各重跑一次 `$obinit`（重复运行模式），一次收敛 v0.1.30 的体积预算与读取分级、以及本版的追加顺序规则。
 - 备注：归档切点用业务判据（保留最近的条目、移出最旧的）而非结构判据——该文件历史形态为「头部含最新、尾部含最旧、中间另有局部升序」，靠「找第一个递增处」会切错边（实测先切出 3 条、再切出 8 条且把最新条目移走）。切点另对齐到日期边界，避免同一日期在两边各留一半。
 - 来源：dsh/progress-ordering
+
+## 2026-09-14 - active.md 体积预算与折叠规则
+
+- 已完成：`skills/obinit/references/memory-bank.md` 的「每次必读，必须小」组把 `.agents/active.md` 从无预算改为**软约束 4 KB**，并写明 `## 当前状态` 里已由权威状态载体记录的完成项折叠成一行并指向载体，不逐条累积。
+- 已完成：`skills/obclose/SKILL.md` 三处对齐——「active.md 写法」新增「它是快照，不是历史台账」段（含折叠范围与成本理由）、Memory 维护检查清单加 `active.md` 4 KB 一项、可直接做的维护把折叠写成明确动作。
+- 已完成：`scripts/validate-skills.mjs` 新增 `activeSnapshotByteBudget`（6 KB 硬上限）、`assertActiveSnapshotBudgetTerm`（`memory-bank.md` 与 `obclose/SKILL.md` 必须各自有一行同时声明 `active.md` 与 `4 KB`，防止预算单侧分叉）与 `.agents/active.md` 的 `assertByteBudget` 实例断言。
+- 已完成：本仓库 `.agents/active.md` 按新规则折叠——`0.1.31` 五轮发布内容的 7 条逐条「已完成」收成 1 条并指向 `.agents/handoffs/2026-09-11_*` 与 `progress.md`，5,152 B → 3,547 B（软约束占用 126% → 87%）。
+- 已验证：`npm test` 输出 `All skills are valid. (6 skills checked)`；三条新断言逐条负向红灯——`.agents/active.md` 补到 8,167 B 触发 6,144 B 上限、`memory-bank.md` 的 4 KB 改 5 KB 触发声明断言、`obclose/SKILL.md` 的 4 KB 改 5 KB 同样触发，恢复后全绿。
+- 已变更：`skills/obinit/references/memory-bank.md`、`skills/obclose/SKILL.md`、`scripts/validate-skills.mjs`、`.agents/active.md`、`.agents/handoffs/2026-09-14_060717_dsh_active-snapshot-budget.md`（新增）、`.agents/progress.md`。
+- 下一步：随 0.1.32 发布；下游 bn-alpha-bot 与 ClashRouteKit 的 `$obinit` 重复运行需把本轮 `active.md` 折叠规则一并收敛。
+- 备注：本轮同时查明 LP-Bot（未运行过 `$obinit`）的 `.agents/active.md` 是该仓库 2026-09-06 自建的「活跃会话认领登记」，与 obinit 的 `active.md` 只是同名——但 `inspect-project.mjs` 的重复运行判定是「`.agents/` 下任一 memory 文件存在」，该文件会让 LP-Bot 被误判为 repeat，已记入 `active.md` 下一步待评估。未提交、未发版。
+- 来源：dsh/active-snapshot-budget
