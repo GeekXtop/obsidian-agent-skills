@@ -116,6 +116,12 @@ const requiredObinitScripts = [
 ];
 
 const requiredObinitReferenceConcepts = {
+  "references/init-modes.md": [
+    {
+      name: "verification landing card",
+      terms: ["验证分层落地", "测试文件", "同一任务内", "六行全填", "有意留空", "不报差异"],
+    },
+  ],
   "references/obsidian-sync.md": [
     {
       name: "progressive project knowledge binding",

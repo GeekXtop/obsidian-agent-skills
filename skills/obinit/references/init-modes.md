@@ -23,3 +23,5 @@ node <skill>/scripts/inspect-project.mjs <project-root>
 重复运行时必须检查 Obsidian 项目笔记是否过期；过期则按当前模式幂等更新。
 
 项目相关知识在重复运行时逐步收敛：第一次初始化不强行判断项目类型；项目类型为 `unknown` 时只保留查询协议，`candidate` 时只列建议，`confirmed` 时才根据 `Agent/Knowledge/_catalog.md` 回写高置信相关知识链接。只回写链接和 `kind` / `use_as`，不复制公共知识正文。
+
+验证分层落地节（新项目模板）按项目实际填值。主判定信号是存在测试文件（`*.test.*` / `*_test.go` / `tests/` / `spec/` 之一）；辅信号是 `package.json` 的 test script 与 CI 配置（`.github/workflows/`、`.gitlab-ci.yml` 等托管形态），主信号不依赖 CI。有任一信号的项目六行全填，无对应机制的行写「无」，不留空行；两项信号都没有的项目把节体替换为一行「本项目无测试与 CI，本节有意留空（判定于 <日期>）；引入测试时按模板填值」，不整节删除。测试架构、门禁命令或 CI 配置变更的同一任务内同步更新该节，与文档地图同款机制，不挂 `$obclose` 收尾。重复运行逐节对比时，六行全填、一行有意留空与索引型整节不加均为有意形态，不报差异。
