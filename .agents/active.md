@@ -18,7 +18,7 @@
 
 - 命令：`npm test` → `All skills are valid. (6 skills checked)`。
 - 负向红灯（本批）：模板缺卡 8 项全列、索引模板加节、init-modes 删判据段 6 词全列，各一次，还原复绿。
-- 体积现状：`skills/obinit/templates/instructions.md` 5,668 B / 8 KB（加卡后）；`.agents/instructions.md` 6,355 B / 8 KB（reload 后 Task 6 补卡，预计 ≈6,951 B）；`docs/README.md` 3,554 B / 软约束 4 KB、上限 6 KB；`.agents/active.md` 3,547 B / 软约束 4 KB、上限 6 KB；`progress.md` 30,868 B / 50 KB；`lessons.md` 18,457 B / 30 KB。
+- 体积现状：`skills/obinit/templates/instructions.md` 5,668 B / 8 KB（加卡后）；`.agents/instructions.md` 6,355 B / 8 KB（reload 后 Task 6 补卡，预计 ≈6,951 B）；`docs/README.md` 3,554 B / 软约束 4 KB、上限 6 KB；`.agents/active.md` 3,839 B / 软约束 4 KB、上限 6 KB；`progress.md` 30,868 B / 50 KB；`lessons.md` 18,457 B / 30 KB。
 
 ## 关键文件
 
