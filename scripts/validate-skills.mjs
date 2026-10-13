@@ -234,6 +234,17 @@ const requiredDocsReadmeTerms = ["## 权威文档地图", "同步触发", "时�
 
 const requiredMemoryBudgetTerms = ["8 KB", "4 KB"];
 
+const requiredVerificationLandingTerms = [
+  "## 验证分层落地",
+  "验证策略由 agent 全局规则承担",
+  "- 受影响测试命令：",
+  "- 提交门禁命令（本项目实际跑什么）：",
+  "- 全量命令与承担者（本项目跑在哪，本地 / CI）：",
+  "- 依赖图推不出的检查与触发范围（读源码文本、数据驱动、子进程类）：",
+  "- 测试并发预算与依据（值：并发数；依据：实测数据）：",
+  "- 选跑器路径：",
+];
+
 // progress.md 曾在多个项目里以「开头一段倒序积压 + 其后升序追加」的形态出现，
 // 根因是追加位置没有明文规定；这两条术语把它固定成契约。
 const requiredProgressOrderingTerms = ["追加到文件末尾", "时间升序"];
@@ -1115,6 +1126,19 @@ if (!existsSync(skillsDir)) {
 
         if (skillName === "obinit" && ["instructions.md", "instructions-index.md"].includes(template) && !content.includes("## 协作策略")) {
           fail(`${skillName}: template ${template} must include a "## 协作策略" section`);
+        }
+
+        if (skillName === "obinit" && template === "instructions.md") {
+          const missing = requiredVerificationLandingTerms.filter((term) => !content.includes(term));
+          if (missing.length > 0) {
+            fail(`${skillName}: template ${template} must include the verification landing card terms: ${missing.join(", ")}`);
+          }
+        }
+
+        if (skillName === "obinit" && template === "instructions-index.md") {
+          assertNoPhrases(`${skillName}: template ${template}`, content, ["## 验证分层落地"], (phrase) => {
+            return `index template must not gain the verification landing card: ${phrase}`;
+          });
         }
 
         if (skillName === "oblearn" && template === "public-knowledge-note.md") {
