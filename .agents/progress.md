@@ -177,3 +177,13 @@
 - 下一步：随 0.1.32 发布；下游 bn-alpha-bot 与 ClashRouteKit 的 `$obinit` 重复运行需把本轮 `active.md` 折叠规则一并收敛。
 - 备注：本轮同时查明 LP-Bot（未运行过 `$obinit`）的 `.agents/active.md` 是该仓库 2026-09-06 自建的「活跃会话认领登记」，与 obinit 的 `active.md` 只是同名——但 `inspect-project.mjs` 的重复运行判定是「`.agents/` 下任一 memory 文件存在」，该文件会让 LP-Bot 被误判为 repeat，已记入 `active.md` 下一步待评估。未提交、未发版。
 - 来源：dsh/active-snapshot-budget
+
+## 2026-10-14 - 验证分层落地填值卡与 0.1.32 发布
+
+- 已完成：obinit 新项目模板「文档地图」节后新增「验证分层落地」填值卡——策略归 agent 全局规则，项目只填值；六行待填行的行内括号是填值形状提示。填值判据（主信号 = 测试文件，辅信号 = test script 与 CI 配置）、同一任务内触发式同步、三种有意形态豁免下沉 `references/init-modes.md`；memory-upgrade v3 行合成 0.1.32 追加记录并补口径小节；memory-bank 在 instructions.md 必读条目登记该节说明。
+- 已完成：validator 三条断言——`requiredVerificationLandingTerms`（8 子串钉节名、指针句与待填行形状）、instructions-index.md 整节不加的负向断言、`requiredObinitReferenceConcepts` 新增 init-modes 概念条目（6 词）；不钉机制名词，不对自举文件加新节断言。
+- 已验证：`npm test` → `All skills are valid. (6 skills checked)`；三条新断言逐条负向红灯——模板缺卡（8 项全列）、索引模板加节、init-modes 删判据段（6 词全列），还原后全绿；模板实测 5668 B / 8192（比 plan 记 5667 多 1 B，是节间空行换行符，见 SDD ledger Ruling）。
+- 已变更：`skills/obinit/templates/instructions.md`、`skills/obinit/references/init-modes.md`、`skills/obinit/references/memory-upgrade.md`、`skills/obinit/references/memory-bank.md`、`scripts/validate-skills.mjs`、版本 5 文件（version:set 0.1.32）、`.agents/handoffs/2026-10-14_050215_zcode_test-gates-bootstrap.md`（新增）。
+- 下一步：客户端 update plugin + reload 后执行自举两动作——补本仓库 `.agents/instructions.md` 六行真值卡、代际标记 v2→v3（validator 字面量 `"0.1.28"`→`"0.1.29"` 同批），重复运行先报缺失差异、补后为空；下游 bn-alpha-bot / ClashRouteKit 重跑 `$obinit` 时顺带收敛本节。
+- 备注：发布与自举解耦（doc-map-contract 先例）；本批与前批 active.md 预算（c998e2d）一并进 0.1.32。Native inline 执行，SDD ledger 在 `.superpowers/sdd/2026-10-14-test-gates-bootstrap/`。
+- 来源：zcode/test-gates-bootstrap
