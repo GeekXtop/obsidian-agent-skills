@@ -61,10 +61,12 @@ const docsSignals = ["README.md", "docs"].map((path) => ({
   exists: pathExists(root, path),
 }));
 
-const hasMemory = memoryFiles.some((file) => file.exists);
+// 重复运行判定只认 .agents/instructions.md：obinit 每次初始化必建它，只有它能证明
+// .agents/ 是 obinit 代际产物；非 obinit 项目自建的 active.md 等文件不得误判（LP-Bot 反例）。
+const hasObinitMemory = memoryFiles.some((file) => file.path === ".agents/instructions.md" && file.exists);
 const hasNonEmptyEntry = entryFiles.some((file) => file.nonEmpty);
 const hasProjectDocs = docsSignals.some((item) => item.exists);
-const mode = hasMemory ? "repeat" : hasNonEmptyEntry || hasProjectDocs ? "mature" : "new";
+const mode = hasObinitMemory ? "repeat" : hasNonEmptyEntry || hasProjectDocs ? "mature" : "new";
 
 const allowlist = [
   "AGENTS.md",

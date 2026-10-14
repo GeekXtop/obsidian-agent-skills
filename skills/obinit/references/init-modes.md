@@ -6,7 +6,7 @@
 | --- | --- | --- |
 | 新项目模式 | 没有非空入口指南，也没有明显项目文档 | 创建完整 `.agents/instructions.md`；入口文件可用薄指针 |
 | 成熟项目接入模式 | fork、已有项目、已有非空 `AGENTS.md` / `CLAUDE.md` / README / docs 顶层信号 | 创建索引型 `.agents/instructions.md`；保留已有指南，只追加入口提示 |
-| 重复运行模式 | `.agents/instructions.md`、`.agents/active.md` 或入口提示已存在 | 只补缺失文件、链接和过期表述；不重写、不重复追加、不重置状态；代际差异按 `memory-upgrade.md` 逐节对比后报告 |
+| 重复运行模式 | `.agents/instructions.md` 或入口提示已存在（只认 instructions.md：obinit 每次初始化必建它，非 obinit 项目自建的其他 `.agents/` 文件不算） | 只补缺失文件、链接和过期表述；不重写、不重复追加、不重置状态；代际差异按 `memory-upgrade.md` 逐节对比后报告 |
 
 执行前可运行：
 

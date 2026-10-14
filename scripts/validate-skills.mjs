@@ -761,6 +761,15 @@ function runInspectProjectFixtures() {
       mkdirSync(join(projectRoot, ".agents"));
       writeFileSync(join(projectRoot, ".agents", "instructions.md"), "# Instructions\n", "utf8");
     }),
+    {
+      // LP-Bot 反例：非 obinit 项目自建的 .agents/active.md 不得误判为 repeat。
+      name: ".agents/active.md alone is new",
+      setup: (projectRoot) => {
+        mkdirSync(join(projectRoot, ".agents"));
+        writeFileSync(join(projectRoot, ".agents", "active.md"), "# Active\n", "utf8");
+      },
+      assert: (result) => expectEqual("inspect-project fixture .agents/active.md alone is new mode", result.mode, "new"),
+    },
     modeFixture("GEMINI.md is unsupported", "new", (projectRoot) => {
       writeFileSync(join(projectRoot, "GEMINI.md"), "# Gemini\n", "utf8");
     }),

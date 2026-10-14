@@ -38,7 +38,7 @@ node <skill>/scripts/inspect-project.mjs <project-root>
 | --- | --- | --- |
 | 新项目模式 | 没有非空入口指南，也没有明显项目文档 | 用完整 `.agents/instructions.md`；入口文件可薄指针 |
 | 成熟项目接入模式 | fork、已有项目、已有非空 `AGENTS.md` / `CLAUDE.md` / README / docs | 用索引型 `.agents/instructions.md`；保留已有指南 |
-| 重复运行模式 | `.agents/instructions.md`、`.agents/active.md` 或入口提示已存在 | 只补缺失文件、链接和过期表述 |
+| 重复运行模式 | `.agents/instructions.md` 或入口提示已存在 | 只补缺失文件、链接和过期表述 |
 
 重复运行模式先按 `references/memory-upgrade.md` 逐节对比模板与现有文件，报告差异并等用户确认，不自动改写。
 
