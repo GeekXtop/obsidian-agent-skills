@@ -196,3 +196,13 @@
 - 已变更：`.agents/instructions.md`、`scripts/validate-skills.mjs`、`.agents/active.md`、`.agents/progress.md`、`.agents/handoffs/2026-10-14_050215_zcode_test-gates-bootstrap.md`。
 - 备注：Task 1–6 全链闭环——spec 6e1cd17、plan 9a0d3a7、发版 557d975、口径修复 50f872d、体积重测 64fac59、自举本提交。独立评审 1 Important（active.md 自报体积过期）已修，1 Minor（「有意留空」双文本形态）deferred 待下批补指针。
 - 来源：zcode/test-gates-bootstrap
+
+## 2026-10-15 - repeat 判定收紧与 0.1.33 发布
+
+- 已完成：`inspect-project.mjs` 重复运行判定从「`.agents/` 下任一 memory 文件存在」收紧到「`.agents/instructions.md` 存在」——obinit 每次初始化必建 instructions.md，只有它能证明 `.agents/` 是 obinit 代际产物；LP-Bot 自建 active.md 误触发反例修复。
+- 已完成：判定信号三处同批对齐——validator 新增负向 fixture「仅 active.md 存在 → new」（TDD 先红：`expected "new", got "repeat"`）、SKILL.md 模式表与 init-modes.md 模式表删去 active.md 信号（SKILL.md 正文 1998→1997/2000，B1 净减词）。
+- 已验证：`npm test` → `All skills are valid. (6 skills checked)`；负向 fixture 红灯实测一次、收紧后全绿；README 只写模式行为不写信号文件、docs/README.md 无文档增删，均不需更新。
+- 已变更：`skills/obinit/scripts/inspect-project.mjs`、`scripts/validate-skills.mjs`、`skills/obinit/SKILL.md`、`skills/obinit/references/init-modes.md`、版本 5 文件（version:set 0.1.33）。0.1.33 同批含上一批「有意留空」指针句与本实例「有意保留」标注（08c56bc）。
+- 下一步：客户端 update plugin + reload 后动下游——ClashRouteKit 填卡（六行全填，有测试有 CI）、bn-alpha-bot 填卡（六行全填无 CI）+ 记忆库措辞对齐宽口径 + progress 头部 3 条倒序按 v2→v3 可选第 6 条移出归档。
+- 备注：评估项「自举门禁下沉通用模板」结论不下沉（引用仓库自身事实，模板放不下；第二个源码仓出现时在 init-modes 加「源码仓库形态」判据更便宜）。
+- 来源：zcode/repeat-signal-tightening
