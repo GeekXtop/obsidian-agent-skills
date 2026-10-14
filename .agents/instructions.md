@@ -16,8 +16,8 @@ Obsidian 项目笔记：`Agent/Projects/obsidian-agent-skills.md`。
 
 本仓库同时是 ob* skill 的源码仓库，执行者手上的插件版本不一定等于仓库当前契约。写 memory 或改 skill 之前先做一次自检。
 
-- 当前 memory 代际：v2，对应插件版本 `0.1.28` 及以上；代际定义和迁移清单见 `skills/obinit/references/memory-upgrade.md`。
-- 代际标记只在本版**已发布且执行者已更新插件**后推进：仓库先把 v3 契约写进模板，但加载到的插件仍是 v2 时，按 v2 行事；0.1.29 发布并 reload 后再把本行改为 v3 / `0.1.29`。
+- 当前 memory 代际：v3，对应插件版本 `0.1.29` 及以上；代际定义和迁移清单见 `skills/obinit/references/memory-upgrade.md`。
+- 代际标记只在本版**已发布且执行者已更新插件**后推进：仓库先把 v3 契约写进模板，但加载到的插件仍是 v2 时，按 v2 行事。
 - 自检依据是你**实际加载到的 skill 正文**，不是版本号：加载到的 `$obclose` 正文如果没有 `## handoffs 目录` 一节，或 `$obinit` 正文没有 `references/memory-upgrade.md` 指针，就判定插件过旧。
 - 判定插件过旧时：只做只读分析和代码阅读，不执行 `$obinit`、`$obclose`、`$oblearn`、`$obdoc`、`$obadr`、`$obcurate` 的写入，不改 `.agents/`。
 - 恢复方式：按 `docs/adr/0001-use-marketplace-plugin-update-flow.md` 更新插件，reload 或重启客户端后继续。
@@ -71,6 +71,17 @@ Obsidian 项目笔记：`Agent/Projects/obsidian-agent-skills.md`。
 - 设计稿、实施计划等时点快照不进文档地图：它们记录当时的判断，不随后续改动更新。
 - 有意保留旧写法或刻意不改的条目，在对应行注明「有意保留」，避免重复运行 `$obinit` 时被反复报告为差异。
 - 体积预算：本文件是每个任务开始都要读的规则源头，保持 **8 KB** 以内；只收约束和入口链接，细节放 `docs/README.md`、`docs/adr/` 和项目既有文档。文档地图保持 **4 KB** 以内。
+
+## 验证分层落地
+
+验证策略由 agent 全局规则承担（验证与审查；执行者无全局规则时，本节改记完整验证策略），本节登记本项目的落地值：
+
+- 受影响测试命令：`npm test`（validate-skills.mjs 扫描式断言，无受影响子集，任何改动等价全量）
+- 提交门禁命令（本项目实际跑什么）：`npm test` 全绿；无独立 lint / 类型检查步骤
+- 全量命令与承担者（本项目跑在哪，本地 / CI）：`npm test`，本地（本仓库无 CI）
+- 依赖图推不出的检查与触发范围（读源码文本、数据驱动、子进程类）：validate-skills.mjs 对 `skills/**`、模板与 references 的文本断言——改 `skills/**` 即触发
+- 测试并发预算与依据（值：并发数；依据：实测数据）：无（validator 单进程串行，无并发参数）
+- 选跑器路径：无（无测试框架与选跑器）
 
 ## 重复运行
 

@@ -140,7 +140,7 @@ const requiredSkillNames = ["obinit", "obadr", "obclose", "oblearn", "obcurate",
 
 const requiredSelfHostingGateTerms = [
   "## 自举门禁",
-  "0.1.28",
+  "0.1.29",
   "## handoffs 目录",
   "docs/adr/0001-use-marketplace-plugin-update-flow.md",
 ];

@@ -187,3 +187,12 @@
 - 下一步：客户端 update plugin + reload 后执行自举两动作——补本仓库 `.agents/instructions.md` 六行真值卡、代际标记 v2→v3（validator 字面量 `"0.1.28"`→`"0.1.29"` 同批），重复运行先报缺失差异、补后为空；下游 bn-alpha-bot / ClashRouteKit 重跑 `$obinit` 时顺带收敛本节。
 - 备注：发布与自举解耦（doc-map-contract 先例）；本批与前批 active.md 预算（c998e2d）一并进 0.1.32。Native inline 执行，SDD ledger 在 `.superpowers/sdd/2026-10-14-test-gates-bootstrap/`。
 - 来源：zcode/test-gates-bootstrap
+
+## 2026-10-14 - reload 后自举：补真值卡与代际 v2→v3
+
+- 已完成：`.agents/instructions.md` 补「验证分层落地」六行真值卡（六行全填，无值写「无」，行数与模板一致）——受影响测试 = `npm test`（扫描式断言等价全量）、提交门禁 = `npm test` 全绿、全量 = 本地（无 CI）、依赖图推不出 = validate-skills.mjs 对 `skills/**` 与模板/references 的文本断言（改 `skills/**` 即触发）、并发预算 = 无（单进程串行）、选跑器 = 无。
+- 已完成：自举门禁代际标记推进 v2 / `0.1.28` → v3 / `0.1.29`，删去已失效的「0.1.29 发布并 reload 后再把本行改为 v3」尾句；validator `requiredSelfHostingGateTerms` 字面量 `"0.1.28"`→`"0.1.29"` 同批换（未加新断言，守住「发布与自举解耦」时序）。
+- 已验证：update plugin + reload 后自检 0.1.32 缓存正文（模板卡与 init-modes 判据齐备）；重复运行对比——补卡前唯一新增差异为缺失「验证分层落地」节，补卡后六行标签与模板逐一一致、新增差异清零（既有实例命名分叉与特有节为存量状态）；`npm test` → `All skills are valid. (6 skills checked)`；实测 `.agents/instructions.md` 7,216 B / 8 KB（plan 估 ≈6,951，实际 +861 B，余量 976 B 未触压缩线）。
+- 已变更：`.agents/instructions.md`、`scripts/validate-skills.mjs`、`.agents/active.md`、`.agents/progress.md`、`.agents/handoffs/2026-10-14_050215_zcode_test-gates-bootstrap.md`。
+- 备注：Task 1–6 全链闭环——spec 6e1cd17、plan 9a0d3a7、发版 557d975、口径修复 50f872d、体积重测 64fac59、自举本提交。独立评审 1 Important（active.md 自报体积过期）已修，1 Minor（「有意留空」双文本形态）deferred 待下批补指针。
+- 来源：zcode/test-gates-bootstrap
