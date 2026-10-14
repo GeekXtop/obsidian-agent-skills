@@ -22,7 +22,7 @@
 - 命令：`npm test` → `All skills are valid. (6 skills checked)`。
 - 负向红灯：0.1.32 批三条断言（模板缺卡 8 项全列、索引模板加节、init-modes 删判据段 6 词全列）；0.1.33 批负向 fixture（仅 active.md 存在误判 repeat，收紧后判 new）。各一次，还原复绿。
 - 自举验证：重复运行对比 0.1.32 模板——补卡前唯一新增差异为缺失「验证分层落地」节，补卡后六行标签与模板逐一一致、新增差异清零（既有命名分叉如 `规则入口`↔`项目规则` 与实例特有节为存量状态，不在新增项内）。
-- 体积现状：`skills/obinit/templates/instructions.md` 5,668 B / 8 KB（加卡后）；.agents/instructions.md` 7,410 B / 8 KB（标注后）；`docs/README.md` 3,554 B / 软约束 4 KB、上限 6 KB；`.agents/active.md` 4,054 B / 软约束 4 KB、上限 6 KB；`progress.md` 34,455 B / 50 KB；`lessons.md` 18,457 B / 30 KB。
+- 体积现状：`skills/obinit/templates/instructions.md` 5,668 B / 8 KB（加卡后）；.agents/instructions.md` 7,410 B / 8 KB（标注后）；`docs/README.md` 3,554 B / 软约束 4 KB、上限 6 KB；`.agents/active.md` 4,611 B / 软约束 4 KB、上限 6 KB；`progress.md` 34,455 B / 50 KB；`lessons.md` 18,457 B / 30 KB。
 
 ## 关键文件
 
@@ -35,3 +35,16 @@
 ## 下一步
 
 - 无——下游收敛完成，线程挂账清零；bn 侧货架项（Post-Access 验证、symbol 正则收紧等）在 bn 自己的 progress 里。
+## 当前 ADR
+
+- [0001-use-marketplace-plugin-update-flow.md](../docs/adr/0001-use-marketplace-plugin-update-flow.md)：使用 marketplace/plugin 命令更新本地插件。
+
+## 已使用知识
+
+- `[[Skill 行为规则使用正向 contract]]`：门禁文案与新增断言按正向 contract 规则书写。
+
+## 已提取知识
+
+- 项目笔记：`Agent/Projects/obsidian-agent-skills.md`
+- `[[Marketplace 插件更新流程]]`（`kind: knowledge` / `use_as: runbook`）
+- `[[Skill 行为规则使用正向 contract]]`（`kind: knowledge` / `use_as: rule`）
