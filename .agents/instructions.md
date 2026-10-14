@@ -11,6 +11,7 @@ Obsidian 项目笔记：`Agent/Projects/obsidian-agent-skills.md`。
 - package metadata：`package.json`、`skills.json`。
 - 如果需要项目结构、命令、测试、架构或提交规范细节，读取上述源文件，不要依赖本文件的二次摘要。
 - 不要把 `AGENTS.md` / `CLAUDE.md` / `README.md` / docs 的长内容完整复制进本文件。
+- 命名与节形为有意保留形态：本节对应模板「项目规则」，实例另含「自举门禁」「重复运行」特有节，逐节对比不报差异（判定于 2026-10-15）。
 
 ## 自举门禁
 
