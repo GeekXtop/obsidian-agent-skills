@@ -9,7 +9,7 @@ description: 在任务、阶段或会话收尾时更新项目内 agent memory。
 
 ## 运行时假设
 
-- 只写 `.agents/` 下的项目 memory；不修改源码、依赖、构建配置或 git 配置。
+- 只写 `.agents/` 下的项目 memory（本轮调查在 `.agents/scratch/` 中产出需升档的成型取证/回测报告时，可按收尾分流规则写入 `docs/research/`）；不修改源码、依赖、构建配置或 git 配置。
 - git 可选：非 git 项目跳过 `git status` / `git diff` / `git log`，改用文件改动清单作为证据，并在验证段说明证据来源。
 - 只有回写本次实际使用过的 Obsidian 公共知识 `last_verified` / `status` 时才需要 Obsidian；CLI 不可用或无法解析 vault 本地路径时跳过该回写并在完成说明中报告，不退回 CLI mutation。
 - 目标 memory 文件在写入前已被其他会话或工具改动时，先重新读取当前内容，只追加本次条目，不覆盖对方内容。
@@ -101,10 +101,11 @@ description: 在任务、阶段或会话收尾时更新项目内 agent memory。
 7. 追加 `.agents/progress.md` 的日期条目。
 8. 如果发现跨任务复用经验，追加 `.agents/lessons.md`。
 9. 对本次任务相关的 lessons 条目执行增量验证；验证失败按证据强度分级标注。
-10. 检查 memory 文件大小和重复度，必要时轻量压缩或提出整理建议。
-11. 如果发现重要技术决策但没有 ADR，建议运行 `$obadr`。
-12. 如果发现明显跨项目可复用经验，建议运行 `$oblearn`。
-13. 如果待复核或已退役条目积压，建议运行 `$obcurate` 复查。
+10. 检查本轮任务在 `.agents/scratch/<MMDD>-<topic>/` 下的调查产物，执行当场淘金脱钩：把有独立保留价值的取证/回测报告按自包含要求（内联关键原始判据片段、统计复现口径与结果分布表）升档到 `docs/research/YYYY-MM-DD-<topic>.md`，3～10 行的短结论直接内联进对应 Spec / ADR / progress 条目；核对本轮新增/更新的入库文档不留 `.agents/scratch/` 持久证据外链；本轮 scratch 子目录当场默认保留作近期热缓存，不删除。
+11. 检查 memory 文件大小和重复度，必要时轻量压缩或提出整理建议。
+12. 如果发现重要技术决策但没有 ADR，建议运行 `$obadr`。
+13. 如果发现明显跨项目可复用经验，建议运行 `$oblearn`。
+14. 如果待复核或已退役条目积压，建议运行 `$obcurate` 复查。
 
 ## active.md 写法
 
@@ -189,6 +190,7 @@ description: 在任务、阶段或会话收尾时更新项目内 agent memory。
 - `.agents/progress.md` 是否超过约 500 行或 50 KB。
 - `.agents/lessons.md` 是否超过约 300 行或 30 KB。
 - `.agents/handoffs/` 是否超过自己的顶（见「handoffs 目录」）；已交接且超龄的条目优先归档。
+- `.agents/scratch/` 是否超过约 10 个子目录或 20 MB，或存在最后修改超过 14 天且无进行中 handoff 关联的过时子目录。
 - 本次要新增的经验是否和已有条目明显重复——用 grep 在 `.agents/lessons.md` 里定位同主题条目后比对，不要全量读取文件。
 
 可以直接做的维护：
@@ -197,12 +199,14 @@ description: 在任务、阶段或会话收尾时更新项目内 agent memory。
 - `progress.md` 过长时，保留最近阶段记录，把较旧阶段压缩为短摘要，或归档到 `.agents/archive/progress-YYYY.md`。归档时按连续区块整体移出，并让归档文件内部**按时间升序排列**——现行文件与归档文件都升序，新旧之分只体现在哪个文件里。
 - `lessons.md` 新增条目与已有经验明显重复时，合并到已有条目，不追加近似重复段落。
 - `lessons.md` 有少量同主题重复时，在原文件内合并和重排。
+- 将本轮 `.agents/scratch/<MMDD>-<topic>/` 中已定稿的成型研究/取证/回测报告（含关键判据片段与统计口径）升档写入 `docs/research/YYYY-MM-DD-<topic>.md`，消除入库文档对 `.agents/scratch/` 的持久证据外链。
 
 需要用户确认后再做：
 
 - 按主题拆分 `.agents/lessons.md` 为多个文件。
 - 删除历史记录或经验。
 - 大规模重写、移动、重命名 `.agents/` 下的 memory 文件。
+- 按子目录批量清理已脱钩的过时 `.agents/scratch/<MMDD>-<topic>/` 目录或历史散装草稿：先列出候选子目录、体积、最后修改日期与结论是否已升档 `docs/research/` 或内联，经确认后按目录整体删除；历史文档曾提及路径但结论已升档/内联的不阻碍清理。
 
 不属于 `obclose` 的维护：
 
@@ -229,6 +233,6 @@ description: 在任务、阶段或会话收尾时更新项目内 agent memory。
 - 记录了哪些完成事项和下一步。
 - 是否建议运行 `$obadr`。
 - 是否建议运行 `$oblearn`。
-- memory 占用：`progress.md`、`lessons.md` 的行数和 KB，以及 `handoffs/` 数量，与各自阈值并列；字数口径复用项目校验脚本的统计方式，不另造第二套。
+- memory 占用：`progress.md`、`lessons.md` 的行数和 KB，以及 `handoffs/` 数量，与各自阈值并列；`.agents/scratch/` 的子目录数与总体积（与 10 个子目录 / 20 MB 阈值并列），及本次是否升档了 `docs/research/` 报告或存在建议清理的过时 scratch 子目录；字数口径复用项目校验脚本的统计方式，不另造第二套。
 
 不要把完整 memory 内容复制到最终回复，除非用户要求。

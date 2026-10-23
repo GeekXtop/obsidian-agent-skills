@@ -133,6 +133,10 @@ const requiredObinitReferenceConcepts = {
       name: "memory generation and migration",
       terms: ["memory 代际", "v1 → v2", "v2 → v3", "必做", "可选", "执行主体", "验证方式"],
     },
+    {
+      name: "scratch lifecycle and research promotion upgrade",
+      terms: ["0.1.34", "<MMDD>-<topic>/", "docs/research/", "持久证据外链"],
+    },
   ],
 };
 
@@ -239,6 +243,14 @@ const requiredDocMapTerms = [
 const requiredDocsReadmeTerms = ["## 权威文档地图", "同步触发", "时点快照", "docs/adr/"];
 
 const requiredMemoryBudgetTerms = ["8 KB", "4 KB"];
+
+// scratch 生命周期契约（0.1.34）：子目录制、升档落点、零持久外链、热缓存两段式。
+const requiredScratchLifecycleTerms = [
+  "<MMDD>-<topic>/",
+  "docs/research/",
+  "持久证据外链",
+  "热缓存",
+];
 
 const requiredVerificationLandingTerms = [
   "## 验证分层落地",
@@ -571,6 +583,18 @@ const requiredSkillConcepts = {
       name: "handoff workspace",
       terms: [".agents/handoffs/", "已交接", "涉及文件", "不计入", "自己的顶"],
     },
+    {
+      name: "scratch graduation and deferred eviction",
+      terms: [
+        "<MMDD>-<topic>/",
+        "docs/research/",
+        "持久证据外链",
+        "热缓存",
+        "10 个子目录",
+        "20 MB",
+        "14 天",
+      ],
+    },
   ],
 };
 
@@ -874,6 +898,11 @@ if (!existsSync(skillsDir)) {
               fail(`${skillName}: ${relativePath} must include usage-time falsification terms: ${missing.join(", ")}`);
             }
 
+            const missingScratch = requiredScratchLifecycleTerms.filter((term) => !referenceContent.includes(term));
+            if (missingScratch.length > 0) {
+              fail(`${skillName}: ${relativePath} must include scratch lifecycle terms: ${missingScratch.join(", ")}`);
+            }
+
             assertActiveSnapshotBudgetTerm(`${skillName}: ${relativePath}`, referencePath);
           }
 
@@ -1072,6 +1101,11 @@ if (!existsSync(skillsDir)) {
           if (missingDocMap.length > 0) {
             fail(`${skillName}: template ${template} must include the doc map section terms: ${missingDocMap.join(", ")}`);
           }
+
+          const missingScratch = requiredScratchLifecycleTerms.filter((term) => !content.includes(term));
+          if (missingScratch.length > 0) {
+            fail(`${skillName}: template ${template} must include scratch lifecycle terms: ${missingScratch.join(", ")}`);
+          }
         }
 
         if (skillName === "obinit" && ["instructions.md", "instructions-index.md", "docs-readme.md"].includes(template)) {
@@ -1093,6 +1127,10 @@ if (!existsSync(skillsDir)) {
           const missingDocsReadme = requiredDocsReadmeTerms.filter((term) => !content.includes(term));
           if (missingDocsReadme.length > 0) {
             fail(`${skillName}: template ${template} must include doc map table terms: ${missingDocsReadme.join(", ")}`);
+          }
+
+          if (!content.includes("docs/research/")) {
+            fail(`${skillName}: template ${template} must include docs/research/ in the point-in-time snapshot note`);
           }
         }
 
