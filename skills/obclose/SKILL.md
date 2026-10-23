@@ -101,7 +101,7 @@ description: 在任务、阶段或会话收尾时更新项目内 agent memory。
 7. 追加 `.agents/progress.md` 的日期条目。
 8. 如果发现跨任务复用经验，追加 `.agents/lessons.md`。
 9. 对本次任务相关的 lessons 条目执行增量验证；验证失败按证据强度分级标注。
-10. 检查本轮任务在 `.agents/scratch/<MMDD>-<topic>/` 下的调查产物，执行当场淘金脱钩：把有独立保留价值的取证/回测报告按自包含要求（内联关键原始判据片段、统计复现口径与结果分布表）升档到 `docs/research/YYYY-MM-DD-<topic>.md`，3～10 行的短结论直接内联进对应 Spec / ADR / progress 条目；核对本轮新增/更新的入库文档不留 `.agents/scratch/` 持久证据外链；本轮 scratch 子目录当场默认保留作近期热缓存，不删除。
+10. 检查本轮任务在 `.agents/scratch/<MMDD>-<topic>/` 下的调查产物，执行当场淘金脱钩：把有独立保留价值的取证/回测报告按自包含要求（内联关键原始判据片段、统计复现口径与结果分布表）升档到 `docs/research/YYYY-MM-DD-<topic>.md`，3～10 行的短结论直接内联进对应 Spec / ADR / progress 条目；跨任务复跑脚本与最小回归样本分别移入项目 `scripts/` 与 `samples/` 或 `test/fixtures/`，其余过程语料不升档；核对本轮新增/更新的入库文档不留 `.agents/scratch/` 持久证据外链；本轮 scratch 子目录当场默认保留作近期热缓存，不删除。
 11. 检查 memory 文件大小和重复度，必要时轻量压缩或提出整理建议。
 12. 如果发现重要技术决策但没有 ADR，建议运行 `$obadr`。
 13. 如果发现明显跨项目可复用经验，建议运行 `$oblearn`。

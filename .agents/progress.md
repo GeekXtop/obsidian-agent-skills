@@ -216,3 +216,10 @@
 - 下一步：下游收敛独立批次——bn-alpha-bot / flower-dashboard 按 memory-upgrade 新小节跑 `$obinit` 重复运行与四分法清理；本仓库 `.agents/scratch/skillcheck/`（630 B、30 文件、2026-09-19 遗留、未入库）列入清理候选待用户确认；obclose 补四分法②③去向提示句（Minor 延期）。
 - 备注：批次留痕——spec `docs/superpowers/specs/2026-10-23-scratch-lifecycle-and-research-promotion-design.md`（a1e165e）、plan `docs/superpowers/plans/2026-10-23-scratch-lifecycle-and-research-promotion.md`（9fc2ffa）；workspace 主工作树（降级出口：零依赖/单会话无在途/main 直提惯例）；Native inline（8 文件共享 validator 术语契约强耦合，用户「干完」预授权连续执行）。提交链 a1e165e → 9fc2ffa → 4da1067 → 3029816。
 - 来源：zcode/scratch-lifecycle-and-research-promotion
+
+## 2026-10-23 - 0.1.34 延期 Minor 修复轮
+
+- 已完成：终审 3 Minor 修复——① obclose 工作流步 10 补四分法②③去向句（跨任务脚本进 `scripts/`、最小样本进 `samples/` 或 `test/fixtures/`，其余过程语料不升档），validator obclose 概念块加 `scripts/` / `samples/` 两术语先红后绿钉住；② validator scratch 断言从 doc-map 块并入 instructions 模板主术语块（纯重构，失败信息与行为不变）；③ instructions-index.md 补一次独立负向红灯实验（去 `热缓存` → 红点名该文件 → 还原复绿）。
+- 已验证：`npm test` → `All skills are valid. (6 skills checked)`；obclose 4,269/5,000 wordsish；改动集仅 `scripts/validate-skills.mjs` 与 `skills/obclose/SKILL.md` 两文件。
+- 备注：不 bump 版本，随下次发布带走（main 常规提交先例 3913a8b）；已发布 0.1.34 插件不含本提示句，下游批次任务书里显式带②③动作即可。
+- 来源：zcode/scratch-minor-fixes

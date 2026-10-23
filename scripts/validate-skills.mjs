@@ -593,6 +593,8 @@ const requiredSkillConcepts = {
         "10 个子目录",
         "20 MB",
         "14 天",
+        "scripts/",
+        "samples/",
       ],
     },
   ],
@@ -1094,17 +1096,17 @@ if (!existsSync(skillsDir)) {
           if (missingUsageFalsification.length > 0) {
             fail(`${skillName}: template ${template} must include usage-time falsification terms: ${missingUsageFalsification.join(", ")}`);
           }
+
+          const missingScratch = requiredScratchLifecycleTerms.filter((term) => !content.includes(term));
+          if (missingScratch.length > 0) {
+            fail(`${skillName}: template ${template} must include scratch lifecycle terms: ${missingScratch.join(", ")}`);
+          }
         }
 
         if (skillName === "obinit" && ["instructions.md", "instructions-index.md"].includes(template)) {
           const missingDocMap = requiredDocMapTerms.filter((term) => !content.includes(term));
           if (missingDocMap.length > 0) {
             fail(`${skillName}: template ${template} must include the doc map section terms: ${missingDocMap.join(", ")}`);
-          }
-
-          const missingScratch = requiredScratchLifecycleTerms.filter((term) => !content.includes(term));
-          if (missingScratch.length > 0) {
-            fail(`${skillName}: template ${template} must include scratch lifecycle terms: ${missingScratch.join(", ")}`);
           }
         }
 
