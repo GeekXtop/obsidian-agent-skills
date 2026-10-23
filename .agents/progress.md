@@ -206,3 +206,13 @@
 - 下一步：客户端 update plugin + reload 后动下游——ClashRouteKit 填卡（六行全填，有测试有 CI）、bn-alpha-bot 填卡（六行全填无 CI）+ 记忆库措辞对齐宽口径 + progress 头部 3 条倒序按 v2→v3 可选第 6 条移出归档。
 - 备注：评估项「自举门禁下沉通用模板」结论不下沉（引用仓库自身事实，模板放不下；第二个源码仓出现时在 init-modes 加「源码仓库形态」判据更便宜）。
 - 来源：zcode/repeat-signal-tightening
+
+## 2026-10-23 - scratch 两段式生命周期与 0.1.34 发布
+
+- 已完成：0.1.34 内容——`.agents/scratch/` `<MMDD>-<topic>/` 子目录制、收尾四分法（成型取证/回测报告内联关键判据片段与统计口径后升档 `docs/research/YYYY-MM-DD-<topic>.md`、跨任务脚本进 `scripts/`、最小样本进 fixtures、其余过程语料留热缓存）、入库文档零 `.agents/scratch/` 持久证据外链契约、`$obclose` 两段式生命周期（当场淘金脱钩默认保留热缓存；超 10 子目录/20 MB 或 14 天无在途 handoff 经用户确认按目录清退）。`obinit/SKILL.md` 本体零改动（1997/2000 满员）；memory 代际维持 v3 同代际追加（memory-upgrade.md 新小节含存量项目收敛口径）。
+- 已完成：validator-first——`requiredScratchLifecycleTerms`（4 术语 × instructions/instructions-index/memory-bank）+ docs-readme 单术语断言 + memory-upgrade / obclose 概念块共 6 处，红灯先行；5 载体文件逐条负向红灯实验（破坏→红→原位补回→绿，精确编辑往返未动 git）。
+- 已验证：`npm test` → `All skills are valid. (6 skills checked)`；模板实测 instructions.md 6,006 B、instructions-index.md 5,703 B、docs-readme.md 2,082 B（预算 8,192/8,192/6,144）；obclose 4,235/5,000 wordsish；独立终审（子代理，范围 3913a8b..3029816）无 Critical/Important，3 Minor 延期。
+- 已变更：`scripts/validate-skills.mjs`、`skills/obinit/templates/`（instructions、instructions-index、docs-readme、agents-readme）、`skills/obinit/references/`（memory-bank、memory-upgrade）、`skills/obclose/SKILL.md`、版本 5 文件（version:set 0.1.34）、本仓库自举 `.agents/instructions.md`（7,748 B）、`.agents/README.md`、`docs/README.md`（3,628 B）、本 handoff 与 active.md。
+- 下一步：下游收敛独立批次——bn-alpha-bot / flower-dashboard 按 memory-upgrade 新小节跑 `$obinit` 重复运行与四分法清理；本仓库 `.agents/scratch/skillcheck/`（630 B、30 文件、2026-09-19 遗留、未入库）列入清理候选待用户确认；obclose 补四分法②③去向提示句（Minor 延期）。
+- 备注：批次留痕——spec `docs/superpowers/specs/2026-10-23-scratch-lifecycle-and-research-promotion-design.md`（a1e165e）、plan `docs/superpowers/plans/2026-10-23-scratch-lifecycle-and-research-promotion.md`（9fc2ffa）；workspace 主工作树（降级出口：零依赖/单会话无在途/main 直提惯例）；Native inline（8 文件共享 validator 术语契约强耦合，用户「干完」预授权连续执行）。提交链 a1e165e → 9fc2ffa → 4da1067 → 3029816。
+- 来源：zcode/scratch-lifecycle-and-research-promotion

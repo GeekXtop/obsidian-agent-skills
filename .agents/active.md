@@ -4,25 +4,23 @@
 
 ## 当前任务
 
-- 目标：0.1.33 发布（repeat 判定收紧）与下游两仓库「验证分层落地」收敛。
-- 状态：0.1.33 已发布 reload，下游两仓库收敛完成——ClashRouteKit 72cd3c0（填卡六行全填）、bn-alpha-bot 890ba5f（填卡 + 记忆库宽口径 + progress 9 月 18 条归档 + 预算压缩到 8,023/8,192）。本线程挂账清零。
-- 最后更新：2026-10-15
+- 目标：0.1.34 发布（scratch 两段式生命周期与 docs/research/ 升档契约）。
+- 状态：已发布推送（4da1067），本仓库自举同步完成（3029816），独立终审通过。剩余为下游收敛独立批次与两项用户侧确认。
+- 最后更新：2026-10-23
 
 ## 当前状态
 
-- 已完成：下游收敛（0.1.33 reload 后）——ClashRouteKit 与 bn-alpha-bot 各补「验证分层落地」真值卡；bn 另做记忆库宽口径对齐、progress 9 月 18 条移出归档（守恒 18+10）、超预算压缩（8,023/8,192，含移除与 skill 重复的「重复运行」节）。证据见各自仓库提交与 `.agents/handoffs/2026-10-15_024010_zcode_repeat-signal-tightening.md`。
-- 已完成：0.1.33 已发布——`inspect-project.mjs` repeat 判定收紧到 `.agents/instructions.md`（LP-Bot 误触发修复，负向 fixture 先红）+ SKILL/init-modes 信号同批删 active.md；「有意留空」指针句与本实例「有意保留」标注同批入版。评估项「自举门禁下沉」结论不下沉。证据见 `.agents/handoffs/2026-10-15_024010_zcode_repeat-signal-tightening.md` 与 `.agents/progress.md` 2026-10-15 条目。
-- 已完成：reload 后自举（Task 6）——`.agents/instructions.md` 补六行真值卡、代际标记推进 v3 / `0.1.29`（validator 字面量同批换），重复运行先报「验证分层落地」缺失、补后新增差异清零。证据见 `.agents/progress.md` 2026-10-14 自举条目。
-- 已完成：0.1.32 已发布——「验证分层落地」填值卡（模板加节、init-modes 判据下沉、memory-upgrade v3 行合成与口径小节、memory-bank 登记、validator 三断言各负向红灯）与前批 `active.md` 预算（c998e2d）。证据见 `.agents/handoffs/2026-10-14_050215_zcode_test-gates-bootstrap.md` 与 `.agents/progress.md` 2026-10-14 条目。
-- 已完成：`0.1.31` 五轮发布内容——自举门禁（代际 v2 / `0.1.28`）、仓库自身 v1 → v2 收敛、`active.md` 章节集统一、文档地图契约（memory 代际 v3）、memory 体积预算与读取分级、`progress.md` 追加顺序契约与归档。逐轮记录见 `.agents/handoffs/2026-09-11_*` 与 `.agents/progress.md` 2026-09-11 各条。
+- 已完成：0.1.34 发布——`.agents/scratch/` 子目录制（`<MMDD>-<topic>/`）、收尾四分法（成型报告内联判据升档 `docs/research/`）、入库文档零 `scratch` 持久外链、`$obclose` 当场淘金脱钩 + 延期经确认按目录清退；validator 6 断言红灯先行，5 载体文件负向实验还原；memory 代际维持 v3 同代际追加。证据见 `.agents/handoffs/2026-10-23_063100_agy_scratch-lifecycle-and-research-promotion.md` 与 `.agents/progress.md` 2026-10-23 条目。
+- 已完成：本仓库自举同步——`.agents/instructions.md`（7,748 B）记忆库/文档地图两句、`.agents/README.md` scratch 条目、`docs/README.md`（3,628 B）时点快照说明并入 `docs/research/`。
+- 历史：0.1.29–0.1.33 各批（自举门禁、文档地图、体积预算、验证分层填值卡、repeat 判定收紧）及下游 ClashRouteKit / bn-alpha-bot 收敛已完成，逐批见 `.agents/progress.md` 与 `.agents/archive/`。
 - 阻塞：无。
 
 ## 验证
 
 - 命令：`npm test` → `All skills are valid. (6 skills checked)`。
-- 负向红灯：0.1.32 批三条断言（模板缺卡 8 项全列、索引模板加节、init-modes 删判据段 6 词全列）；0.1.33 批负向 fixture（仅 active.md 存在误判 repeat，收紧后判 new）。各一次，还原复绿。
-- 自举验证：重复运行对比 0.1.32 模板——补卡前唯一新增差异为缺失「验证分层落地」节，补卡后六行标签与模板逐一一致、新增差异清零（既有命名分叉如 `规则入口`↔`项目规则` 与实例特有节为存量状态，不在新增项内）。
-- 体积现状：`skills/obinit/templates/instructions.md` 5,668 B / 8 KB（加卡后）；.agents/instructions.md` 7,410 B / 8 KB（标注后）；`docs/README.md` 3,554 B / 软约束 4 KB、上限 6 KB；`.agents/active.md` 4,611 B / 软约束 4 KB、上限 6 KB；`progress.md` 34,455 B / 50 KB；`lessons.md` 18,457 B / 30 KB。
+- 负向红灯：0.1.34 批 6 断言红灯先行，5 载体文件各一次破坏→红→原位补回→绿（instructions/热缓存、docs-readme/docs·research、memory-bank/热缓存、memory-upgrade/MMDD、obclose/热缓存）；0.1.32 / 0.1.33 批各见 progress。
+- 终审：独立子代理评审 3913a8b..3029816——无 Critical/Important，3 Minor 延期（obclose 未列四分法②③去向提示、validator 断言块位置风格、index 模板未单独负向实验）。
+- 体积现状：`skills/obinit/templates/instructions.md` 6,006 B / 8 KB；`instructions-index.md` 5,703 B / 8 KB；`docs-readme.md` 2,082 B / 6 KB；`.agents/instructions.md` 7,748 B / 8 KB；`docs/README.md` 3,628 B / 6 KB；`.agents/active.md` 本文件在 6 KB 上限内（不自带评数字，避免自指漂移）；`progress.md` / `lessons.md` 见每次收尾汇报行。
 
 ## 关键文件
 
@@ -34,7 +32,10 @@
 
 ## 下一步
 
-- 无——下游收敛完成，线程挂账清零；bn 侧货架项（Post-Access 验证、symbol 正则收紧等）在 bn 自己的 progress 里。
+- 下游收敛独立批次：bn-alpha-bot / flower-dashboard 按 `skills/obinit/references/memory-upgrade.md`「Scratch 生命周期与研究报告升档」小节跑 `$obinit` 重复运行 + 四分法升档清理（bn 两份回测报告补判据升档、flower `.agents/scratch/` 71 文件清退、两者 active/progress 折叠归档）。
+- 等用户确认：本仓库 `.agents/scratch/skillcheck/`（2026-09-19 遗留 clip-01..30.txt，630 B，未入库）删除；客户端插件更新 reload。
+- 未来批次 Minor：obclose 补四分法②③（scripts/fixtures）去向提示句。
+
 ## 当前 ADR
 
 - [0001-use-marketplace-plugin-update-flow.md](../docs/adr/0001-use-marketplace-plugin-update-flow.md)：使用 marketplace/plugin 命令更新本地插件。
