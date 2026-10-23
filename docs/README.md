@@ -9,7 +9,7 @@
 - **当前状态**：描述系统现在如何工作，行为改动必须同批更新。
 - **决策记录**：`docs/adr/` 下逐条累积，新增决策只加新文件，不改旧文件。
 
-设计稿、实施计划等**时点快照**不入表：它们记录当时的判断，不随后续改动更新，各自按日期累积。
+设计稿、实施计划、研究报告（`docs/research/`）等**时点快照**不入表：它们记录当时的判断与取证，不随后续改动更新，各自按日期累积。
 
 | 文档 | 事实范围 | 同步触发（改这里就要更新它） |
 |---|---|---|
@@ -21,7 +21,7 @@
 | [`skills/ob*/SKILL.md`](../skills/) | 各 skill 的行为契约与运行时假设 | 对应该 skill 的模板、脚本、references 或校验规则 |
 | [`scripts/validate-skills.mjs`](../scripts/validate-skills.mjs) | `npm test` 的全部门禁：模板必备术语、共享章节、自举一致性 | 任何模板或 SKILL.md 契约变化（新断言必须同批加） |
 | [`docs/README.md`](README.md) | 本文件：项目文档的事实索引 | 文档新增、改名或下掉 |
-| `docs/superpowers/`（`specs/`、`plans/`） | 时点快照：当时的判断，不随后续改动更新 | 不更新 |
+| `docs/superpowers/`（`specs/`、`plans/`）、`docs/research/` | 时点快照：当时的判断与取证，不随后续改动更新 | 不更新 |
 
 `docs/adr/` 是决策记录：新增决策只加新文件，不改旧文件。当前条目见 [ADR 索引](adr/README.md)。
 

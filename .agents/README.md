@@ -8,8 +8,8 @@
 - `progress.md`：阶段性进展摘要，新条目带 `- 来源：<agent>/<任务 slug>`。
 - `lessons.md`：项目内可复用经验。
 - `archive/`：过长 `progress.md` 的历史归档，应提交。
-- `scratch/`：临时调查草稿，可清理。
+- `scratch/`：临时调查草稿，按 `<MMDD>-<topic>/` 子目录归拢，可清理。
 
-临时调查草稿写入 `scratch/`；运行日志、缓存和生成物不要放进 agent memory。`scratch/` 不提交，`handoffs/` 和 `archive/` 应提交。
+临时调查草稿按 `<MMDD>-<topic>/` 子目录写入 `scratch/`；收尾把有独立价值的取证/回测报告（内联关键判据与统计口径）升档到 `docs/research/`，不留持久证据外链，原目录暂留后按目录清理。运行日志、缓存和生成物不要放进 agent memory。`scratch/` 不提交，`handoffs/` 和 `archive/` 应提交。
 
 不要在这里保存密钥、凭证、私人 vault 内容或聊天流水。
