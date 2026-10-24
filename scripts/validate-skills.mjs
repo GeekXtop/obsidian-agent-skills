@@ -128,6 +128,12 @@ const requiredObinitReferenceConcepts = {
       terms: ["项目相关知识回写", "第一次初始化", "重复初始化", "项目类型", "unknown", "candidate", "confirmed", "高置信", "只回写链接", "只列建议"],
     },
   ],
+  "references/memory-bank.md": [
+    {
+      name: "scratch contract remediation",
+      terms: ["改写为指向", "只在用户当次确认后", "tools/", "可重建产物", "最近 14 天更新过"],
+    },
+  ],
   "references/memory-upgrade.md": [
     {
       name: "memory generation and migration",
@@ -561,7 +567,7 @@ const requiredSkillConcepts = {
     obsidianVaultFilesystemMutationContract,
     {
       name: "close-only safety boundary",
-      terms: ["不修改源码、依赖、构建配置或 git 配置", "不自动提交、不自动推送、不自动创建 release", "git status --short"],
+      terms: ["既有源码内容", "不改写其逻辑", "不自动提交、不自动推送、不自动创建 release", "git status --short"],
     },
     {
       name: "authoritative state carrier memory boundary",
@@ -595,6 +601,11 @@ const requiredSkillConcepts = {
         "14 天",
         "scripts/",
         "samples/",
+        "tools/",
+        "改写为指向",
+        "可重建产物",
+        "只在用户当次确认后",
+        "最近 14 天更新过",
       ],
     },
   ],

@@ -52,7 +52,7 @@
 - `.agents/archive/` 保存过长 `progress.md` 的历史归档，应提交。
 - 长期项目决策写入 `docs/adr/`。
 - 如已有设计/计划文档（无论由哪个工具生成），在 `.agents/active.md` 链接当前文件，不复制全文。
-- 临时调查草稿按 `<MMDD>-<topic>/` 子目录写入 `.agents/scratch/`；收尾时将有独立价值的取证/回测报告（内联关键判据片段与统计口径）升档到 `docs/research/` 或内联进正式文档，入库文档不留 `.agents/scratch/` 持久证据外链，原目录暂留作热缓存后按目录定期清理；运行日志、缓存和生成物不要放进 agent memory。
+- 临时调查草稿按 `<MMDD>-<topic>/` 子目录写入 `.agents/scratch/`；收尾时将有独立价值的取证/回测报告（内联关键判据片段与统计口径）升档到 `docs/research/` 或内联进正式文档，升档后旧引用改写为指向升档落点，入库文档不留 `.agents/scratch/` 持久证据外链，原目录暂留作热缓存后按目录定期清理；运行日志、缓存和生成物不要放进 agent memory。
 
 ## 文档地图
 

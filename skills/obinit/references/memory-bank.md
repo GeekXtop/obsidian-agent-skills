@@ -28,7 +28,7 @@ docs/
 - `.agents/archive/` 保存过长 `progress.md` 的历史归档；归档是项目 memory 的一部分，应提交，不要加入 `.gitignore`。
 - 长期设计决策抽成 `docs/adr/`。
 - 项目内既有的设计/计划文档（无论由哪个工具生成）保留原文件，`.agents/active.md` 只链接当前使用的文件；obinit 不创建、不改写、不按工具路径批量读取，只有 `.agents/active.md` 指向具体文件或用户指定时才读取。
-- 临时调查草稿按 `.agents/scratch/<MMDD>-<topic>/` 子目录写入，并在 `.gitignore` 忽略；收尾按四分法分流：成型取证/回测报告内联关键判据片段与统计口径后升档 `docs/research/YYYY-MM-DD-<topic>.md`（短结论直接内联进正式文档），跨任务复跑脚本进 `scripts/` 或 `tools/`，最小回归样本进 `samples/` 或 `test/fixtures/`，其余过程语料留作热缓存。入库文档不留 `.agents/scratch/` 持久证据外链；当场只脱钩不删目录，超过建议规模（不超过 10 个子目录或 20 MB，单目录超 14 天且无进行中 handoff 视为过时）经用户确认后按目录清理。运行日志、缓存和生成物不要放进 agent memory。
+- 临时调查草稿按 `.agents/scratch/<MMDD>-<topic>/` 子目录写入，并在 `.gitignore` 忽略；收尾按四分法分流：成型取证/回测报告内联关键判据片段与统计口径后升档 `docs/research/YYYY-MM-DD-<topic>.md`（短结论直接内联进正式文档），升档后入库文档中的旧引用改写为指向升档落点；跨任务复跑脚本与最小回归样本只在用户当次确认后移入 `scripts/` 或 `tools/`、`samples/` 或 `test/fixtures/`（移入时剥离临时硬编码，样本只保留最小必要字段），其余过程语料留作热缓存。可重建产物与运行态（构建产物、下载的二进制、日志、pid、缓存目录）不按热缓存保留，发现即列入建议删除清单。入库文档不留 `.agents/scratch/` 持久证据外链；当场只脱钩不删目录，超过建议规模（不超过 10 个子目录或 20 MB，单目录超 14 天且无任何最近 14 天更新过的 handoff 引用视为过时）经用户确认后按目录清理。运行日志、缓存和生成物不要放进 agent memory。
 
 ## 体积与读取成本
 
@@ -43,6 +43,6 @@ memory 文件的成本不在体积本身，而在**读它的人付多少上下�
 **按需读取，不要全文加载**：
 
 - `.agents/progress.md` 与 `.agents/lessons.md` 是日志与经验库，是**用 grep 定位相关条目的对象，不是通读对象**。收尾时只读与本次任务相关的条目，不要为了“了解项目历史”整篇读入。
-- 现行预算：`.agents/progress.md` 约 500 行 / 50 KB；`.agents/lessons.md` 约 300 行 / 30 KB；`.agents/handoffs/` 建议不超过 30 个文件或 200 KB；`.agents/scratch/` 建议不超过 10 个子目录或 20 MB（单目录超过 14 天且无进行中 handoff 视为过时，可清理）。
+- 现行预算：`.agents/progress.md` 约 500 行 / 50 KB；`.agents/lessons.md` 约 300 行 / 30 KB；`.agents/handoffs/` 建议不超过 30 个文件或 200 KB；`.agents/scratch/` 建议不超过 10 个子目录或 20 MB（单目录超过 14 天且无任何最近 14 天更新过的 handoff 引用视为过时，可清理）。
 
 成熟项目的索引型 `.agents/instructions.md` 必须包含已有指南链接、memory 文件用途、Obsidian 项目笔记路径和写入边界。不要复制 `AGENTS.md` / `CLAUDE.md`、README、docs 或第三方工具文档的长章节。

@@ -1,7 +1,7 @@
 # `.agents/scratch/` 两段式生命周期与 `docs/research/` 升档契约设计
 
 - 日期：2026-10-23
-- 状态：待用户确认（brainstorming 产物；确认后才进 writing-plans）
+- 状态：已实现——随 0.1.34 发布，0.1.35 补 ②③ 去向句；契约修正见《0.1.36 scratch 契约整改》spec（2026-10-24）
 - 来源实证：`flower-dashboard`（`.agents/scratch/` 71 文件 / 6.41 MB）与 `bn-alpha-bot`（43 文件 / 3.18 MB，含 `2026-10-20` 子目录先行约定及 `1021-alpha123-quota` / `1021-value-window-forensics` 逆向回测案例）
 - 目标版本：`0.1.34`（memory 代际维持 v3，同代际追加）
 
