@@ -251,3 +251,12 @@
 - 下一步：客户端更新插件 reload；下游按 `memory-upgrade.md` 0.1.36 节各自重跑 `$obinit` 收敛（bn 51 处悬空引用下降验证属下游批次）；6 Minor 随下一批。
 - 备注：批次留痕——workspace 主工作树（降级出口：零依赖/单会话无在途/main 直提惯例）；Native inline（8+ 文件共享 validator 术语契约强耦合，用户「干」预授权连续执行）；Ruling 1 条（spec §3(a) 快照句触发工具路径禁令，改工具无关表述，见 sdd 台账）。提交链 a4c0cc7 → a2cae0c → f05f5dc → 597a8bf → b89a954 → 本收口提交。
 - 来源：zcode/scratch-contract-remediation
+
+## 2026-10-24 - 0.1.36 终审 Minor 修复轮与 0.1.37 发布
+
+- 已完成：终审 6 Minor 全修复——① memory-bank:31 补「改指只改 `.agents/` 与当前状态文档中的旧引用，时点快照与既有 `docs/adr/` 只读」边界句，validator memory-bank 概念块钉「时点快照与既有 `docs/adr/` 只读」（对照表第 2 行缺口闭合）；② obclose:12 改指句补「已升档或已删目标」限定（进行中的 scratch 引用不动）；③ :13 改指扫描落为 `git grep -n '.agents/scratch/'` + 可枚举排除（设计稿/实施计划目录按项目实际命名，如 `docs/specs/`、`docs/plans/`；工具路径禁令下不点名具体工具目录）；④ progress/lessons 口径改「行数按文件行计数、KB 按文件字节数（1 KB = 1,024 B）计」，删「复用校验脚本统计」空指；⑤ 完成说明补「②③ 搬移候选与确认状态（不跨轮沿用、不写 active.md）」「改指文件清单」两槽；⑥ safety boundary 加「不修改既有源码内容」术语独立钉住 :47。
+- 已验证：`npm test` → `All skills are valid. (6 skills checked)`（红灯先行：memory-bank 只读短语先红后补绿）；两条新钉术语负向实验 RED✓（删→红点名→还原→绿）；obclose wordsish ≈4,824/5,000；无 `docs/superpowers/` 字面残留。
+- 事故与修复：两条负向实验的还原步骤用了 `git checkout --`，当时修复轮 4 处编辑尚未提交，被一并还原回 0.1.36 发布态（0.1.36 批次实验时改动已提交故安全）。当即按原串重放 4 处编辑恢复、复绿后先提交（fd741ff）再做后续。教训：负向实验的 git checkout 还原必须以「本轮改动已提交」为前提，未提交时用原串重放恢复。
+- 已变更：`scripts/validate-skills.mjs`（memory-bank 概念块 5→6 术语、safety boundary 4→5 术语）、`skills/obclose/SKILL.md`（:12/:13/完成说明）、`skills/obinit/references/memory-bank.md`（:31 边界句）、版本 5 文件（version:set 0.1.37）。
+- 下一步：客户端更新插件到 0.1.37 并 reload；下游按 memory-upgrade 0.1.36 节收敛不变（本修复轮不动模板，无需新收敛轮）。
+- 来源：zcode/scratch-contract-remediation
