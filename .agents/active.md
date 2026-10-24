@@ -4,9 +4,11 @@
 
 ## 当前任务
 
-- 目标：0.1.34/0.1.35 发布（scratch 两段式生命周期与 docs/research/ 升档契约，Minor 修复随版）。
-- 状态：0.1.35 已发布（6b4e86b），0.1.34 批次全部收口。剩余为下游收敛独立批次与 skillcheck 删除确认。
-- 最后更新：2026-10-23
+## 当前任务
+
+- 目标：0.1.34/0.1.35 发布与全量收口（含下游收敛）。
+- 状态：全部完成——0.1.35 已发布（6b4e86b）、本地插件升级 reload、skillcheck 清退、下游 bn-alpha-bot / flower-dashboard 契约落地（report 见 progress 2026-10-24）。0.1.34 批次挂账清零。
+- 最后更新：2026-10-24
 
 ## 当前状态
 
@@ -32,8 +34,8 @@
 
 ## 下一步
 
-- 下游收敛独立批次：bn-alpha-bot / flower-dashboard 按 `skills/obinit/references/memory-upgrade.md`「Scratch 生命周期与研究报告升档」小节跑 `$obinit` 重复运行 + 四分法升档清理（bn 两份回测报告补判据升档、flower `.agents/scratch/` 71 文件清退、两者 active/progress 折叠归档）。
-- 等用户确认：本仓库 `.agents/scratch/skillcheck/`（2026-09-19 遗留 clip-01..30.txt，630 B，未入库）删除。
+- 无挂账——下游收敛完成（bn 3f4cc17..a732848、flower 162bc5f..aaab8cf，均为本地仓库无推送惯例）；flower 有他会在途 deliveries 批照常自行收尾。
+- 货架：memory-upgrade 存量收敛口径已验证两仓库可执行；后续新项目按 0.1.35 模板初始化即含完整契约。
 
 ## 当前 ADR
 
