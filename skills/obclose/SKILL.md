@@ -9,8 +9,8 @@ description: 在任务、阶段或会话收尾时更新项目内 agent memory。
 
 ## 运行时假设
 
-- 只写 `.agents/` 下的项目 memory；本轮调查的成型取证 / 回测报告升档写入 `docs/research/`；本轮或入库文档里指向 `.agents/scratch/` 的引用改写为指向升档后的落点，短结论内联进本轮正在撰写的文档或 `.agents/progress.md`。跨任务脚本与最小样本只在用户当次确认后移入 `scripts/` 或 `tools/`、`samples/` 或 `test/fixtures/`，移入时只剥离临时硬编码、不改写其逻辑与判据。既有源码内容、依赖、构建配置与 git 配置不改动；时点快照类文档（设计稿、实施计划与既有研究报告，无论由哪个工具生成）与既有 `docs/adr/` 只读（项目无文档地图时，改指范围收窄为 `.agents/` 与根 `README.md`）。
-- git 可选：非 git 项目跳过 `git status` / `git diff` / `git log`，改用文件改动清单作为证据，并在验证段说明证据来源；改指扫描在非 git 项目用 `grep -rn` / `rg` 加目录排除（跳过时点快照类目录、既有 `docs/research/`、`docs/adr/`、`.agents/scratch/`）等价执行。
+- 只写 `.agents/` 下的项目 memory；本轮调查的成型取证 / 回测报告升档写入 `docs/research/`；本轮或入库文档里指向已升档或已删目标的 `.agents/scratch/` 旧引用改写为指向升档后的落点（进行中的 scratch 引用不动），短结论内联进本轮正在撰写的文档或 `.agents/progress.md`。跨任务脚本与最小样本只在用户当次确认后移入 `scripts/` 或 `tools/`、`samples/` 或 `test/fixtures/`，移入时只剥离临时硬编码、不改写其逻辑与判据。既有源码内容、依赖、构建配置与 git 配置不改动；时点快照类文档（设计稿、实施计划与既有研究报告，无论由哪个工具生成）与既有 `docs/adr/` 只读（项目无文档地图时，改指范围收窄为 `.agents/` 与根 `README.md`）。
+- git 可选：非 git 项目跳过 `git status` / `git diff` / `git log`，改用文件改动清单作为证据，并在验证段说明证据来源；改指扫描用 `git grep -n '.agents/scratch/'` 并排除时点快照目录（设计稿 / 实施计划目录，按项目实际命名，如 `docs/specs/`、`docs/plans/`）、既有 `docs/research/`、`docs/adr/` 与 `.agents/scratch/`；非 git 项目用 `grep -rn` / `rg` 加同组目录排除等价执行。
 - 只有回写本次实际使用过的 Obsidian 公共知识 `last_verified` / `status` 时才需要 Obsidian；CLI 不可用或无法解析 vault 本地路径时跳过该回写并在完成说明中报告，不退回 CLI mutation。
 - 目标 memory 文件在写入前已被其他会话或工具改动时，先重新读取当前内容，只追加本次条目，不覆盖对方内容。
 
@@ -235,6 +235,8 @@ description: 在任务、阶段或会话收尾时更新项目内 agent memory。
 - 记录了哪些完成事项和下一步。
 - 是否建议运行 `$obadr`。
 - 是否建议运行 `$oblearn`。
-- memory 占用：`progress.md`、`lessons.md` 的行数和 KB，以及 `handoffs/` 数量，与各自阈值并列；`.agents/scratch/` 的子目录数与总体积（与 10 个子目录 / 20 MB 阈值并列），及本次是否升档了 `docs/research/` 报告或存在建议清理的过时 scratch 子目录；`.agents/scratch/` 总体积按各子目录内所有文件字节数求和（`Get-ChildItem -Recurse | Measure-Object Length -Sum` 或等价命令），数字只作量级参考，超限只触发确认、不阻断；`progress.md`、`lessons.md` 的行数与 KB 口径复用项目校验脚本的统计方式，不另造第二套。
+- memory 占用：`progress.md`、`lessons.md` 的行数和 KB，以及 `handoffs/` 数量，与各自阈值并列；`.agents/scratch/` 的子目录数与总体积（与 10 个子目录 / 20 MB 阈值并列），及本次是否升档了 `docs/research/` 报告或存在建议清理的过时 scratch 子目录；`.agents/scratch/` 总体积按各子目录内所有文件字节数求和（`Get-ChildItem -Recurse | Measure-Object Length -Sum` 或等价命令），数字只作量级参考，超限只触发确认、不阻断；`progress.md`、`lessons.md` 的行数按文件行计数、KB 按文件字节数（1 KB = 1,024 B）计。
+- 登记的 ②③ 搬移候选与确认状态；未确认的候选只写在本说明，不跨轮沿用、不写进 `active.md`。
+- 本轮改写为指向的引用所在文件清单，便于复核。
 
 不要把完整 memory 内容复制到最终回复，除非用户要求。

@@ -131,7 +131,7 @@ const requiredObinitReferenceConcepts = {
   "references/memory-bank.md": [
     {
       name: "scratch contract remediation",
-      terms: ["改写为指向", "只在用户当次确认后", "tools/", "可重建产物", "最近 14 天更新过"],
+      terms: ["改写为指向", "只在用户当次确认后", "tools/", "可重建产物", "最近 14 天更新过", "时点快照与既有 `docs/adr/` 只读"],
     },
   ],
   "references/memory-upgrade.md": [
@@ -567,7 +567,7 @@ const requiredSkillConcepts = {
     obsidianVaultFilesystemMutationContract,
     {
       name: "close-only safety boundary",
-      terms: ["既有源码内容", "不改写其逻辑", "不自动提交、不自动推送、不自动创建 release", "git status --short"],
+      terms: ["既有源码内容", "不修改既有源码内容", "不改写其逻辑", "不自动提交、不自动推送、不自动创建 release", "git status --short"],
     },
     {
       name: "authoritative state carrier memory boundary",
