@@ -223,3 +223,10 @@
 - 已验证：`npm test` → `All skills are valid. (6 skills checked)`；obclose 4,269/5,000 wordsish；改动集仅 `scripts/validate-skills.mjs` 与 `skills/obclose/SKILL.md` 两文件。
 - 备注：不 bump 版本，随下次发布带走（main 常规提交先例 3913a8b）；已发布 0.1.34 插件不含本提示句，下游批次任务书里显式带②③动作即可。
 - 来源：zcode/scratch-minor-fixes
+
+## 2026-10-23 - 0.1.35 发布（Minor 修复随版）
+
+- 已完成：版本 bump 0.1.34 → 0.1.35（6b4e86b），把 Minor 修复轮（obclose 四分法②③去向句、validator 术语钉住与断言归位、instructions-index 独立负向实验）随版发布；上一条「不 bump 版本随下次发布带走」的裁定被用户「更新本地版本」请求取代。
+- 已验证：`npm test` → `All skills are valid. (6 skills checked)`；5 manifest 同步 0.1.35；本地插件经 zcode-plugins-upgrade 升级到 0.1.35。
+- 已变更：package.json、skills.json、`.claude-plugin/plugin.json`、`.codex-plugin/plugin.json`、`.claude-plugin/marketplace.json`。
+- 来源：zcode/scratch-minor-fixes
