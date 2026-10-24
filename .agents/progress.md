@@ -239,3 +239,15 @@
 - 事故与修复：flower 与他会在途会话并行，我的 `git commit --amend` 在「确认 HEAD→执行」窗口内被对方新提交（b65c24b/c116066）抢先——我的 2 文件修正被裹入对方 c116066。当即 `git reset --soft` 拆分、按原信息原日期还原对方提交（1a82fe0，5 文件纯净）、我的修正独立成 aaab8cf。教训：共享工作树多会话并行时禁用 amend（无「确认后无竞态」保证），一律追加提交。
 - 验证：两仓库 instructions/active/progress/docs-README 全部预算内；升档报告零 scratch 持久外链；两仓库工作树仅剩他会在途文件（bn 无、flower 的 worker/tools/wrangler 未触碰未裹入）；全程显式路径提交。
 - 来源：zcode/memory-convergence-0135
+
+## 2026-10-24 - 0.1.36 契约整改与发布（证据链闭环与写入边界）
+
+- 已完成：spec `docs/superpowers/specs/2026-10-24-scratch-contract-remediation-design.md`（m00223 提出，本会话 ZCode 复审 5 条修订并入后用户「干」当轮确认：断言矩阵与编号清单对齐、memory-upgrade 0.1.36 节显式 supersede、死链第三出口、快照状态行元数据 carve、非 git 扫描与无地图收窄口径入 plan）；plan `docs/superpowers/plans/2026-10-24-scratch-contract-remediation.md`（8 任务 Native inline）。
+- 已完成：0.1.36 内容——升档后旧引用改写为指向升档落点（obclose 假设/步10/免确认清单、memory-bank、两指令模板简写）；②③ 搬移改「只在用户当次确认后」+ `tools/` 补齐 + 剥离临时硬编码/最小必要字段限定词；可重建产物与运行态不入热缓存；过时判据改「超 14 天且无任何最近 14 天更新过的 handoff 引用」三处同步 + 僵尸 handoff 确认清单项；运行时假设重写（既有源码内容/不改写其逻辑/快照与既有 ADR 只读/无地图收窄）与非 git 改指扫描回退；20 MB 口径落为字节求和定义；旧 spec 状态行更新（快照唯一例外）。
+- 已完成：validator-first——obclose 概念块 9→14 术语、memory-bank 新建概念块 5 术语（共享 `requiredScratchLifecycleTerms` 4 词组不动，模板不被波及）、close-only safety boundary 首条整句换「既有源码内容」「不改写其逻辑」，红灯先行；负向红灯 12/12（含空格术语首跑被 bash 分词拆坏后引号重跑）；反向验证（模板 0 处确认句、旧安全句 0 残留、`tools/` 与限定词双文件在场）通过。
+- 已验证：`npm test` → `All skills are valid. (6 skills checked)`；模板 6,054 / 5,751 / 869 B、自举 `.agents/instructions.md` 7,796 B（与模板逐字一致）全部在限；obclose wordsish ≈4,728/5,000；5 manifest 同步 0.1.36 并推送。
+- 终审：独立子代理评审 f3498d5..b89a954——无 Critical；1 Important（plan Task 8 收口留痕时序，由本收口提交解决，0.1.34 同惯例）；6 Minor 延期：① spec 对照表第 2 行超承诺（memory-bank 无快照/ADR 只读句、validator 无「只读」术语——断言覆盖矩阵本身全兑现）② obclose:12 改指句缺「已升档/已删除」限定（步 10 已限定，spec 原文如此）③ :13 排除目录不可枚举 + git 主扫描命令未进 skill ④ progress/lessons 口径句仍指向不存在的校验统计（存量问题，本批只修了 scratch 半句）⑤ 完成说明缺「搬移候选/改指文件清单」两个报告槽 ⑥ :47 不再被独立断言钉住（可加「不修改既有源码内容」术语）。
+- 已变更：`scripts/validate-skills.mjs`、`skills/obclose/SKILL.md`、`skills/obinit/references/{memory-bank,memory-upgrade}.md`、`skills/obinit/templates/{instructions,instructions-index,agents-readme}.md`、旧 spec 状态行、版本 5 文件（version:set 0.1.36）、自举 2 文件、本 handoff 与 active/progress。
+- 下一步：客户端更新插件 reload；下游按 `memory-upgrade.md` 0.1.36 节各自重跑 `$obinit` 收敛（bn 51 处悬空引用下降验证属下游批次）；6 Minor 随下一批。
+- 备注：批次留痕——workspace 主工作树（降级出口：零依赖/单会话无在途/main 直提惯例）；Native inline（8+ 文件共享 validator 术语契约强耦合，用户「干」预授权连续执行）；Ruling 1 条（spec §3(a) 快照句触发工具路径禁令，改工具无关表述，见 sdd 台账）。提交链 a4c0cc7 → a2cae0c → f05f5dc → 597a8bf → b89a954 → 本收口提交。
+- 来源：zcode/scratch-contract-remediation
