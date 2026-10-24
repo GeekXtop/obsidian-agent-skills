@@ -230,3 +230,12 @@
 - 已验证：`npm test` → `All skills are valid. (6 skills checked)`；5 manifest 同步 0.1.35；本地插件经 zcode-plugins-upgrade 升级到 0.1.35。
 - 已变更：package.json、skills.json、`.claude-plugin/plugin.json`、`.codex-plugin/plugin.json`、`.claude-plugin/marketplace.json`。
 - 来源：zcode/scratch-minor-fixes
+
+## 2026-10-24 - 下游收敛批与 skillcheck 清退（0.1.35 契约存量落地）
+
+- 已完成：源仓库 `.agents/scratch/skillcheck/`（30 文件、2026-09-19 遗留 clip 测试文件、未入库）经用户确认删除，scratch 清零。
+- 已完成（bn-alpha-bot）：两份成型报告升档 `docs/research/2026-10-21-{alpha123-quota,value-window-forensics}.md`（7 轮 quota_*/d976_* 原始 JSON 判据内联、回测分布表自包含）；instructions.md 换 0.1.35 模板同文（去「待上游 skill 吸收后对齐」注记）+ 自填内容无损压缩 8,383→8,049 B；scratch 四分法清退 6 个已完结目录（40 文件 ~3.1 MB），anon-flat 观察中任务 3 散装文件归拢成子目录；active.md 折叠 18.9→4.5 KB。提交 3f4cc17/ca3aaac/a732848（本地仓库，无推送惯例）。
+- 已完成（flower-dashboard）：instructions/docs-README 对齐 0.1.35 契约（自填压缩 8,102→8,180 B，首测 8,225 超限补压）；scratch 71 文件/6.4 MB 全量清退（全④过程语料，无①②③，docs/research/ 未建）；progress 归档 10-05~10-12 共 25 条至 archive/progress-2026.md（61.8→19.5 KB）；active.md 折叠 35→5.1 KB。提交 162bc5f/033b0d8/aaab8cf。
+- 事故与修复：flower 与他会在途会话并行，我的 `git commit --amend` 在「确认 HEAD→执行」窗口内被对方新提交（b65c24b/c116066）抢先——我的 2 文件修正被裹入对方 c116066。当即 `git reset --soft` 拆分、按原信息原日期还原对方提交（1a82fe0，5 文件纯净）、我的修正独立成 aaab8cf。教训：共享工作树多会话并行时禁用 amend（无「确认后无竞态」保证），一律追加提交。
+- 验证：两仓库 instructions/active/progress/docs-README 全部预算内；升档报告零 scratch 持久外链；两仓库工作树仅剩他会在途文件（bn 无、flower 的 worker/tools/wrangler 未触碰未裹入）；全程显式路径提交。
+- 来源：zcode/memory-convergence-0135
