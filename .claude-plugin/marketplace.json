@@ -11,10 +11,7 @@
   "plugins": [
     {
       "name": "obsidian-agent-skills",
-      "source": {
-        "source": "url",
-        "url": "https://github.com/GeekXtop/obsidian-agent-skills.git"
-      },
+      "source": "./",
       "description": "Obsidian-backed 项目记忆、任务收尾、ADR、经验沉淀、文档整理和知识整理 skills。",
       "version": "0.1.37",
       "strict": true
