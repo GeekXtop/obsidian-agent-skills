@@ -260,3 +260,11 @@
 - 已变更：`scripts/validate-skills.mjs`（memory-bank 概念块 5→6 术语、safety boundary 4→5 术语）、`skills/obclose/SKILL.md`（:12/:13/完成说明）、`skills/obinit/references/memory-bank.md`（:31 边界句）、版本 5 文件（version:set 0.1.37）。
 - 下一步：客户端更新插件到 0.1.37 并 reload；下游按 memory-upgrade 0.1.36 节收敛不变（本修复轮不动模板，无需新收敛轮）。
 - 来源：zcode/scratch-contract-remediation
+
+## 2026-10-28 - 下游收敛批：0.1.36/0.1.37 契约落地 bn-alpha-bot 与 flower-dashboard
+
+- 已完成（bn-alpha-bot，4 提交 20dc56a/8001a6b/8d12673/8cbc6a9）：契约收敛——instructions scratch 条补 0.1.36 改指简写、文档地图时点快照条补研究报告句、README 整文件换 0.1.37 模板同文（后两处为 0.1.35 批漏网，本次补齐），8,143/8,192 B；改指义务首跑——当前状态文档悬空 scratch 引用 3→0（lessons 2 处死链改「按审计报告口径复跑 + 原 scratch 证据已清理」标注，system-flow 立项取证改指在途子目录 1021-anon-flat-window-audit/）；scratch 散装 3 文件装盒 1024-round-retire/（gitignored 无提交）；active 顺手修正 campaign 批过时状态（23e7d09 已合入，git 证据）。
+- 已完成（flower-dashboard，2 提交 af6d1d2/bb6137e）：同款收敛 2 文件；加句后 8,274 B 超预算，四处无损微压缩 → 8,184/8,192；README 整文件换版。他会话 K线批（worker/src 3 文件）在批中段完成提交，全程未触碰、显式路径提交。
+- 验收 #5（spec）结果：bn 全仓 scratch 唯一引用 65、悬空 64（批前）——当前状态文档 3→0，其余 61 处位于 handoffs 已交接/progress 历史/docs/superpowers 快照/既有 docs/research，按 0.1.36 契约「快照不回改」保留，随各 topic 收尾 $obclose 改指逐步下降；flower 悬空 7 处全在历史/快照，当前状态文档 0。改指机制可走已实证。
+- 观察：bn instructions 缺「## 重复运行」节（0.1.33 前遗留，预算余量 49 B 放不下，未下修，挂账待下轮收敛评估）；bn 1027-cloudflared-upgrade/ 疑他会话在途未触碰；本地插件缓存 0.1.37 已就位（skill 清单已指向）。
+- 来源：zcode/memory-convergence-0137
