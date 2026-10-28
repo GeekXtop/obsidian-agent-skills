@@ -34,7 +34,7 @@
 ## 下一步
 
 - 无挂账——0.1.34～0.1.37 全链路与下游收敛收官（本地插件缓存已 0.1.37）。
-- 货架：bn instructions 缺「## 重复运行」节（预算余量 49 B 放不下，待下轮收敛评估）；bn 1021-anon-flat 观察结题时按四分法升档 `docs/research/` 并改指 system-flow 指针（属 bn 侧批次）。
+- 货架：bn 1021-anon-flat 观察结题时按四分法升档 `docs/research/` 并改指 system-flow 指针（属 bn 侧批次）。
 
 ## 当前 ADR
 

@@ -276,3 +276,8 @@
 - 教训：门禁命令严禁管道尾接 tail 后直接 && 后续步骤——退出码必须显式核验（`echo EXIT=$?` 或 PIPESTATUS）；多会话并行期每批动手前先跑一次基线 npm test（本批若先跑基线即可提前发现 75a4f24 的红）。
 - 已变更：`scripts/validate-skills.mjs`（marketplace source 断言）。
 - 来源：zcode/memory-convergence-0137
+
+## 2026-10-28 - 勘误：bn「缺重复运行节」为误判，撤销挂账
+
+- 勘误：前条「观察：bn instructions 缺『## 重复运行』节」不成立——该节只存在于索引型模板 `instructions-index.md`，完整型模板 `instructions.md` 本无此节；bn 与完整型模板节集合逐一对齐（「规则入口」↔「项目规则」为 0.1.32 批已登记的既有命名分叉，另含实例特有「项目铁律」节），无缺失，撤销挂账。误判根源：把索引型模板的节集误当完整型基准。flower 实例多带的「重复运行」节为实例自填附加，无害不动。
+- 来源：zcode/memory-convergence-0137
