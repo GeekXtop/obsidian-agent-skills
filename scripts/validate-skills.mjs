@@ -1605,8 +1605,11 @@ if (existsSync(packageJsonPath)) {
         fail(".claude-plugin/marketplace.json: plugin version must match package version");
       }
 
-      if (marketplacePlugin.source?.source !== "url" || marketplacePlugin.source?.url !== "https://github.com/GeekXtop/obsidian-agent-skills.git") {
-        fail(".claude-plugin/marketplace.json: plugin source must point at the GitHub repository URL");
+      const marketplaceSource = marketplacePlugin.source;
+      const isGitHubUrlSource = marketplaceSource?.source === "url" && marketplaceSource?.url === "https://github.com/GeekXtop/obsidian-agent-skills.git";
+      const isLocalRootSource = marketplaceSource === "./";
+      if (!isGitHubUrlSource && !isLocalRootSource) {
+        fail(".claude-plugin/marketplace.json: plugin source must be \"./\" (repo root) or the GitHub repository URL");
       }
     }
   }

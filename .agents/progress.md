@@ -268,3 +268,11 @@
 - 验收 #5（spec）结果：bn 全仓 scratch 唯一引用 65、悬空 64（批前）——当前状态文档 3→0，其余 61 处位于 handoffs 已交接/progress 历史/docs/superpowers 快照/既有 docs/research，按 0.1.36 契约「快照不回改」保留，随各 topic 收尾 $obclose 改指逐步下降；flower 悬空 7 处全在历史/快照，当前状态文档 0。改指机制可走已实证。
 - 观察：bn instructions 缺「## 重复运行」节（0.1.33 前遗留，预算余量 49 B 放不下，未下修，挂账待下轮收敛评估）；bn 1027-cloudflared-upgrade/ 疑他会话在途未触碰；本地插件缓存 0.1.37 已就位（skill 清单已指向）。
 - 来源：zcode/memory-convergence-0137
+
+## 2026-10-28 - 红门禁事故与 marketplace source 断言对齐
+
+- 事故：下游收敛批收口时 `npm test 2>&1 | tail` 掩盖退出码，把红门禁随 aa16fa6 推上 main。根因非本批——75a4f24（10-26，他会话，已先行推送）把 marketplace.json 插件 source 从 GitHub URL 改为 "./" 本地目录引用（zcode 转本地 directory 源与 dsh 共用同一实体），validator 断言仍要求 URL，main 自 10-26 起即红。
+- 修复：validator source 断言放宽为双白名单（"./" 仓库根 或 GitHub URL），其余形态仍拒——"./" 在 marketplace 格式下指向仓库根、GitHub 安装仍有效，属合法形态；尊重他会话的用户侧决策，不回滚其清单。负向验证：source 改 "./skills" → 红点名 → 还原复绿（EXIT=0）。
+- 教训：门禁命令严禁管道尾接 tail 后直接 && 后续步骤——退出码必须显式核验（`echo EXIT=$?` 或 PIPESTATUS）；多会话并行期每批动手前先跑一次基线 npm test（本批若先跑基线即可提前发现 75a4f24 的红）。
+- 已变更：`scripts/validate-skills.mjs`（marketplace source 断言）。
+- 来源：zcode/memory-convergence-0137
