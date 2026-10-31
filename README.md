@@ -1,4 +1,4 @@
-# Obsidian Agent Skills _(obsidian-agent-skills)_
+# Obsidian Agent Skills
 
 [![Release](https://img.shields.io/github/v/tag/GeekXtop/obsidian-agent-skills?label=release)](https://github.com/GeekXtop/obsidian-agent-skills/tags)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
@@ -7,7 +7,7 @@
 
 Obsidian-backed 项目记忆、任务收尾、ADR、经验沉淀、文档整理和知识整理 skills。
 
-本仓库是一套遵循 [Agent Skills specification](https://agentskills.io/specification) 的 skills 集合，把 Obsidian 变成 coding agent 的项目记忆与知识层。Claude Code、Codex、OpenCode，以及其他能发现 `skills/<skill-name>/SKILL.md` 的客户端都可以安装使用；构建、测试和发布本仓库不依赖 Obsidian。
+一套遵循 [Agent Skills specification](https://agentskills.io/specification) 的 skills 集合，把 Obsidian vault 用作 coding agent 的项目记忆与知识层。Claude Code、Codex、OpenCode，以及其他能发现 `skills/<skill-name>/SKILL.md` 的客户端都可以安装使用；Obsidian 在这里是上下文与知识层，不成为构建、测试、部署或运行时依赖。
 
 ## 目录
 
@@ -17,11 +17,10 @@ Obsidian-backed 项目记忆、任务收尾、ADR、经验沉淀、文档整理�
 - [Skills](#skills)
 - [更新](#更新)
 - [开发](#开发)
-- [许可证](#许可证)
 
 ## 背景
 
-coding agent 的工作记忆通常与会话强绑定：换会话、换客户端，项目约定与已沉淀的经验就断了。本仓库把 Obsidian vault 用作 agent 的长期记忆与知识层——项目内 memory 留在仓库 `.agents/`，跨项目公共知识与文档沉淀到 vault 的 `Agent/Knowledge/` 与 `Agent/Documents/`；同时遵循 Agent Skills 规范，任何能发现 `SKILL.md` 的客户端都能直接使用，不绑定单一 agent 产品。
+coding agent 的工作记忆通常与会话强绑定：换会话、换客户端，项目约定与已沉淀的经验就断了。本仓库把记忆拆成两层：项目内 memory 留在仓库 `.agents/`，跟代码同生命周期；跨项目公共知识与可独立阅读的文档沉淀到 vault 的 `Agent/Knowledge/` 与 `Agent/Documents/`。技能发现遵循 Agent Skills 规范，不绑定单一 agent 产品。
 
 ## 安装
 
@@ -60,7 +59,7 @@ codex plugin add obsidian-agent-skills@obsidian-agent-skills
 npx skills add https://github.com/GeekXtop/obsidian-agent-skills
 ```
 
-如果偏好 SSH：
+偏好 SSH 时：
 
 ```bash
 npx skills add git@github.com:GeekXtop/obsidian-agent-skills.git
@@ -109,9 +108,9 @@ npx skills add git@github.com:GeekXtop/obsidian-agent-skills.git
 
 ### 语言与模板
 
-`kind`、`use_as`、`sensitivity` 等 metadata 的机器层字段值保持英文 token；模板、整理计划和完成说明使用中文展示，例如"类型：文档（`kind: document`）"。
+`kind`、`use_as`、`sensitivity` 等 metadata 的机器层字段值保持英文 token；模板、整理计划和完成说明使用中文展示，例如“类型：文档（`kind: document`）”。
 
-模板文件位于各 skill 的 `templates/` 目录：`SKILL.md` 定义行为和安全边界，模板定义写入项目或 Obsidian 的输出格式。所有 skills 默认遵循用户或项目既有语言偏好，本仓库当前模板使用简体中文，fork 可替换 `templates/` 调整输出语言；技术标识符、路径、命令、包名和英文专有名词保持原样。它们把 Obsidian 作为上下文和知识层，不把 Obsidian 变成构建、测试、部署或运行时依赖。
+模板文件位于各 skill 的 `templates/` 目录：`SKILL.md` 定义行为和安全边界，模板定义写入项目或 Obsidian 的输出格式。所有 skills 默认遵循用户或项目既有语言偏好，本仓库当前模板使用简体中文，fork 可替换 `templates/` 调整输出语言；技术标识符、路径、命令、包名和英文专有名词保持原样。
 
 ## Skills
 
@@ -161,7 +160,7 @@ npm run version:set -- 0.1.38
 npm test
 ```
 
-校验脚本会检查 skill frontmatter、OpenAI agent metadata、命令入口与对应 skill、模板和 reference 引用存在性、README 技能表、description 语义约束、`## 运行时假设` 章节、正文长度预算、机器层枚举、模板对齐规则、模板语言回归规则、Codex 插件 interface 发现层、版本同步脚本，以及插件 manifest 版本一致性；失败时输出问题计数和涉及范围。
+校验脚本检查 skill frontmatter、OpenAI agent metadata、命令入口与对应 skill、模板和 reference 引用存在性、README 技能表、description 语义约束、`## 运行时假设` 章节、正文长度预算、机器层枚举、模板对齐规则、模板语言回归规则、Codex 插件 interface 发现层、版本同步脚本，以及插件 manifest 版本一致性；失败时输出问题计数和涉及范围。
 
 两个 plugin manifest 的 skills 发现方式不同，这是有意为之：`.codex-plugin/plugin.json` 用 `"skills": "./skills/"` 显式声明，`.claude-plugin/plugin.json` 依赖 Claude Code 对仓库根 `skills/` 与 `commands/` 目录的约定式发现，因此不重复声明。两者指向同一套 `skills/`，`.claude-plugin/plugin.json` 缺少 `skills` 字段不是配置遗漏。
 
@@ -169,6 +168,6 @@ npm test
 
 项目文档地图见 [docs/README.md](docs/README.md)，架构决策记录见 `docs/adr/`。
 
-## 许可证
+---
 
 [MIT](https://spdx.org/licenses/MIT/) © 2026 GeekX.top，详见 [LICENSE](LICENSE)。
