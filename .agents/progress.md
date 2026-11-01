@@ -294,3 +294,10 @@
 - 变更：validator 负向断言 ../README.md 收紧为禁 README.md（模板侧超集封死裸登记行等全部变体，现值 0 处无误伤）；memory-upgrade 概念块 term 0.1.38 收紧为「0.1.38 起根 README 退出文档地图登记」，单独钉住 v3 行追加（收紧后仍蕴含代际标记）。载体零改动，发版 0.1.39（3a3b84c）。
 - 验证：双向负向实验——模板插裸「| README.md | x | y |」行→红点名 README.md；删 v3 行追加→红点名收紧 term（终审 Minor 2 指出的原不红场景已闭合）；各自还原→绿。npm test 绿（All skills are valid, 6 skills checked，EXIT 显式）。
 - 来源：zcode/readme-ownership-0138（0.1.39 patch）
+
+## 2026-11-02 - 勘误：0.1.39 收口红门禁误推（fc68086 同形态再现）
+
+- 事故：收口提交时写成「npm test; echo EXIT=$? && git add…」——分号吞门禁，active.md 6,174 B 超 6 KB 的红未拦住链路，随 dae2fba 推出；10-28 条目教训未守住。
+- 修复：active.md 两处无损压缩守回预算（a134cfd），npm test && 直连显式核验绿后推送。
+- 教训重申：门禁命令必须 && 直连后续步骤（红即断链）；「; echo EXIT=$?」只能用于观察性运行，不得串在提交链里。
+- 来源：zcode/readme-ownership-0138（0.1.39 patch）
