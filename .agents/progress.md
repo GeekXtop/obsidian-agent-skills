@@ -281,3 +281,10 @@
 
 - 勘误：前条「观察：bn instructions 缺『## 重复运行』节」不成立——该节只存在于索引型模板 `instructions-index.md`，完整型模板 `instructions.md` 本无此节；bn 与完整型模板节集合逐一对齐（「规则入口」↔「项目规则」为 0.1.32 批已登记的既有命名分叉，另含实例特有「项目铁律」节），无缺失，撤销挂账。误判根源：把索引型模板的节集误当完整型基准。flower 实例多带的「重复运行」节为实例自填附加，无害不动。
 - 来源：zcode/memory-convergence-0137
+
+## 2026-11-02 - 0.1.38 README 所有权与文档地图解耦
+
+- 变更：根 README 退出文档地图登记——模板 docs-readme.md 删 README 登记行（空行保留）+ 表外格式示例 + 维护规则所有权句「介绍规范单独拥有」；obclose 改指面与登记解耦（README 不因不进文档地图而脱离改指面）；memory-bank 改指枚举补根 README；memory-upgrade v3 行 + 0.1.38 新节（存量四条口径：不强制改实例地图/bn 形态可收窄或移除/flower 形态未落点前不得先收窄/所有权句不回填且差异检测不报告）；validator 四组断言红灯先行（正向「介绍规范单独拥有」+ 负向禁 ../README.md 登记 + obclose/memory-bank/memory-upgrade 概念块）。本仓自举 docs/README.md 删 README 行（3,443 B）+ lessons 新条（义务网络 vs 白名单）。发版 0.1.38（b72a740/aefad3d/5681e73）。
+- 终审：review-deep 全分支终审（edef83d..5681e73）Review Focus 6/6 PASS，1 Important——memory-upgrade 存量口径偏离已确认 spec（plan 初稿误写「触达即删」，与「未落点前不得先收窄」冲突），修复轮按 spec §4.5 逐字恢复 + 守卫术语「不得先收窄」RED→GREEN（903d77c）；2 Minor 挂账（裸 README.md 登记行绕过窄负向、v3 行追加未单独钉住）。
+- 验证：npm test 绿（All skills are valid, 6 skills checked，EXIT 显式）；负向红灯实验 7/7 逐条红点名→还原→绿；模板 grep ../README.md = 0。
+- 来源：zcode/readme-ownership-0138
