@@ -145,7 +145,7 @@ const requiredObinitReferenceConcepts = {
     },
     {
       name: "readme ownership decoupling",
-      terms: ["0.1.38", "介绍规范单独拥有", "脱离改指面", "不得先收窄"],
+      terms: ["0.1.38 起根 README 退出文档地图登记", "介绍规范单独拥有", "脱离改指面", "不得先收窄"],
     },
   ],
 };
@@ -1147,7 +1147,7 @@ if (!existsSync(skillsDir)) {
             fail(`${skillName}: template ${template} must include doc map table terms: ${missingDocsReadme.join(", ")}`);
           }
 
-          assertNoPhrases(`${skillName}: template ${template}`, content, ["../README.md"], (phrase) => {
+          assertNoPhrases(`${skillName}: template ${template}`, content, ["README.md"], (phrase) => {
             return `must not register or link the root README in the doc map: ${phrase}`;
           });
 
