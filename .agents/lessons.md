@@ -126,3 +126,11 @@
 - 适用场景：维护会被自身 skill 修改的仓库、设计跨工具通用的契约或版本门禁、评审「契约该放 skill 还是放项目规则」。
 - 验证方式：`scripts/validate-skills.mjs` 自举 scope 断言（门禁术语、obclose 探针章节、active 派生声明、README 记忆库索引、`handoffs/` 目录、progress 末条 `来源` 行）；破坏实验在临时副本上逐条执行。
 - 最后验证：2026-09-11 创建时首次验证：9 条断言在临时副本上全部红灯，主仓库 `npm test` 绿。
+
+## 2026-11-02 - 写文件白名单约束不了间接写义务（义务网络 vs 白名单）
+
+- 背景：bn/flower 两项目 README 膨胀（410 行/61 KB、987 行）的根因不在 obinit 允许清单——清单没写 README，而是 `templates/docs-readme.md` 的预设行给所有实例指派了「根 README 的同步触发」，义务经由模板预设间接下发给每个实例。
+- 经验：新增模板预设内容时同时审「它会向实例指派哪些义务」：写文件白名单约束不了间接写义务，预设的同步触发/引用改指都会绕过它。修法是所有权解耦（README 归项目自己的介绍规范单独拥有，文档地图不登记、不指派），并且断言正负成对——正向钉所有权句（`介绍规范单独拥有`），负向禁相对路径（`../README.md`）而非完整链接短语，防变体绕过。
+- 适用场景：维护 obinit 模板（docs-readme、instructions 等）、评审模板新增预设行、设计 validator 断言形状（正向 contract + 窄负向）。
+- 验证方式：`npm test` 红绿两向（正向句删除→红、临时加回登记行→红、还原→绿）+ 模板 `grep '../README.md'` 为 0；新概念块 `readme ownership decoupling` 三术语逐条红灯。
+- 最后验证：2026-11-02 创建时首次验证：7 项负向实验逐条红灯后还原全绿，模板 0 处 `../README.md`，`npm test` 输出 `All skills are valid. (6 skills checked)`。

@@ -13,7 +13,6 @@
 
 | 文档 | 事实范围 | 同步触发（改这里就要更新它） |
 |---|---|---|
-| [`README.md`](../README.md) | 项目定位、`$ob*` skill 用法、安装与发布流程、开发命令 | skill 的触发语义与用法、安装步骤、发布流程、npm scripts |
 | [`AGENTS.md`](../AGENTS.md) | 仓库项目约定：skill 放置路径、frontmatter 字段、运行时假设、发布前验证 | 目录约定、skill 结构要求、发布门禁 |
 | [`.agents/instructions.md`](../.agents/instructions.md) | agent 工作约定、自举门禁、memory 契约与代际 | memory 代际、初始化范围、自举门禁判据 |
 | [`skills/obinit/references/memory-upgrade.md`](../skills/obinit/references/memory-upgrade.md) | `.agents/` 模板代际定义与存量项目迁移清单 | 任一模板的代际变更（新增/改名/删除节、规则口径变化） |
