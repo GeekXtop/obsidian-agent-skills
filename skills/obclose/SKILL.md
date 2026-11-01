@@ -9,7 +9,7 @@ description: 在任务、阶段或会话收尾时更新项目内 agent memory。
 
 ## 运行时假设
 
-- 只写 `.agents/` 下的项目 memory；本轮调查的成型取证 / 回测报告升档写入 `docs/research/`；本轮或入库文档里指向已升档或已删目标的 `.agents/scratch/` 旧引用改写为指向升档后的落点（进行中的 scratch 引用不动），短结论内联进本轮正在撰写的文档或 `.agents/progress.md`。跨任务脚本与最小样本只在用户当次确认后移入 `scripts/` 或 `tools/`、`samples/` 或 `test/fixtures/`，移入时只剥离临时硬编码、不改写其逻辑与判据。既有源码内容、依赖、构建配置与 git 配置不改动；时点快照类文档（设计稿、实施计划与既有研究报告，无论由哪个工具生成）与既有 `docs/adr/` 只读（项目无文档地图时，改指范围收窄为 `.agents/` 与根 `README.md`）。
+- 只写 `.agents/` 下的项目 memory；本轮调查的成型取证 / 回测报告升档写入 `docs/research/`；本轮或入库文档里指向已升档或已删目标的 `.agents/scratch/` 旧引用改写为指向升档后的落点（进行中的 scratch 引用不动），短结论内联进本轮正在撰写的文档或 `.agents/progress.md`。跨任务脚本与最小样本只在用户当次确认后移入 `scripts/` 或 `tools/`、`samples/` 或 `test/fixtures/`，移入时只剥离临时硬编码、不改写其逻辑与判据。既有源码内容、依赖、构建配置与 git 配置不改动；时点快照类文档（设计稿、实施计划与既有研究报告，无论由哪个工具生成）与既有 `docs/adr/` 只读（改指范围为 `.agents/`、当前状态文档与根 `README.md`——README 不因不进文档地图而脱离改指面）。
 - git 可选：非 git 项目跳过 `git status` / `git diff` / `git log`，改用文件改动清单作为证据，并在验证段说明证据来源；改指扫描用 `git grep -n '.agents/scratch/'` 并排除时点快照目录（设计稿 / 实施计划目录，按项目实际命名，如 `docs/specs/`、`docs/plans/`）、既有 `docs/research/`、`docs/adr/` 与 `.agents/scratch/`；非 git 项目用 `grep -rn` / `rg` 加同组目录排除等价执行。
 - 只有回写本次实际使用过的 Obsidian 公共知识 `last_verified` / `status` 时才需要 Obsidian；CLI 不可用或无法解析 vault 本地路径时跳过该回写并在完成说明中报告，不退回 CLI mutation。
 - 目标 memory 文件在写入前已被其他会话或工具改动时，先重新读取当前内容，只追加本次条目，不覆盖对方内容。

@@ -131,7 +131,7 @@ const requiredObinitReferenceConcepts = {
   "references/memory-bank.md": [
     {
       name: "scratch contract remediation",
-      terms: ["改写为指向", "只在用户当次确认后", "tools/", "可重建产物", "最近 14 天更新过", "时点快照与既有 `docs/adr/` 只读"],
+      terms: ["改写为指向", "只在用户当次确认后", "tools/", "可重建产物", "最近 14 天更新过", "时点快照与既有 `docs/adr/` 只读", "与根 `README.md`"],
     },
   ],
   "references/memory-upgrade.md": [
@@ -142,6 +142,10 @@ const requiredObinitReferenceConcepts = {
     {
       name: "scratch lifecycle and research promotion upgrade",
       terms: ["0.1.34", "<MMDD>-<topic>/", "docs/research/", "持久证据外链"],
+    },
+    {
+      name: "readme ownership decoupling",
+      terms: ["0.1.38", "介绍规范单独拥有", "脱离改指面"],
     },
   ],
 };
@@ -246,7 +250,7 @@ const requiredDocMapTerms = [
   "4 KB",
 ];
 
-const requiredDocsReadmeTerms = ["## 权威文档地图", "同步触发", "时点快照", "docs/adr/"];
+const requiredDocsReadmeTerms = ["## 权威文档地图", "同步触发", "时点快照", "docs/adr/", "介绍规范单独拥有"];
 
 const requiredMemoryBudgetTerms = ["8 KB", "4 KB"];
 
@@ -606,6 +610,7 @@ const requiredSkillConcepts = {
         "可重建产物",
         "只在用户当次确认后",
         "最近 14 天更新过",
+        "脱离改指面",
       ],
     },
   ],
@@ -1141,6 +1146,10 @@ if (!existsSync(skillsDir)) {
           if (missingDocsReadme.length > 0) {
             fail(`${skillName}: template ${template} must include doc map table terms: ${missingDocsReadme.join(", ")}`);
           }
+
+          assertNoPhrases(`${skillName}: template ${template}`, content, ["../README.md"], (phrase) => {
+            return `must not register or link the root README in the doc map: ${phrase}`;
+          });
 
           if (!content.includes("docs/research/")) {
             fail(`${skillName}: template ${template} must include docs/research/ in the point-in-time snapshot note`);
