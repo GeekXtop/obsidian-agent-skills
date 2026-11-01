@@ -23,7 +23,7 @@
 - 负向红灯：0.1.36 批 12 条（obclose 7 术语 + memory-bank 5 术语）逐条删→红点名→还原→绿；0.1.37 修复轮 2 条新钉术语（memory-bank 只读短语、obclose「不修改既有源码内容」）RED✓；反向验证（模板 0 处②③确认句、obclose 旧安全句 0 残留、`tools/` 与限定词双文件在场）通过。
 - 终审：独立子代理评审 f3498d5..b89a954——无 Critical；1 Important（收口时序，由发布后收口提交解决）；6 Minor 已全部随 0.1.37 修复（见 progress 2026-10-24 修复轮条目）。
 - 0.1.38 批：负向红灯实验 7/7（模板正负向、obclose、memory-bank、memory-upgrade 3 术语）逐条红点名→还原→绿；终审 review-deep（edef83d..5681e73）Review Focus 6/6 PASS、1 Important 修复轮 RED→GREEN 闭环（903d77c）。
-- 0.1.39 补强：负向断言收紧为禁 README.md（模板插裸登记行实验红）；v3 term 收紧为「0.1.38 起根 README 退出文档地图登记」（删 v3 追加实验红——终审指出的原不红场景已闭合）。
+- 0.1.39 补强：负向禁 README.md（裸登记行实验红）；v3 term 收紧为「0.1.38 起根 README 退出文档地图登记」（删 v3 追加实验红，终审原不红场景闭合）。
 - 体积现状：`skills/obinit/templates/instructions.md` 6,054 B / 8 KB；`instructions-index.md` 5,751 B / 8 KB；`docs-readme.md` 2,194 B / 6 KB；`.agents/instructions.md` 7,796 B / 8 KB；`docs/README.md` 3,443 B / 6 KB；`.agents/active.md` 本文件在 6 KB 上限内；`progress.md` / `lessons.md` 见每次收尾汇报行。
 
 ## 关键文件
@@ -36,7 +36,7 @@
 
 ## 下一步
 
-- 挂账：bn 形态（已收窄且事实承接文档在位）随重跑收窄或移除地图 README 行；flower 形态承接落点拍板前地图行维持现状，不得先收窄。（0.1.38 终审 validator 两条 minors 已随 0.1.39 补强，挂账移除。）
+- 挂账：bn 形态（已收窄且事实承接文档在位）随重跑收窄或移除地图 README 行；flower 形态承接落点拍板前地图行维持现状，不得先收窄。（validator 两条 minors 已随 0.1.39 补强。）
 - 本地插件缓存更新至 0.1.39（marketplace/plugin update）。
 - 货架：bn 1021-anon-flat 观察结题时按四分法升档 `docs/research/` 并改指 system-flow 指针（属 bn 侧批次）。
 
