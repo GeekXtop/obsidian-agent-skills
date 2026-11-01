@@ -150,4 +150,4 @@ File: `skills/obinit/references/memory-upgrade.md`
 ## 终审修复记录（2026-11-02，review-deep）
 
 - **Important 1**：本计划 Task 5.2 初稿把 spec §4.5 的四条存量收敛口径误写为「存量 README 行下次触达时删」，与「未落点前不得先收窄」直接冲突，并丢失「不强制改实例地图」「所有权句不回填、差异检测不报告」两条。已按 spec §4.5 逐字恢复 `memory-upgrade.md` 新节（导语承载两锚点 + 四条口径），概念块增守卫术语 `不得先收窄`——RED 点名（missing required readme ownership decoupling concept terms: 不得先收窄）→ GREEN（All skills are valid）。
-- **Minor（deferred）**：① 负向断言仅禁 `../README.md`，裸 `README.md` 登记行可绕过窄负向——下批补强；② v3 行追加未被单独钉住（`0.1.38` 为全文存在性检查，新节亦含该词），term 可收紧为 `0.1.38 起根 README 退出文档地图登记`。
+- **Minor（deferred）**：① 负向断言仅禁 `../README.md`，裸 `README.md` 登记行可绕过窄负向——下批补强；② v3 行追加未被单独钉住（`0.1.38` 为全文存在性检查，新节亦含该词），term 可收紧为 `0.1.38 起根 README 退出文档地图登记`。（两条已随 0.1.39 补强收严：负向禁 README.md、term 收紧，双向负向实验证明咬合——裸行→红、删 v3 追加→红、还原→绿。）

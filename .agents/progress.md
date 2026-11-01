@@ -288,3 +288,9 @@
 - 终审：review-deep 全分支终审（edef83d..5681e73）Review Focus 6/6 PASS，1 Important——memory-upgrade 存量口径偏离已确认 spec（plan 初稿误写「触达即删」，与「未落点前不得先收窄」冲突），修复轮按 spec §4.5 逐字恢复 + 守卫术语「不得先收窄」RED→GREEN（903d77c）；2 Minor 挂账（裸 README.md 登记行绕过窄负向、v3 行追加未单独钉住）。
 - 验证：npm test 绿（All skills are valid, 6 skills checked，EXIT 显式）；负向红灯实验 7/7 逐条红点名→还原→绿；模板 grep ../README.md = 0。
 - 来源：zcode/readme-ownership-0138
+
+## 2026-11-02 - 0.1.39 补强 0.1.38 终审两条 deferred minors
+
+- 变更：validator 负向断言 ../README.md 收紧为禁 README.md（模板侧超集封死裸登记行等全部变体，现值 0 处无误伤）；memory-upgrade 概念块 term 0.1.38 收紧为「0.1.38 起根 README 退出文档地图登记」，单独钉住 v3 行追加（收紧后仍蕴含代际标记）。载体零改动，发版 0.1.39（3a3b84c）。
+- 验证：双向负向实验——模板插裸「| README.md | x | y |」行→红点名 README.md；删 v3 行追加→红点名收紧 term（终审 Minor 2 指出的原不红场景已闭合）；各自还原→绿。npm test 绿（All skills are valid, 6 skills checked，EXIT 显式）。
+- 来源：zcode/readme-ownership-0138（0.1.39 patch）
