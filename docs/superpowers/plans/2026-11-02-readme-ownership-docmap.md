@@ -132,7 +132,7 @@ File: `skills/obinit/references/memory-upgrade.md`
 
 ### Task 11: 收口
 
-- [ ] 11.1 `.agents/progress.md` 2026-11-02 条目；`.agents/active.md` 当前任务/验证/下一步改写（挂账：bn/flower 存量 `docs/README.md` 的 README 行下次触达时删、不专项；bn 1021 观察结题升档照旧）。
+- [ ] 11.1 `.agents/progress.md` 2026-11-02 条目；`.agents/active.md` 当前任务/验证/下一步改写（挂账：bn 形态——已收窄且事实承接文档在位——随重跑收窄或移除地图 README 行；flower 形态承接落点拍板前地图行维持现状，**不得先收窄**；所有权句不回填实例、差异检测不报告；bn 1021 观察结题升档照旧）。
 - [ ] 11.2 提交 + `git push`。
 - [ ] 11.3 收尾说明提示本地插件缓存更新（marketplace 更新至 0.1.38）。
 
@@ -146,3 +146,8 @@ File: `skills/obinit/references/memory-upgrade.md`
 - workspace：主工作树（docs-only + validator 小改动，隔离成本 > 收益；无他会在途文件冲突即降级）。
 - spec：`docs/superpowers/specs/2026-11-02-readme-ownership-docmap-design.md`（b8a9923）。
 - plan：本文件。
+
+## 终审修复记录（2026-11-02，review-deep）
+
+- **Important 1**：本计划 Task 5.2 初稿把 spec §4.5 的四条存量收敛口径误写为「存量 README 行下次触达时删」，与「未落点前不得先收窄」直接冲突，并丢失「不强制改实例地图」「所有权句不回填、差异检测不报告」两条。已按 spec §4.5 逐字恢复 `memory-upgrade.md` 新节（导语承载两锚点 + 四条口径），概念块增守卫术语 `不得先收窄`——RED 点名（missing required readme ownership decoupling concept terms: 不得先收窄）→ GREEN（All skills are valid）。
+- **Minor（deferred）**：① 负向断言仅禁 `../README.md`，裸 `README.md` 登记行可绕过窄负向——下批补强；② v3 行追加未被单独钉住（`0.1.38` 为全文存在性检查，新节亦含该词），term 可收紧为 `0.1.38 起根 README 退出文档地图登记`。

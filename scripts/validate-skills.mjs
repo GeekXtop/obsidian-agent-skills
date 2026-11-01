@@ -145,7 +145,7 @@ const requiredObinitReferenceConcepts = {
     },
     {
       name: "readme ownership decoupling",
-      terms: ["0.1.38", "介绍规范单独拥有", "脱离改指面"],
+      terms: ["0.1.38", "介绍规范单独拥有", "脱离改指面", "不得先收窄"],
     },
   ],
 };
